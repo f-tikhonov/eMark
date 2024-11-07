@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import java.util.HashMap;
 import kotlin.Metadata;
+import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
 import kz.sapasoft.emark.app.domain.model.FieldModel;
 

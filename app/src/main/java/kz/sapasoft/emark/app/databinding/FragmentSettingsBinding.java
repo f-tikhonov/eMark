@@ -1,5 +1,6 @@
 package kz.sapasoft.emark.app.databinding;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public abstract class FragmentSettingsBinding extends ViewDataBinding {
         return inflate(layoutInflater, DataBindingUtil.getDefaultComponent());
     }
 
+    @SuppressLint("RestrictedApi")
     @Deprecated
     public static FragmentSettingsBinding inflate(LayoutInflater layoutInflater, Object obj) {
         return (FragmentSettingsBinding) ViewDataBinding.inflateInternal(layoutInflater, R.layout.fragment_settings, (ViewGroup) null, false, obj);

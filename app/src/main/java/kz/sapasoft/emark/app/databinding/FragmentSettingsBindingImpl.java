@@ -4,6 +4,7 @@ import android.util.SparseIntArray;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+
 import androidx.databinding.DataBindingComponent;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.MutableLiveData;

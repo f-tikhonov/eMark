@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import kotlin.Metadata;
+import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
 import kz.sapasoft.emark.app.R;
 import kz.sapasoft.emark.app.databinding.ItemPhotoBinding;
@@ -47,7 +48,7 @@ public final class PhotoAdapter extends RecyclerView.Adapter<DataBindingViewHold
     }
 
     public PhotoAdapter(ArrayList<ImageDataModel> arrayList, OnPhotoClickListener onPhotoClickListener, Context context2) {
-        Intrinsics.checkParameterIsNotNull(arrayList, FirebaseAnalytics.Param.ITEMS);
+     //   Intrinsics.checkParameterIsNotNull(arrayList, FirebaseAnalytics.Param.ITEMS);
         Intrinsics.checkParameterIsNotNull(onPhotoClickListener, ServiceSpecificExtraArgs.CastExtraArgs.LISTENER);
         Intrinsics.checkParameterIsNotNull(context2, "context");
         this.items = arrayList;

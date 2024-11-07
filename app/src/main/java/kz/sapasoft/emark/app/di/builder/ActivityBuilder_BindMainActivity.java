@@ -8,7 +8,7 @@ import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
 import kz.sapasoft.emark.app.ui.MainActivity;
 
-@Module(subcomponents = {MainActivitySubcomponent.class})
+@Module(subcomponents = {ActivityBuilder_BindMainActivity.MainActivitySubcomponent.class})
 public abstract class ActivityBuilder_BindMainActivity {
 
     @Subcomponent(modules = {MainActivityProviders.class})

@@ -18,6 +18,7 @@ import kotlin.Lazy;
 import kotlin.LazyKt;
 import kotlin.Metadata;
 import kotlin.TypeCastException;
+import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
 import kz.sapasoft.emark.app.databinding.FragmentAboutBinding;
 import kz.sapasoft.emark.app.ui.MainActivity;

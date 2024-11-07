@@ -9,6 +9,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import java.util.ArrayList;
 import java.util.List;
 import kotlin.Metadata;
+import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
 import kz.sapasoft.emark.app.databinding.ItemProjectBinding;
 import kz.sapasoft.emark.app.domain.model.ProjectModel;
@@ -16,7 +17,7 @@ import kz.sapasoft.emark.app.ui.DataBindingViewHolder;
 
 @Metadata(bv = {1, 0, 3}, d1 = {"\u0000B\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u0002\n\u0000\n\u0002\u0010 \n\u0002\b\u0002\n\u0002\u0010\b\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0002\b\u0004\u0018\u00002\f\u0012\b\u0012\u00060\u0002R\u00020\u00000\u0001:\u0002\u0018\u0019B'\u0012\u0018\b\u0002\u0010\u0003\u001a\u0012\u0012\u0004\u0012\u00020\u00050\u0004j\b\u0012\u0004\u0012\u00020\u0005`\u0006\u0012\u0006\u0010\u0007\u001a\u00020\b¢\u0006\u0002\u0010\tJ\u0014\u0010\n\u001a\u00020\u000b2\f\u0010\f\u001a\b\u0012\u0004\u0012\u00020\u00050\rJ\u0006\u0010\u000e\u001a\u00020\u000bJ\b\u0010\u000f\u001a\u00020\u0010H\u0016J\u001c\u0010\u0011\u001a\u00020\u000b2\n\u0010\u0012\u001a\u00060\u0002R\u00020\u00002\u0006\u0010\u0013\u001a\u00020\u0010H\u0016J\u001c\u0010\u0014\u001a\u00060\u0002R\u00020\u00002\u0006\u0010\u0015\u001a\u00020\u00162\u0006\u0010\u0017\u001a\u00020\u0010H\u0016R\u001e\u0010\u0003\u001a\u0012\u0012\u0004\u0012\u00020\u00050\u0004j\b\u0012\u0004\u0012\u00020\u0005`\u0006X\u000e¢\u0006\u0002\n\u0000R\u000e\u0010\u0007\u001a\u00020\bX\u000e¢\u0006\u0002\n\u0000¨\u0006\u001a"}, d2 = {"Lkz/sapasoft/emark/app/ui/projects/adapter/ProjectsAdapter;", "Landroidx/recyclerview/widget/RecyclerView$Adapter;", "Lkz/sapasoft/emark/app/ui/projects/adapter/ProjectsAdapter$SimpleHolder;", "items", "Ljava/util/ArrayList;", "Lkz/sapasoft/emark/app/domain/model/ProjectModel;", "Lkotlin/collections/ArrayList;", "listener", "Lkz/sapasoft/emark/app/ui/projects/adapter/ProjectsAdapter$OnProjectClickListener;", "(Ljava/util/ArrayList;Lkz/sapasoft/emark/app/ui/projects/adapter/ProjectsAdapter$OnProjectClickListener;)V", "add", "", "list", "", "clear", "getItemCount", "", "onBindViewHolder", "holder", "position", "onCreateViewHolder", "parent", "Landroid/view/ViewGroup;", "viewType", "OnProjectClickListener", "SimpleHolder", "app_release"}, k = 1, mv = {1, 1, 16})
 /* compiled from: ProjectsAdapter.kt */
-public final class ProjectsAdapter extends RecyclerView.Adapter<SimpleHolder> {
+public final class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.SimpleHolder> {
     private ArrayList<ProjectModel> items;
     /* access modifiers changed from: private */
     public OnProjectClickListener listener;
@@ -33,7 +34,7 @@ public final class ProjectsAdapter extends RecyclerView.Adapter<SimpleHolder> {
     }
 
     public ProjectsAdapter(ArrayList<ProjectModel> arrayList, OnProjectClickListener onProjectClickListener) {
-        Intrinsics.checkParameterIsNotNull(arrayList, FirebaseAnalytics.Param.ITEMS);
+       // Intrinsics.checkParameterIsNotNull(arrayList, FirebaseAnalytics.Param.ITEMS);
         Intrinsics.checkParameterIsNotNull(onProjectClickListener, ServiceSpecificExtraArgs.CastExtraArgs.LISTENER);
         this.items = arrayList;
         this.listener = onProjectClickListener;

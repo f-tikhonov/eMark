@@ -7,6 +7,7 @@ import android.widget.Spinner;
 import java.util.HashMap;
 import java.util.List;
 import kotlin.Metadata;
+import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
 import kz.sapasoft.emark.app.R;
 import kz.sapasoft.emark.app.domain.model.FieldModel;

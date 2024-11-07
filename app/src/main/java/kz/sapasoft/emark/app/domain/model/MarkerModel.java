@@ -3,6 +3,7 @@ package kz.sapasoft.emark.app.domain.model;
 import java.io.Serializable;
 import java.util.List;
 import kotlin.Metadata;
+import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
 import kz.sapasoft.emark.app.utils.Constants;
 

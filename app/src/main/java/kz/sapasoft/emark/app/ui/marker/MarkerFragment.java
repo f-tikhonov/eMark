@@ -35,6 +35,7 @@ import kotlin.Metadata;
 import kotlin.TuplesKt;
 import kotlin.TypeCastException;
 import kotlin.collections.CollectionsKt;
+import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
 import kz.sapasoft.emark.app.databinding.FragmentMarkerBinding;
 import kz.sapasoft.emark.app.domain.model.FieldModel;

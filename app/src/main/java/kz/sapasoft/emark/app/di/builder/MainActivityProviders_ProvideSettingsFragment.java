@@ -8,7 +8,7 @@ import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
 import kz.sapasoft.emark.app.ui.settings.SettingsFragment;
 
-@Module(subcomponents = {SettingsFragmentSubcomponent.class})
+@Module(subcomponents = {MainActivityProviders_ProvideSettingsFragment.SettingsFragmentSubcomponent.class})
 public abstract class MainActivityProviders_ProvideSettingsFragment {
 
     @Subcomponent

@@ -21,6 +21,7 @@ import kotlin.Lazy;
 import kotlin.LazyKt;
 import kotlin.Metadata;
 import kotlin.TypeCastException;
+import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
 import kz.sapasoft.emark.app.databinding.FragmentProjectsBinding;
 import kz.sapasoft.emark.app.domain.model.ProjectModel;

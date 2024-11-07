@@ -43,7 +43,7 @@ public final class ViewModelFactory implements ViewModelProvider.Factory {
         }
         if (provider != null) {
             try {
-                return (ViewModel) provider.get();
+                return (T) provider.get();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import kotlin.Metadata;
 import kotlin.collections.CollectionsKt;
+import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
 import kz.sapasoft.emark.app.domain.model.TemplateModel;
 import kz.sapasoft.emark.app.ui.marker.OnMarkerTypeChangeListener;

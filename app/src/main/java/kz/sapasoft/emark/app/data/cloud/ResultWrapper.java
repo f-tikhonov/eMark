@@ -1,6 +1,7 @@
 package kz.sapasoft.emark.app.data.cloud;
 
 import kotlin.Metadata;
+import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
 import kz.sapasoft.emark.app.domain.model.response.ErrorStatus;
 
@@ -13,9 +14,9 @@ public abstract class ResultWrapper<T> {
     public static final class Success<T> extends ResultWrapper<T> {
         private final T value;
 
-        public static /* synthetic */ Success copy$default(Success success, T t, int i, Object obj) {
+        public /* synthetic */ Success copy$default(Success success, T t, int i, Object obj) {
             if ((i & 1) != 0) {
-                t = success.value;
+                t = value;
             }
             return success.copy(t);
         }

@@ -2,6 +2,7 @@ package kz.sapasoft.emark.app.data.local.room;
 
 import androidx.room.RoomDatabase;
 import kotlin.Metadata;
+import kotlin.jvm.internal.DefaultConstructorMarker;
 import kz.sapasoft.emark.app.data.local.room.image.ImageDao;
 import kz.sapasoft.emark.app.data.local.room.marker.MarkerDao;
 import kz.sapasoft.emark.app.data.local.room.marker_sync.MarkerSyncDao;

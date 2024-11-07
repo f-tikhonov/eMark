@@ -8,7 +8,7 @@ import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
 import kz.sapasoft.emark.app.ui.photo.PhotoActivity;
 
-@Module(subcomponents = {PhotoActivitySubcomponent.class})
+@Module(subcomponents = {ActivityBuilder_BindPhotoActivity.PhotoActivitySubcomponent.class})
 public abstract class ActivityBuilder_BindPhotoActivity {
 
     @Subcomponent

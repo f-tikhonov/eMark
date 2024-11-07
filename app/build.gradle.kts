@@ -1,11 +1,17 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    kotlin("kapt")
 }
 
 android {
     namespace = "com.example.decompiledapk"
     compileSdk = 34
+
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
+    }
 
     defaultConfig {
         applicationId = "com.example.decompiledapk"
@@ -51,11 +57,46 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("com.github.jkwiecien:EasyImage:1.2.1")
+    implementation("com.github.felHR85:UsbSerial:6.1.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
+    implementation("com.squareup.okhttp3:okhttp:3.4.1")
+    implementation("com.squareup.okhttp3:logging-interceptor:3.4.1")
+   // implementation("org.osmdroid:osmbonuspack:6.1.13")
+   // implementation("com.github.mik3y:usb-serial-for-android:3.3.0")
+
+    implementation("androidx.appcompat:appcompat:1.3.1")
+    implementation("org.osmdroid:osmdroid-android:6.1.16")
+
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.github.bumptech.glide:annotations:4.9.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.9.0")
+
+    implementation("com.google.code.gson:gson:2.11.0")
+    implementation("com.google.code.gson:gson:2.11.0")
+    implementation("com.google.android.material:material:1.1.0")
+    implementation("androidx.databinding:databinding-compiler:7.2.1")
+    implementation("androidx.databinding:databinding-compiler:7.2.1")
+    implementation("com.google.firebase:firebase-core:16.0.8")
+
+    implementation("com.squareup.retrofit2:retrofit:2.5.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.5.0")
+    implementation("androidx.multidex:multidex:2.0.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+    implementation("com.google.dagger:dagger-android:2.51")
+    implementation("com.google.dagger:dagger-android-support:2.51")
+    annotationProcessor("com.google.dagger:dagger-android-processor:2.51")
+
+    implementation("androidx.room:room-runtime:2.1.0-alpha06")
+    annotationProcessor("androidx.room:room-compiler:2.1.0-alpha06")
+
+    implementation("androidx.legacy:legacy-preference-v14:1.0.0")
+    implementation("androidx.preference:preference:1.0.0")
+
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.6")
     implementation("androidx.activity:activity-compose:1.9.2")
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
-    implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")

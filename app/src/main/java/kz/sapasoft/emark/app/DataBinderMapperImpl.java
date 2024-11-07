@@ -1,5 +1,6 @@
 package kz.sapasoft.emark.app;
 
+import android.annotation.SuppressLint;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.view.View;
@@ -21,7 +22,7 @@ import kz.sapasoft.emark.app.databinding.ItemPhotoFooterBindingImpl;
 import kz.sapasoft.emark.app.databinding.ItemProjectBindingImpl;
 import kz.ss.emark.R;
 
-public class DataBinderMapperImpl extends DataBinderMapper {
+public abstract class DataBinderMapperImpl extends DataBinderMapper {
     private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP;
     private static final int LAYOUT_ACTIVITYWELCOME = 1;
     private static final int LAYOUT_FRAGMENTABOUT = 2;
@@ -122,6 +123,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
         throw new RuntimeException("view must have a tag");
     }
 
+    @SuppressLint("RestrictedApi")
     public int getLayoutId(String str) {
         Integer num;
         if (str == null || (num = InnerLayoutIdLookup.sKeys.get(str)) == null) {
@@ -130,10 +132,12 @@ public class DataBinderMapperImpl extends DataBinderMapper {
         return num.intValue();
     }
 
+    @SuppressLint("RestrictedApi")
     public String convertBrIdToString(int i) {
         return InnerBrLookup.sKeys.get(i);
     }
 
+    @SuppressLint("RestrictedApi")
     public List<DataBinderMapper> collectDependencies() {
         ArrayList arrayList = new ArrayList(1);
         arrayList.add(new androidx.databinding.library.baseAdapters.DataBinderMapperImpl());

@@ -8,7 +8,7 @@ import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
 import kz.sapasoft.emark.app.ui.marker.MarkerFragment;
 
-@Module(subcomponents = {MarkerFragmentSubcomponent.class})
+@Module(subcomponents = {MainActivityProviders_ProvideMarkerFragment.MarkerFragmentSubcomponent.class})
 public abstract class MainActivityProviders_ProvideMarkerFragment {
 
     @Subcomponent

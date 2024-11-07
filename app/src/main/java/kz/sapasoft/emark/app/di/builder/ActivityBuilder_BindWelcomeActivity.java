@@ -8,7 +8,7 @@ import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
 import kz.sapasoft.emark.app.ui.welcome.WelcomeActivity;
 
-@Module(subcomponents = {WelcomeActivitySubcomponent.class})
+@Module(subcomponents = {ActivityBuilder_BindWelcomeActivity.WelcomeActivitySubcomponent.class})
 public abstract class ActivityBuilder_BindWelcomeActivity {
 
     @Subcomponent

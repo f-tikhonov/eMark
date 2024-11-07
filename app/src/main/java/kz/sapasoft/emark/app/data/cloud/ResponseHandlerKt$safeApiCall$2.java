@@ -23,7 +23,7 @@ import retrofit2.HttpException;
 @Metadata(bv = {1, 0, 3}, d1 = {"\u0000\u0010\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\u0010\u0000\u001a\b\u0012\u0004\u0012\u0002H\u00020\u0001\"\u0004\b\u0000\u0010\u0002*\u00020\u0003H@¢\u0006\u0004\b\u0004\u0010\u0005"}, d2 = {"<anonymous>", "Lkz/sapasoft/emark/app/data/cloud/ResultWrapper;", "T", "Lkotlinx/coroutines/CoroutineScope;", "invoke", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"}, k = 3, mv = {1, 1, 16})
 @DebugMetadata(c = "kz.sapasoft.emark.app.data.cloud.ResponseHandlerKt$safeApiCall$2", f = "ResponseHandler.kt", i = {0}, l = {20}, m = "invokeSuspend", n = {"$this$withContext"}, s = {"L$0"})
 /* compiled from: ResponseHandler.kt */
-final class ResponseHandlerKt$safeApiCall$2 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super ResultWrapper<? extends T>>, Object> {
+abstract class ResponseHandlerKt$safeApiCall$2<T> extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super ResultWrapper<? extends T>>, Object> {
     final /* synthetic */ Function1 $apiCall;
     Object L$0;
     int label;
@@ -40,10 +40,6 @@ final class ResponseHandlerKt$safeApiCall$2 extends SuspendLambda implements Fun
         ResponseHandlerKt$safeApiCall$2 responseHandlerKt$safeApiCall$2 = new ResponseHandlerKt$safeApiCall$2(this.$apiCall, continuation);
         responseHandlerKt$safeApiCall$2.p$ = (CoroutineScope) obj;
         return responseHandlerKt$safeApiCall$2;
-    }
-
-    public final Object invoke(Object obj, Object obj2) {
-        return ((ResponseHandlerKt$safeApiCall$2) create(obj, (Continuation) obj2)).invokeSuspend(Unit.INSTANCE);
     }
 
     public final Object invokeSuspend(Object obj) {

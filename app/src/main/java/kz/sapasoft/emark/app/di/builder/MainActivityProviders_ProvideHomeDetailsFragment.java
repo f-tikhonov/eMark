@@ -8,7 +8,7 @@ import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
 import kz.sapasoft.emark.app.ui.map.MapFragment;
 
-@Module(subcomponents = {MapFragmentSubcomponent.class})
+@Module(subcomponents = {MainActivityProviders_ProvideHomeDetailsFragment.MapFragmentSubcomponent.class})
 public abstract class MainActivityProviders_ProvideHomeDetailsFragment {
 
     @Subcomponent
