@@ -25,6 +25,6 @@ final class ProjectsFragment$setObservers$$inlined$with$lambda$3<T> implements O
             Intrinsics.checkExpressionValueIsNotNull(linearLayout, "ll_connection_error");
             linearLayout.setVisibility(0);
         }
-        Toast.makeText(this.this$0.getContext(), String.valueOf(error != null ? error.getError() : null), 1).show();
+        Toast.makeText(this.this$0.getContext(), String.valueOf(error != null ? error.getMessage() : null), 1).show();
     }
 }

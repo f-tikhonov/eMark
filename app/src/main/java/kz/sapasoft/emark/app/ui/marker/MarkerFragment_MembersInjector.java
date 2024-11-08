@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModelProvider;
 import dagger.MembersInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.DaggerFragment_MembersInjector;
+import kz.sapasoft.emark.app.di.builder.MainActivityProviders_ProvideMarkerFragment;
+
 import javax.inject.Provider;
 
 public final class MarkerFragment_MembersInjector implements MembersInjector<MarkerFragment> {
@@ -25,6 +27,6 @@ public final class MarkerFragment_MembersInjector implements MembersInjector<Mar
     }
 
     public static void injectViewModelFactory(MarkerFragment markerFragment, ViewModelProvider.Factory factory) {
-        markerFragment.viewModelFactory = factory;
+        markerFragment.setViewModelFactory((MainActivityProviders_ProvideMarkerFragment.MarkerFragmentSubcomponent.Factory) factory);
     }
 }

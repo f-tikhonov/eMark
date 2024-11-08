@@ -31,18 +31,18 @@ public final class ImageDao_Impl implements ImageDao {
                 } else {
                     supportSQLiteStatement.bindString(1, imageDataModel.getId());
                 }
-                if (imageDataModel.getLocalIdParent() == null) {
+                if (imageDataModel.localIdParent == null) {
                     supportSQLiteStatement.bindNull(2);
                 } else {
-                    supportSQLiteStatement.bindString(2, imageDataModel.getLocalIdParent());
+                    supportSQLiteStatement.bindString(2, imageDataModel.localIdParent);
                 }
-                String fromMetaData = ImageDao_Impl.this.__dataConverter.fromMetaData(imageDataModel.getMetadata());
+                String fromMetaData = ImageDao_Impl.this.__dataConverter.fromMetaData(imageDataModel.metadata);
                 if (fromMetaData == null) {
                     supportSQLiteStatement.bindNull(3);
                 } else {
                     supportSQLiteStatement.bindString(3, fromMetaData);
                 }
-                String fromFile = ImageDao_Impl.this.__dataConverter.fromFile(imageDataModel.getFile());
+                String fromFile = ImageDao_Impl.this.__dataConverter.fromFile(imageDataModel.file);
                 if (fromFile == null) {
                     supportSQLiteStatement.bindNull(4);
                 } else {

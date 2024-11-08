@@ -3,9 +3,21 @@ package kz.sapasoft.emark.app.databinding;
 import android.util.SparseIntArray;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
+
 import androidx.databinding.DataBindingComponent;
 import androidx.databinding.ViewDataBinding;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.button.MaterialButton;
+
 import kz.sapasoft.emark.app.domain.model.MarkerModel;
+import kz.sapasoft.emark.app.ui.custom_views.MarkerDepthView;
+import kz.sapasoft.emark.app.ui.custom_views.MarkerIdentifierView;
+import kz.sapasoft.emark.app.ui.custom_views.MarkerModelView;
+import kz.sapasoft.emark.app.ui.custom_views.MarkerPhotoView;
+import kz.sapasoft.emark.app.ui.custom_views.MarkerTypeView;
 import kz.ss.emark.R;
 
 public class FragmentMarkerBindingImpl extends FragmentMarkerBinding {
@@ -39,10 +51,10 @@ public class FragmentMarkerBindingImpl extends FragmentMarkerBinding {
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     private FragmentMarkerBindingImpl(DataBindingComponent dataBindingComponent, View view, Object[] objArr) {
-        super(dataBindingComponent, view, 0, objArr[1], objArr[10], objArr[9], objArr[2], objArr[3], objArr[7], objArr[5], objArr[6], objArr[8], objArr[4]);
+        super((Object) dataBindingComponent, view, 0, (AppBarLayout) objArr[1], (MaterialButton) objArr[10], (LinearLayout) objArr[9], (ProgressBar) objArr[2], (ScrollView) objArr[3], (MarkerDepthView) objArr[7], (MarkerIdentifierView) objArr[5], (MarkerModelView) objArr[6], (MarkerPhotoView) objArr[8], (MarkerTypeView) objArr[4]);
         this.mDirtyFlags = -1;
         this.ablToolbar.setTag((Object) null);
-        LinearLayout linearLayout = objArr[0];
+        LinearLayout linearLayout = (LinearLayout) objArr[0];
         this.mboundView0 = linearLayout;
         linearLayout.setTag((Object) null);
         setRootTag(view);

@@ -1,3 +1,4 @@
+/*
 package kz.sapasoft.emark.app.ui.marker;
 
 import kotlin.Metadata;
@@ -16,15 +17,23 @@ import kz.sapasoft.emark.app.domain.model.MarkerModel;
 
 @Metadata(bv = {1, 0, 3}, d1 = {"\u0000\u000e\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H@¢\u0006\u0004\b\u0003\u0010\u0004"}, d2 = {"<anonymous>", "", "Lkotlinx/coroutines/CoroutineScope;", "invoke", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"}, k = 3, mv = {1, 1, 16})
 @DebugMetadata(c = "kz.sapasoft.emark.app.ui.marker.MarkerViewModel$getImages$1", f = "MarkerViewModel.kt", i = {0}, l = {113}, m = "invokeSuspend", n = {"$this$launchIO"}, s = {"L$0"})
-/* compiled from: MarkerViewModel.kt */
+*/
+/* compiled from: MarkerViewModel.kt *//*
+
 final class MarkerViewModel$getImages$1 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
-    final /* synthetic */ MarkerModel $markerModel;
+    final */
+/* synthetic *//*
+ MarkerModel $markerModel;
     Object L$0;
     int label;
     private CoroutineScope p$;
-    final /* synthetic */ MarkerViewModel this$0;
+    final */
+/* synthetic *//*
+ MarkerViewModel this$0;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    */
+/* JADX INFO: super call moved to the top of the method (can break code semantics) *//*
+
     MarkerViewModel$getImages$1(MarkerViewModel markerViewModel, MarkerModel markerModel, Continuation continuation) {
         super(2, continuation);
         this.this$0 = markerViewModel;
@@ -66,8 +75,9 @@ final class MarkerViewModel$getImages$1 extends SuspendLambda implements Functio
         if (resultWrapper instanceof ResultWrapper.Error) {
             this.this$0.getError().postValue(resultWrapper);
         } else if (resultWrapper instanceof ResultWrapper.Success) {
-            this.this$0.getImagesData().postValue(((ResultWrapper.Success) resultWrapper).getValue());
+            this.this$0.getImagesData().postValue(((ResultWrapper.Success) resultWrapper).value);
         }
         return Unit.INSTANCE;
     }
 }
+*/

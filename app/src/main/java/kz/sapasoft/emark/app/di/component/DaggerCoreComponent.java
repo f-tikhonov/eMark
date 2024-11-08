@@ -11,7 +11,6 @@ import dagger.android.DispatchingAndroidInjector_Factory;
 import dagger.android.support.DaggerAppCompatActivity_MembersInjector;
 import dagger.android.support.DaggerFragment_MembersInjector;
 import dagger.internal.DoubleCheck;
-import dagger.internal.Factory;
 import dagger.internal.InstanceFactory;
 import dagger.internal.MapBuilder;
 import dagger.internal.MapProviderFactory;
@@ -46,7 +45,6 @@ import kz.sapasoft.emark.app.di.builder.MainActivityProviders_ProvideHomeFragmen
 import kz.sapasoft.emark.app.di.builder.MainActivityProviders_ProvideMainFragment;
 import kz.sapasoft.emark.app.di.builder.MainActivityProviders_ProvideMarkerFragment;
 import kz.sapasoft.emark.app.di.builder.MainActivityProviders_ProvideSettingsFragment;
-import kz.sapasoft.emark.app.di.component.CoreComponent;
 import kz.sapasoft.emark.app.di.module.ContextModule;
 import kz.sapasoft.emark.app.di.module.ContextModule_ProvideContextFactory;
 import kz.sapasoft.emark.app.di.module.DatabaseModule;
@@ -152,7 +150,7 @@ public final class DaggerCoreComponent implements CoreComponent {
         return new Builder();
     }
 
-    private Map<Class<?>, Provider<AndroidInjector.Factory<?>>> getMapOfClassOfAndProviderOfAndroidInjectorFactoryOf() {
+    private Map<Object, Object> getMapOfClassOfAndProviderOfAndroidInjectorFactoryOf() {
         return MapBuilder.newMapBuilder(3).put(WelcomeActivity.class, this.welcomeActivitySubcomponentFactoryProvider).put(MainActivity.class, this.mainActivitySubcomponentFactoryProvider).put(PhotoActivity.class, this.photoActivitySubcomponentFactoryProvider).build();
     }
 
@@ -177,9 +175,9 @@ public final class DaggerCoreComponent implements CoreComponent {
                 return new PhotoActivitySubcomponentFactory();
             }
         };
-        Factory create = InstanceFactory.create(application);
-        this.applicationProvider = create;
-        Provider<Context> provider = DoubleCheck.provider(ContextModule_ProvideContextFactory.create(contextModule, create));
+        Factory create = (Factory) InstanceFactory.create(application);
+        this.applicationProvider = (Provider<Application>) create;
+        Provider<Context> provider = DoubleCheck.provider(ContextModule_ProvideContextFactory.create(contextModule, (Provider<Application>) create));
         this.provideContextProvider = provider;
         this.prefsImplProvider = PrefsImpl_Factory.create(provider);
         this.providesGsonConverterFactoryProvider = DoubleCheck.provider(NetworkModule_ProvidesGsonConverterFactoryFactory.create(networkModule));

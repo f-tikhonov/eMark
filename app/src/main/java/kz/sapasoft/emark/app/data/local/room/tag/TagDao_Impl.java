@@ -29,40 +29,40 @@ public final class TagDao_Impl implements TagDao {
                 } else {
                     supportSQLiteStatement.bindString(1, tagModel.getId());
                 }
-                if (tagModel.getCreatedById() == null) {
+                if (tagModel.createdById == null) {
                     supportSQLiteStatement.bindNull(2);
                 } else {
-                    supportSQLiteStatement.bindString(2, tagModel.getCreatedById());
+                    supportSQLiteStatement.bindString(2, tagModel.createdById);
                 }
-                if (tagModel.getCreated() == null) {
+                if (tagModel.created == null) {
                     supportSQLiteStatement.bindNull(3);
                 } else {
-                    supportSQLiteStatement.bindLong(3, tagModel.getCreated().longValue());
+                    supportSQLiteStatement.bindLong(3, tagModel.created.longValue());
                 }
-                if (tagModel.getUpdatedById() == null) {
+                if (tagModel.updatedById == null) {
                     supportSQLiteStatement.bindNull(4);
                 } else {
-                    supportSQLiteStatement.bindString(4, tagModel.getUpdatedById());
+                    supportSQLiteStatement.bindString(4, tagModel.updatedById);
                 }
-                if (tagModel.getUpdated() == null) {
+                if (tagModel.updated == null) {
                     supportSQLiteStatement.bindNull(5);
                 } else {
-                    supportSQLiteStatement.bindLong(5, tagModel.getUpdated().longValue());
+                    supportSQLiteStatement.bindLong(5, tagModel.updated.longValue());
                 }
-                if (tagModel.getFrontData() == null) {
+                if (tagModel.frontData == null) {
                     supportSQLiteStatement.bindNull(6);
                 } else {
-                    supportSQLiteStatement.bindString(6, tagModel.getFrontData());
+                    supportSQLiteStatement.bindString(6, tagModel.frontData);
                 }
-                if (tagModel.getTemplateId() == null) {
+                if (tagModel.templateId == null) {
                     supportSQLiteStatement.bindNull(7);
                 } else {
-                    supportSQLiteStatement.bindString(7, tagModel.getTemplateId());
+                    supportSQLiteStatement.bindString(7, tagModel.templateId);
                 }
-                if (tagModel.getName() == null) {
+                if (tagModel.name == null) {
                     supportSQLiteStatement.bindNull(8);
                 } else {
-                    supportSQLiteStatement.bindString(8, tagModel.getName());
+                    supportSQLiteStatement.bindString(8, tagModel.name);
                 }
             }
         };

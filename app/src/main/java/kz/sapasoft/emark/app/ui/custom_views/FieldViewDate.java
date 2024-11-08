@@ -156,7 +156,7 @@ public final class FieldViewDate extends FieldView {
         DateConverter dateConverter = DateConverter.INSTANCE;
         TextView textView = (TextView) _$_findCachedViewById(R.id.tv_text);
         Intrinsics.checkExpressionValueIsNotNull(textView, "tv_text");
-        fieldModel.setDateValue(dateConverter.stringToMillis(textView.getText().toString(), "dd.MM.yyyy"));
+        fieldModel.dateValue = dateConverter.stringToMillis(textView.getText().toString(), "dd.MM.yyyy");
         return this.mField;
     }
 
@@ -165,11 +165,11 @@ public final class FieldViewDate extends FieldView {
         this.mField = FieldModel.copy$default(fieldModel, (String) null, (Long) null, (String) null, (Long) null, (String) null, (String) null, (String) null, (String) null, (String) null, (Boolean) null, (Boolean) null, (String) null, (String) null, (String) null, (Long) null, (Double) null, (String) null, (String) null, (TagModel) null, (Long) null, 1048575, (Object) null);
         TextView textView = (TextView) _$_findCachedViewById(R.id.tv_text);
         Intrinsics.checkExpressionValueIsNotNull(textView, "tv_text");
-        textView.setText(DateConverter.INSTANCE.millisToString(fieldModel.getDateValue(), "dd.MM.yyyy"));
+        textView.setText(DateConverter.INSTANCE.millisToString(fieldModel.dateValue, "dd.MM.yyyy"));
     }
 
     public boolean isRequired() {
-        Boolean required = this.mField.getRequired();
+        Boolean required = this.mField.required;
         if (required != null) {
             return required.booleanValue();
         }

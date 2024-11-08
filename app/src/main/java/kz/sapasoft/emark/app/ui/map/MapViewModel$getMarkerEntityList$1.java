@@ -1,3 +1,4 @@
+/*
 package kz.sapasoft.emark.app.ui.map;
 
 import java.util.ArrayList;
@@ -21,14 +22,22 @@ import kz.sapasoft.emark.app.domain.model.MarkerModelSync;
 
 @Metadata(bv = {1, 0, 3}, d1 = {"\u0000\u000e\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H@¢\u0006\u0004\b\u0003\u0010\u0004"}, d2 = {"<anonymous>", "", "Lkotlinx/coroutines/CoroutineScope;", "invoke", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"}, k = 3, mv = {1, 1, 16})
 @DebugMetadata(c = "kz.sapasoft.emark.app.ui.map.MapViewModel$getMarkerEntityList$1", f = "MapViewModel.kt", i = {}, l = {}, m = "invokeSuspend", n = {}, s = {})
-/* compiled from: MapViewModel.kt */
+*/
+/* compiled from: MapViewModel.kt *//*
+
 final class MapViewModel$getMarkerEntityList$1 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
-    final /* synthetic */ String $projectId;
+    final */
+/* synthetic *//*
+ String $projectId;
     int label;
     private CoroutineScope p$;
-    final /* synthetic */ MapViewModel this$0;
+    final */
+/* synthetic *//*
+ MapViewModel this$0;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    */
+/* JADX INFO: super call moved to the top of the method (can break code semantics) *//*
+
     MapViewModel$getMarkerEntityList$1(MapViewModel mapViewModel, String str, Continuation continuation) {
         super(2, continuation);
         this.this$0 = mapViewModel;
@@ -84,3 +93,4 @@ final class MapViewModel$getMarkerEntityList$1 extends SuspendLambda implements 
         throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
     }
 }
+*/

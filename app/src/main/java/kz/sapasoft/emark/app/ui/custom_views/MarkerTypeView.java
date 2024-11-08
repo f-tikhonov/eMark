@@ -110,7 +110,7 @@ public final class MarkerTypeView extends LinearLayout {
         }
         Spinner spinner = (Spinner) _$_findCachedViewById(kz.sapasoft.emark.app.R.id.spinner);
         Intrinsics.checkExpressionValueIsNotNull(spinner, "spinner");
-        return list.get(spinner.getSelectedItemPosition()).getMarkerTypes().get(0);
+        return list.get(spinner.getSelectedItemPosition()).markerTypes.get(0);
     }
 
     public final String getTemplateId() {

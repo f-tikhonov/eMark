@@ -2,8 +2,16 @@ package kz.sapasoft.emark.app.databinding;
 
 import android.util.SparseIntArray;
 import android.view.View;
+import android.widget.ScrollView;
+
 import androidx.databinding.DataBindingComponent;
 import androidx.databinding.ViewDataBinding;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textview.MaterialTextView;
+
 import kz.sapasoft.emark.app.ui.welcome.WelcomeViewModel;
 import kz.ss.emark.R;
 
@@ -37,7 +45,7 @@ public class ActivityWelcomeBindingImpl extends ActivityWelcomeBinding {
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     private ActivityWelcomeBindingImpl(DataBindingComponent dataBindingComponent, View view, Object[] objArr) {
-        super(dataBindingComponent, view, 0, objArr[9], objArr[6], objArr[8], objArr[4], objArr[5], objArr[7], objArr[3], objArr[1], objArr[2], objArr[0]);
+        super((Object) dataBindingComponent, view, 0, (MaterialButton) objArr[9], (TextInputEditText) objArr[6], (TextInputEditText) objArr[8], (TextInputEditText) objArr[4], (TextInputLayout) objArr[5], (TextInputLayout) objArr[7], (TextInputLayout) objArr[3], (MaterialTextView) objArr[1], (MaterialTextView) objArr[2], (ScrollView) objArr[0]);
         this.mDirtyFlags = -1;
         this.viewParent.setTag((Object) null);
         setRootTag(view);

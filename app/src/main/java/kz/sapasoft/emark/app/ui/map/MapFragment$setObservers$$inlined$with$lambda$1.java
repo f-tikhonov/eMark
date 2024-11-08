@@ -1,3 +1,4 @@
+/*
 package kz.sapasoft.emark.app.ui.map;
 
 import androidx.lifecycle.Observer;
@@ -10,9 +11,13 @@ import kz.sapasoft.emark.app.domain.model.MarkerModel;
 import org.osmdroid.views.MapView;
 
 @Metadata(bv = {1, 0, 3}, d1 = {"\u0000\u0018\n\u0000\n\u0002\u0010\u0002\n\u0000\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\b\u0003\u0010\u0000\u001a\u00020\u00012\u001a\u0010\u0002\u001a\u0016\u0012\u0004\u0012\u00020\u0004 \u0005*\n\u0012\u0004\u0012\u00020\u0004\u0018\u00010\u00030\u0003H\n¢\u0006\u0002\b\u0006¨\u0006\u0007"}, d2 = {"<anonymous>", "", "it", "", "Lkz/sapasoft/emark/app/domain/model/MarkerModel;", "kotlin.jvm.PlatformType", "onChanged", "kz/sapasoft/emark/app/ui/map/MapFragment$setObservers$1$1"}, k = 3, mv = {1, 1, 16})
-/* compiled from: MapFragment.kt */
+*/
+/* compiled from: MapFragment.kt *//*
+
 final class MapFragment$setObservers$$inlined$with$lambda$1<T> implements Observer<List<? extends MarkerModel>> {
-    final /* synthetic */ MapFragment this$0;
+    final */
+/* synthetic *//*
+ MapFragment this$0;
 
     MapFragment$setObservers$$inlined$with$lambda$1(MapFragment mapFragment) {
         this.this$0 = mapFragment;
@@ -34,3 +39,4 @@ final class MapFragment$setObservers$$inlined$with$lambda$1<T> implements Observ
         mapFragment.addMapMarkers((List<MarkerModel>) list);
     }
 }
+*/

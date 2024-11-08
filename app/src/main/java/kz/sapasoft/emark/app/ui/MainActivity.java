@@ -98,7 +98,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
     }
 
     private final void setupNavigation() {
-        this.fm.beginTransaction().add((int) R.id.fl_content, this.fragment1, DiskLruCache.VERSION_1).commit();
+//        this.fm.beginTransaction().add((int) R.id.fl_content, this.fragment1, DiskLruCache.VERSION_1).commit();
         this.fm.beginTransaction().add((int) R.id.fl_content, this.fragment2, ExifInterface.GPS_MEASUREMENT_2D).hide(this.fragment2).commit();
         this.fm.beginTransaction().add((int) R.id.fl_content, this.fragment3, ExifInterface.GPS_MEASUREMENT_3D).hide(this.fragment3).commit();
         updateNavigationBarState(R.id.nav_item_projects);
@@ -154,9 +154,9 @@ public final class MainActivity extends DaggerAppCompatActivity {
         PendingIntent broadcast = PendingIntent.getBroadcast(this, 0, new Intent(this.ACTION_USB_PERMISSION), 0);
         Collection<UsbDevice> values = getMUsbManager().getDeviceList().values();
         Intrinsics.checkExpressionValueIsNotNull(values, "mUsbManager.deviceList.values");
-        for (T requestPermission : CollectionsKt.toMutableList(values)) {
-            getMUsbManager().requestPermission(requestPermission, broadcast);
-        }
+//        for (T requestPermission : CollectionsKt.toMutableList(values)) {
+//            getMUsbManager().requestPermission(requestPermission, broadcast);
+//        }
     }
 
     private final void registerReceiver() {

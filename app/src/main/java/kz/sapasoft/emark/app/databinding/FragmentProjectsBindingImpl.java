@@ -1,13 +1,23 @@
 package kz.sapasoft.emark.app.databinding;
 
+import android.annotation.SuppressLint;
 import android.util.SparseIntArray;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import androidx.databinding.DataBindingComponent;
 import androidx.databinding.InverseBindingListener;
 import androidx.databinding.ViewDataBinding;
 import androidx.databinding.adapters.TextViewBindingAdapter;
 import androidx.lifecycle.MutableLiveData;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.appbar.AppBarLayout;
+
 import kz.sapasoft.emark.app.ui.projects.ProjectsViewModel;
 import kz.ss.emark.R;
 
@@ -32,10 +42,10 @@ public class FragmentProjectsBindingImpl extends FragmentProjectsBinding {
     }
 
     private FragmentProjectsBindingImpl(DataBindingComponent dataBindingComponent, View view, Object[] objArr) {
-        super(dataBindingComponent, view, 2, objArr[1], objArr[2], objArr[5], objArr[4], objArr[3], objArr[6], objArr[7]);
+        super(dataBindingComponent, view, 2, (AppBarLayout) objArr[1], (EditText) objArr[2], (LinearLayout) objArr[5], (RecyclerView) objArr[4], (SwipeRefreshLayout) objArr[3], (TextView) objArr[6], (TextView) objArr[7]);
         this.etSearchandroidTextAttrChanged = new InverseBindingListener() {
             public void onChange() {
-                String textString = TextViewBindingAdapter.getTextString(FragmentProjectsBindingImpl.this.etSearch);
+                @SuppressLint("RestrictedApi") String textString = TextViewBindingAdapter.getTextString(FragmentProjectsBindingImpl.this.etSearch);
                 ProjectsViewModel projectsViewModel = FragmentProjectsBindingImpl.this.mViewModel;
                 boolean z = true;
                 if (projectsViewModel != null) {
@@ -52,7 +62,7 @@ public class FragmentProjectsBindingImpl extends FragmentProjectsBinding {
         this.mDirtyFlags = -1;
         this.ablToolbar.setTag((Object) null);
         this.etSearch.setTag((Object) null);
-        RelativeLayout relativeLayout = objArr[0];
+        RelativeLayout relativeLayout = (RelativeLayout) objArr[0];
         this.mboundView0 = relativeLayout;
         relativeLayout.setTag((Object) null);
         this.swipe.setTag((Object) null);

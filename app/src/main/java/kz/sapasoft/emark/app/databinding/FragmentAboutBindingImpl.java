@@ -5,6 +5,9 @@ import android.view.View;
 import android.widget.ScrollView;
 import androidx.databinding.DataBindingComponent;
 import androidx.databinding.ViewDataBinding;
+
+import com.google.android.material.appbar.AppBarLayout;
+
 import kz.sapasoft.emark.app.domain.model.AboutModel;
 
 public class FragmentAboutBindingImpl extends FragmentAboutBinding {
@@ -23,10 +26,10 @@ public class FragmentAboutBindingImpl extends FragmentAboutBinding {
     }
 
     private FragmentAboutBindingImpl(DataBindingComponent dataBindingComponent, View view, Object[] objArr) {
-        super(dataBindingComponent, view, 0, objArr[1]);
+        super(dataBindingComponent, view, 0, (AppBarLayout) objArr[1]);
         this.mDirtyFlags = -1;
         this.ablToolbar.setTag((Object) null);
-        ScrollView scrollView = objArr[0];
+        ScrollView scrollView = (ScrollView) objArr[0];
         this.mboundView0 = scrollView;
         scrollView.setTag((Object) null);
         setRootTag(view);

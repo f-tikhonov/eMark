@@ -1,3 +1,4 @@
+/*
 package kz.sapasoft.emark.app.ui.settings;
 
 import androidx.lifecycle.MutableLiveData;
@@ -21,17 +22,29 @@ import kz.sapasoft.emark.app.domain.model.MarkerModel;
 import kz.sapasoft.emark.app.utils.DateConverter;
 
 @Metadata(bv = {1, 0, 3}, d1 = {"\u0000\u0012\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\b\u0003\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H@¢\u0006\u0004\b\u0003\u0010\u0004¨\u0006\u0005"}, d2 = {"<anonymous>", "", "Lkotlinx/coroutines/CoroutineScope;", "invoke", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", "kz/sapasoft/emark/app/ui/settings/SettingsViewModel$getMarkerDetails$1$1"}, k = 3, mv = {1, 1, 16})
-/* compiled from: SettingsViewModel.kt */
+*/
+/* compiled from: SettingsViewModel.kt *//*
+
 final class SettingsViewModel$getMarkerDetails$$inlined$forEachIndexed$lambda$1 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
-    final /* synthetic */ int $i;
-    final /* synthetic */ MarkerModel $item;
-    final /* synthetic */ ArrayList $markers$inlined;
+    final */
+/* synthetic *//*
+ int $i;
+    final */
+/* synthetic *//*
+ MarkerModel $item;
+    final */
+/* synthetic *//*
+ ArrayList $markers$inlined;
     Object L$0;
     int label;
     private CoroutineScope p$;
-    final /* synthetic */ SettingsViewModel this$0;
+    final */
+/* synthetic *//*
+ SettingsViewModel this$0;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    */
+/* JADX INFO: super call moved to the top of the method (can break code semantics) *//*
+
     SettingsViewModel$getMarkerDetails$$inlined$forEachIndexed$lambda$1(MarkerModel markerModel, int i, Continuation continuation, SettingsViewModel settingsViewModel, ArrayList arrayList) {
         super(2, continuation);
         this.$item = markerModel;
@@ -101,3 +114,4 @@ final class SettingsViewModel$getMarkerDetails$$inlined$forEachIndexed$lambda$1 
         return Unit.INSTANCE;
     }
 }
+*/

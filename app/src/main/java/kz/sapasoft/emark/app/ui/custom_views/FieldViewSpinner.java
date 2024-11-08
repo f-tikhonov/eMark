@@ -215,7 +215,7 @@ public final class FieldViewSpinner extends FieldView {
             List<TagModel> list = this.mTagList;
             Spinner spinner2 = (Spinner) _$_findCachedViewById(R.id.spinner);
             Intrinsics.checkExpressionValueIsNotNull(spinner2, "spinner");
-            fieldModel.setTagValue(list.get(spinner2.getSelectedItemPosition()));
+            fieldModel.tagValue = list.get(spinner2.getSelectedItemPosition());
         }
         return this.mField;
     }
@@ -293,7 +293,7 @@ public final class FieldViewSpinner extends FieldView {
     }
 
     public boolean isRequired() {
-        Boolean required = this.mField.getRequired();
+        Boolean required = this.mField.required;
         if (required != null) {
             return required.booleanValue();
         }

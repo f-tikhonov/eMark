@@ -1,3 +1,4 @@
+/*
 package kz.sapasoft.emark.app.data.cloud.repository;
 
 import java.util.List;
@@ -16,13 +17,21 @@ import kz.sapasoft.emark.app.domain.model.request.GetMarkersRequest;
 
 @Metadata(bv = {1, 0, 3}, d1 = {"\u0000\u000e\n\u0000\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0002\b\u0002\u0010\u0000\u001a\b\u0012\u0004\u0012\u00020\u00020\u0001H@¢\u0006\u0004\b\u0003\u0010\u0004"}, d2 = {"<anonymous>", "", "Lkz/sapasoft/emark/app/domain/model/MarkerModel;", "invoke", "(Ljava/lang/Object;)Ljava/lang/Object;"}, k = 3, mv = {1, 1, 16})
 @DebugMetadata(c = "kz.sapasoft.emark.app.data.cloud.repository.CloudRepository$getMarkerList$2", f = "CloudRepository.kt", i = {}, l = {54}, m = "invokeSuspend", n = {}, s = {})
-/* compiled from: CloudRepository.kt */
-final class CloudRepository$getMarkerList$2 extends SuspendLambda implements Function1<Continuation<? super List<? extends MarkerModel>>, Object> {
-    final /* synthetic */ GetMarkersRequest $request;
-    int label;
-    final /* synthetic */ CloudRepository this$0;
+*/
+/* compiled from: CloudRepository.kt *//*
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+final class CloudRepository$getMarkerList$2 extends SuspendLambda implements Function1<Continuation<? super List<? extends MarkerModel>>, Object> {
+    final */
+/* synthetic *//*
+ GetMarkersRequest $request;
+    int label;
+    final */
+/* synthetic *//*
+ CloudRepository this$0;
+
+    */
+/* JADX INFO: super call moved to the top of the method (can break code semantics) *//*
+
     CloudRepository$getMarkerList$2(CloudRepository cloudRepository, GetMarkersRequest getMarkersRequest, Continuation continuation) {
         super(1, continuation);
         this.this$0 = cloudRepository;
@@ -58,3 +67,4 @@ final class CloudRepository$getMarkerList$2 extends SuspendLambda implements Fun
         return obj;
     }
 }
+*/

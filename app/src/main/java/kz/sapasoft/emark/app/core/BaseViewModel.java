@@ -16,6 +16,6 @@ import kotlinx.coroutines.Job;
 public abstract class BaseViewModel extends ViewModel {
     public final <P> void launchIO(Function2<? super CoroutineScope, ? super Continuation<? super P>, ? extends Object> function2) {
         Intrinsics.checkParameterIsNotNull(function2, "doOnAsyncBlock");
-        Job unused = BuildersKt__Builders_commonKt.launch$default(ViewModelKt.getViewModelScope(this), new BaseViewModel$launchIO$$inlined$CoroutineExceptionHandler$1(CoroutineExceptionHandler.Key), (CoroutineStart) null, new BaseViewModel$launchIO$2(function2, (Continuation) null), 2, (Object) null);
+        //Job unused = BuildersKt__Builders_commonKt.launch$default(ViewModelKt.getViewModelScope(this), new BaseViewModel$launchIO$$inlined$CoroutineExceptionHandler$1(CoroutineExceptionHandler.Key), (CoroutineStart) null, new BaseViewModel$launchIO$2(function2, (Continuation) null), 2, (Object) null);
     }
 }

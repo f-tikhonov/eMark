@@ -2,10 +2,18 @@ package kz.sapasoft.emark.app.databinding;
 
 import android.util.SparseIntArray;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import androidx.databinding.DataBindingComponent;
 import androidx.databinding.ViewDataBinding;
 import androidx.databinding.adapters.TextViewBindingAdapter;
+
+import com.google.android.material.appbar.AppBarLayout;
+
+import org.osmdroid.views.MapView;
+
 import kz.sapasoft.emark.app.domain.model.ProjectModel;
 import kz.ss.emark.R;
 
@@ -32,10 +40,10 @@ public class FragmentMapBindingImpl extends FragmentMapBinding {
     }
 
     private FragmentMapBindingImpl(DataBindingComponent dataBindingComponent, View view, Object[] objArr) {
-        super(dataBindingComponent, view, 0, objArr[1], objArr[4], objArr[3], objArr[2]);
+        super((Object) dataBindingComponent, view, 0, (AppBarLayout) objArr[1], (ImageView) objArr[4], (MapView) objArr[3], (TextView) objArr[2]);
         this.mDirtyFlags = -1;
         this.ablToolbar.setTag((Object) null);
-        LinearLayout linearLayout = objArr[0];
+        LinearLayout linearLayout = (LinearLayout) objArr[0];
         this.mboundView0 = linearLayout;
         linearLayout.setTag((Object) null);
         this.tvName.setTag((Object) null);
@@ -87,7 +95,7 @@ public class FragmentMapBindingImpl extends FragmentMapBinding {
         ProjectModel projectModel = this.mItem;
         long j2 = j & 3;
         if (!(j2 == 0 || projectModel == null)) {
-            str = projectModel.getName();
+            str = projectModel.name;
         }
         if (j2 != 0) {
             TextViewBindingAdapter.setText(this.tvName, str);

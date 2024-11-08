@@ -1,3 +1,4 @@
+/*
 package kz.sapasoft.emark.app.data.local.room;
 
 import androidx.core.app.NotificationCompat;
@@ -34,7 +35,9 @@ public final class LocalDatabase_Impl extends LocalDatabase {
     private volatile TagDao _tagDao;
     private volatile TemplateDao _templateDao;
 
-    /* access modifiers changed from: protected */
+    */
+/* access modifiers changed from: protected *//*
+
     public SupportSQLiteOpenHelper createOpenHelper(DatabaseConfiguration databaseConfiguration) {
         return databaseConfiguration.sqliteOpenHelperFactory.create(SupportSQLiteOpenHelper.Configuration.builder(databaseConfiguration.context).name(databaseConfiguration.name).callback(new RoomOpenHelper(databaseConfiguration, new RoomOpenHelper.Delegate(1) {
             public void createAllTables(SupportSQLiteDatabase supportSQLiteDatabase) {
@@ -57,7 +60,9 @@ public final class LocalDatabase_Impl extends LocalDatabase {
                 supportSQLiteDatabase.execSQL("DROP TABLE IF EXISTS `image_table`");
             }
 
-            /* access modifiers changed from: protected */
+            */
+/* access modifiers changed from: protected *//*
+
             public void onCreate(SupportSQLiteDatabase supportSQLiteDatabase) {
                 if (LocalDatabase_Impl.this.mCallbacks != null) {
                     int size = LocalDatabase_Impl.this.mCallbacks.size();
@@ -78,7 +83,9 @@ public final class LocalDatabase_Impl extends LocalDatabase {
                 }
             }
 
-            /* access modifiers changed from: protected */
+            */
+/* access modifiers changed from: protected *//*
+
             public void validateMigration(SupportSQLiteDatabase supportSQLiteDatabase) {
                 SupportSQLiteDatabase supportSQLiteDatabase2 = supportSQLiteDatabase;
                 HashMap hashMap = new HashMap(4);
@@ -192,7 +199,9 @@ public final class LocalDatabase_Impl extends LocalDatabase {
         }, "84a8cb60b4604c9828bcdd284012e41b", "b34a78d3e9ed1147d8f4d230187b12e2")).build());
     }
 
-    /* access modifiers changed from: protected */
+    */
+/* access modifiers changed from: protected *//*
+
     public InvalidationTracker createInvalidationTracker() {
         return new InvalidationTracker(this, "project_table", "tag_table", "template_table", "marker_table", "marker_sync_table", "image_table");
     }
@@ -302,3 +311,4 @@ public final class LocalDatabase_Impl extends LocalDatabase {
         return imageDao;
     }
 }
+*/

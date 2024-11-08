@@ -33,75 +33,75 @@ public final class MarkerSyncDao_Impl implements MarkerSyncDao {
                 } else {
                     supportSQLiteStatement.bindString(1, markerModelSync.getId());
                 }
-                if (markerModelSync.getUpdated() == null) {
+                if (markerModelSync.updated == null) {
                     supportSQLiteStatement.bindNull(2);
                 } else {
-                    supportSQLiteStatement.bindLong(2, markerModelSync.getUpdated().longValue());
+                    supportSQLiteStatement.bindLong(2, markerModelSync.updated.longValue());
                 }
-                if (markerModelSync.getTemplateId() == null) {
+                if (markerModelSync.templateId == null) {
                     supportSQLiteStatement.bindNull(3);
                 } else {
-                    supportSQLiteStatement.bindString(3, markerModelSync.getTemplateId());
+                    supportSQLiteStatement.bindString(3, markerModelSync.templateId);
                 }
-                if (markerModelSync.getMarkerId() == null) {
+                if (markerModelSync.markerId == null) {
                     supportSQLiteStatement.bindNull(4);
                 } else {
-                    supportSQLiteStatement.bindString(4, markerModelSync.getMarkerId());
+                    supportSQLiteStatement.bindString(4, markerModelSync.markerId);
                 }
-                if (markerModelSync.getMarkerModel() == null) {
+                if (markerModelSync.markerModel == null) {
                     supportSQLiteStatement.bindNull(5);
                 } else {
-                    supportSQLiteStatement.bindString(5, markerModelSync.getMarkerModel());
+                    supportSQLiteStatement.bindString(5, markerModelSync.markerModel);
                 }
-                if (markerModelSync.getColor() == null) {
+                if (markerModelSync.color == null) {
                     supportSQLiteStatement.bindNull(6);
                 } else {
-                    supportSQLiteStatement.bindString(6, markerModelSync.getColor());
+                    supportSQLiteStatement.bindString(6, markerModelSync.color);
                 }
-                if (markerModelSync.getPassiveId() == null) {
+                if (markerModelSync.passiveId == null) {
                     supportSQLiteStatement.bindNull(7);
                 } else {
-                    supportSQLiteStatement.bindString(7, markerModelSync.getPassiveId());
+                    supportSQLiteStatement.bindString(7, markerModelSync.passiveId);
                 }
-                String fromStringList = MarkerSyncDao_Impl.this.__dataConverter.fromStringList(markerModelSync.getProjectIds());
+                String fromStringList = MarkerSyncDao_Impl.this.__dataConverter.fromStringList(markerModelSync.projectIds);
                 if (fromStringList == null) {
                     supportSQLiteStatement.bindNull(8);
                 } else {
                     supportSQLiteStatement.bindString(8, fromStringList);
                 }
-                if (markerModelSync.getDepth() == null) {
+                if (markerModelSync.depth == null) {
                     supportSQLiteStatement.bindNull(9);
                 } else {
-                    supportSQLiteStatement.bindDouble(9, markerModelSync.getDepth().doubleValue());
+                    supportSQLiteStatement.bindDouble(9, markerModelSync.depth.doubleValue());
                 }
-                String fromDoubleList = MarkerSyncDao_Impl.this.__dataConverter.fromDoubleList(markerModelSync.getLocation());
+                String fromDoubleList = MarkerSyncDao_Impl.this.__dataConverter.fromDoubleList(markerModelSync.location);
                 if (fromDoubleList == null) {
                     supportSQLiteStatement.bindNull(10);
                 } else {
                     supportSQLiteStatement.bindString(10, fromDoubleList);
                 }
-                String fromFieldModelList = MarkerSyncDao_Impl.this.__dataConverter.fromFieldModelList(markerModelSync.getFields());
+                String fromFieldModelList = MarkerSyncDao_Impl.this.__dataConverter.fromFieldModelList(markerModelSync.fields);
                 if (fromFieldModelList == null) {
                     supportSQLiteStatement.bindNull(11);
                 } else {
                     supportSQLiteStatement.bindString(11, fromFieldModelList);
                 }
-                if (markerModelSync.getGeneralId() == null) {
+                if (markerModelSync.generalId == null) {
                     supportSQLiteStatement.bindNull(12);
                 } else {
-                    supportSQLiteStatement.bindString(12, markerModelSync.getGeneralId());
+                    supportSQLiteStatement.bindString(12, markerModelSync.generalId);
                 }
-                if (markerModelSync.getMarkerType() == null) {
+                if (markerModelSync.markerType == null) {
                     supportSQLiteStatement.bindNull(13);
                 } else {
-                    supportSQLiteStatement.bindString(13, markerModelSync.getMarkerType());
+                    supportSQLiteStatement.bindString(13, markerModelSync.markerType);
                 }
-                if (markerModelSync.getIdLocal() == null) {
+                if (markerModelSync.idLocal == null) {
                     supportSQLiteStatement.bindNull(14);
                 } else {
-                    supportSQLiteStatement.bindString(14, markerModelSync.getIdLocal());
+                    supportSQLiteStatement.bindString(14, markerModelSync.idLocal);
                 }
-                String fromMarkerStatus = MarkerSyncDao_Impl.this.__dataConverter.fromMarkerStatus(markerModelSync.getStatus());
+                String fromMarkerStatus = MarkerSyncDao_Impl.this.__dataConverter.fromMarkerStatus(markerModelSync.status);
                 if (fromMarkerStatus == null) {
                     supportSQLiteStatement.bindNull(15);
                 } else {

@@ -32,21 +32,21 @@ public final class ProjectDao_Impl implements ProjectDao {
                 } else {
                     supportSQLiteStatement.bindString(1, projectModel.getId());
                 }
-                String fromStringList = ProjectDao_Impl.this.__dataConverter.fromStringList(projectModel.getMarkerTemplateIds());
+                String fromStringList = ProjectDao_Impl.this.__dataConverter.fromStringList(projectModel.markerTemplateIds);
                 if (fromStringList == null) {
                     supportSQLiteStatement.bindNull(2);
                 } else {
                     supportSQLiteStatement.bindString(2, fromStringList);
                 }
-                if (projectModel.getName() == null) {
+                if (projectModel.name == null) {
                     supportSQLiteStatement.bindNull(3);
                 } else {
-                    supportSQLiteStatement.bindString(3, projectModel.getName());
+                    supportSQLiteStatement.bindString(3, projectModel.name);
                 }
-                if (projectModel.getRegionName() == null) {
+                if (projectModel.regionName == null) {
                     supportSQLiteStatement.bindNull(4);
                 } else {
-                    supportSQLiteStatement.bindString(4, projectModel.getRegionName());
+                    supportSQLiteStatement.bindString(4, projectModel.regionName);
                 }
             }
         };

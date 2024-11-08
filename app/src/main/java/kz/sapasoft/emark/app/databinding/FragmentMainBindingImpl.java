@@ -2,6 +2,8 @@ package kz.sapasoft.emark.app.databinding;
 
 import android.util.SparseIntArray;
 import android.view.View;
+import android.widget.FrameLayout;
+
 import androidx.databinding.DataBindingComponent;
 import androidx.databinding.ViewDataBinding;
 import kz.sapasoft.emark.app.ui.projects.ProjectsViewModel;
@@ -21,7 +23,7 @@ public class FragmentMainBindingImpl extends FragmentMainBinding {
     }
 
     private FragmentMainBindingImpl(DataBindingComponent dataBindingComponent, View view, Object[] objArr) {
-        super(dataBindingComponent, view, 0, objArr[0]);
+        super((Object) dataBindingComponent, view, 0, (FrameLayout) objArr[0]);
         this.mDirtyFlags = -1;
         this.flContent.setTag((Object) null);
         setRootTag(view);

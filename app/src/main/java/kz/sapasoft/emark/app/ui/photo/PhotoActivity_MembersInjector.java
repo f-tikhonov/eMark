@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModelProvider;
 import dagger.MembersInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.DaggerAppCompatActivity_MembersInjector;
+import kz.sapasoft.emark.app.di.builder.ActivityBuilder_BindPhotoActivity;
+
 import javax.inject.Provider;
 
 public final class PhotoActivity_MembersInjector implements MembersInjector<PhotoActivity> {
@@ -25,6 +27,6 @@ public final class PhotoActivity_MembersInjector implements MembersInjector<Phot
     }
 
     public static void injectViewModelFactory(PhotoActivity photoActivity, ViewModelProvider.Factory factory) {
-        photoActivity.viewModelFactory = factory;
+        photoActivity.viewModelFactory = (ActivityBuilder_BindPhotoActivity.PhotoActivitySubcomponent.Factory) factory;
     }
 }

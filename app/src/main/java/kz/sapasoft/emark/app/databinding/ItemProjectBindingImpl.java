@@ -2,6 +2,8 @@ package kz.sapasoft.emark.app.databinding;
 
 import android.util.SparseIntArray;
 import android.view.View;
+import android.widget.TextView;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingComponent;
 import androidx.databinding.ViewDataBinding;
@@ -24,9 +26,9 @@ public class ItemProjectBindingImpl extends ItemProjectBinding {
     }
 
     private ItemProjectBindingImpl(DataBindingComponent dataBindingComponent, View view, Object[] objArr) {
-        super(dataBindingComponent, view, 0, objArr[1], objArr[2]);
+        super((Object) dataBindingComponent, view, 0, (TextView) objArr[1], (TextView) objArr[2]);
         this.mDirtyFlags = -1;
-        ConstraintLayout constraintLayout = objArr[0];
+        ConstraintLayout constraintLayout = (ConstraintLayout) objArr[0];
         this.mboundView0 = constraintLayout;
         constraintLayout.setTag((Object) null);
         this.tvName.setTag((Object) null);
@@ -82,8 +84,8 @@ public class ItemProjectBindingImpl extends ItemProjectBinding {
         if (j2 == 0 || projectModel == null) {
             str = null;
         } else {
-            String regionName = projectModel.getRegionName();
-            str2 = projectModel.getName();
+            String regionName = projectModel.regionName;
+            str2 = projectModel.name;
             str = regionName;
         }
         if (j2 != 0) {

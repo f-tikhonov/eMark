@@ -2,12 +2,18 @@ package kz.sapasoft.emark.app.databinding;
 
 import android.util.SparseIntArray;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.SeekBar;
 
 import androidx.databinding.DataBindingComponent;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.MutableLiveData;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textview.MaterialTextView;
 import kz.sapasoft.emark.app.ui.settings.SettingsViewModel;
 import kz.ss.emark.R;
@@ -32,17 +38,17 @@ public class FragmentSettingsBindingImpl extends FragmentSettingsBinding {
     }
 
     private FragmentSettingsBindingImpl(DataBindingComponent dataBindingComponent, View view, Object[] objArr) {
-        super(dataBindingComponent, view, 5, objArr[1], objArr[4], objArr[6], objArr[7], objArr[2]);
+        super((Object) dataBindingComponent, view, 5, (AppBarLayout) objArr[1], (MaterialButton) objArr[4], (ImageView) objArr[6], (SeekBar) objArr[7], (SwitchMaterial) objArr[2]);
         this.mDirtyFlags = -1;
         this.ablToolbar.setTag((Object) null);
         this.btnDownload.setTag((Object) null);
-        ScrollView scrollView = objArr[0];
+        ScrollView scrollView = (ScrollView) objArr[0];
         this.mboundView0 = scrollView;
         scrollView.setTag((Object) null);
-        MaterialTextView materialTextView = objArr[3];
+        MaterialTextView materialTextView = (MaterialTextView) objArr[3];
         this.mboundView3 = materialTextView;
         materialTextView.setTag((Object) null);
-        ProgressBar progressBar = objArr[5];
+        ProgressBar progressBar = (ProgressBar) objArr[5];
         this.mboundView5 = progressBar;
         progressBar.setTag((Object) null);
         this.swOffline.setTag((Object) null);

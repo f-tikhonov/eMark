@@ -14,6 +14,7 @@ public final class AboutViewModel extends BaseViewModel {
     private final BaseCloudRepository baseCloudRepository;
     private final PrefsImpl prefsImpl;
 
+
     @Inject
     public AboutViewModel(PrefsImpl prefsImpl2, BaseCloudRepository baseCloudRepository2) {
         Intrinsics.checkParameterIsNotNull(prefsImpl2, "prefsImpl");

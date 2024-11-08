@@ -1,25 +1,22 @@
-package kz.sapasoft.emark.app.data.local.prefs;
+package kz.sapasoft.emark.app.data.local.prefs
 
-import android.content.Context;
-import dagger.internal.Factory;
-import javax.inject.Provider;
+import android.content.Context
+import dagger.internal.Factory
+import javax.inject.Provider
 
-public final class PrefsImpl_Factory implements Factory<PrefsImpl> {
-    private final Provider<Context> appContextProvider;
-
-    public PrefsImpl_Factory(Provider<Context> provider) {
-        this.appContextProvider = provider;
+class PrefsImpl_Factory(private val appContextProvider: Provider<Context>) : Factory<PrefsImpl> {
+    override fun get(): PrefsImpl {
+        return newInstance(appContextProvider.get())
     }
 
-    public PrefsImpl get() {
-        return newInstance(this.appContextProvider.get());
-    }
+    companion object {
+        @JvmStatic
+        fun create(provider: Provider<Context>): PrefsImpl_Factory {
+            return PrefsImpl_Factory(provider)
+        }
 
-    public static PrefsImpl_Factory create(Provider<Context> provider) {
-        return new PrefsImpl_Factory(provider);
-    }
-
-    public static PrefsImpl newInstance(Context context) {
-        return new PrefsImpl(context);
+        fun newInstance(context: Context?): PrefsImpl {
+            return PrefsImpl(context)
+        }
     }
 }

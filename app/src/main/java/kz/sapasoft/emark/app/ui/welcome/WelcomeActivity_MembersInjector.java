@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModelProvider;
 import dagger.MembersInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.DaggerAppCompatActivity_MembersInjector;
+import kz.sapasoft.emark.app.di.builder.ActivityBuilder_BindWelcomeActivity;
+
 import javax.inject.Provider;
 
 public final class WelcomeActivity_MembersInjector implements MembersInjector<WelcomeActivity> {
@@ -25,6 +27,6 @@ public final class WelcomeActivity_MembersInjector implements MembersInjector<We
     }
 
     public static void injectViewModelFactory(WelcomeActivity welcomeActivity, ViewModelProvider.Factory factory) {
-        welcomeActivity.viewModelFactory = factory;
+        welcomeActivity.viewModelFactory = (ActivityBuilder_BindWelcomeActivity.WelcomeActivitySubcomponent.Factory) factory;
     }
 }

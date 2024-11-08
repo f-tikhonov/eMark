@@ -1,3 +1,4 @@
+/*
 package kz.sapasoft.emark.app.ui.map;
 
 import java.util.Collection;
@@ -17,15 +18,23 @@ import kz.sapasoft.emark.app.data.cloud.repository.BaseCloudRepository;
 
 @Metadata(bv = {1, 0, 3}, d1 = {"\u0000\u000e\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H@¢\u0006\u0004\b\u0003\u0010\u0004"}, d2 = {"<anonymous>", "", "Lkotlinx/coroutines/CoroutineScope;", "invoke", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"}, k = 3, mv = {1, 1, 16})
 @DebugMetadata(c = "kz.sapasoft.emark.app.ui.map.MapViewModel$getTemplateList$1", f = "MapViewModel.kt", i = {0}, l = {74}, m = "invokeSuspend", n = {"$this$launchIO"}, s = {"L$0"})
-/* compiled from: MapViewModel.kt */
+*/
+/* compiled from: MapViewModel.kt *//*
+
 final class MapViewModel$getTemplateList$1 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
-    final /* synthetic */ List $ids;
+    final */
+/* synthetic *//*
+ List $ids;
     Object L$0;
     int label;
     private CoroutineScope p$;
-    final /* synthetic */ MapViewModel this$0;
+    final */
+/* synthetic *//*
+ MapViewModel this$0;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    */
+/* JADX INFO: super call moved to the top of the method (can break code semantics) *//*
+
     MapViewModel$getTemplateList$1(MapViewModel mapViewModel, List list, Continuation continuation) {
         super(2, continuation);
         this.this$0 = mapViewModel;
@@ -71,10 +80,11 @@ final class MapViewModel$getTemplateList$1 extends SuspendLambda implements Func
             this.this$0.getError().postValue(resultWrapper);
         } else if (resultWrapper instanceof ResultWrapper.Success) {
             ResultWrapper.Success success = (ResultWrapper.Success) resultWrapper;
-            if (!((Collection) success.getValue()).isEmpty()) {
-                this.this$0.insertTemplateEntityList((List) success.getValue());
+            if (!((Collection) success.value).isEmpty()) {
+                this.this$0.insertTemplateEntityList((List) success.value);
             }
         }
         return Unit.INSTANCE;
     }
 }
+*/

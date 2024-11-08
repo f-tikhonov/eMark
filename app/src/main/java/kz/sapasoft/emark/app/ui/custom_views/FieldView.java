@@ -15,6 +15,7 @@ import kz.sapasoft.emark.app.domain.model.FieldModel;
 public abstract class FieldView extends LinearLayout {
     private HashMap _$_findViewCache;
 
+
     public void _$_clearFindViewByIdCache() {
         HashMap hashMap = this._$_findViewCache;
         if (hashMap != null) {

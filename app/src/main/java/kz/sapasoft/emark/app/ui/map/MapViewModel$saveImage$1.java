@@ -1,3 +1,4 @@
+/*
 package kz.sapasoft.emark.app.ui.map;
 
 import java.io.File;
@@ -12,19 +13,29 @@ import kotlinx.coroutines.CoroutineScope;
 
 @Metadata(bv = {1, 0, 3}, d1 = {"\u0000\u000e\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H@¢\u0006\u0004\b\u0003\u0010\u0004"}, d2 = {"<anonymous>", "", "Lkotlinx/coroutines/CoroutineScope;", "invoke", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"}, k = 3, mv = {1, 1, 16})
 @DebugMetadata(c = "kz.sapasoft.emark.app.ui.map.MapViewModel$saveImage$1", f = "MapViewModel.kt", i = {0, 1, 1, 1, 1}, l = {140, 147}, m = "invokeSuspend", n = {"$this$launchIO", "$this$launchIO", "compressedImageFile", "requestFile", "body"}, s = {"L$0", "L$0", "L$1", "L$2", "L$3"})
-/* compiled from: MapViewModel.kt */
+*/
+/* compiled from: MapViewModel.kt *//*
+
 final class MapViewModel$saveImage$1 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
-    final /* synthetic */ File $file;
-    final /* synthetic */ String $parentId;
+    final */
+/* synthetic *//*
+ File $file;
+    final */
+/* synthetic *//*
+ String $parentId;
     Object L$0;
     Object L$1;
     Object L$2;
     Object L$3;
     int label;
     private CoroutineScope p$;
-    final /* synthetic */ MapViewModel this$0;
+    final */
+/* synthetic *//*
+ MapViewModel this$0;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    */
+/* JADX INFO: super call moved to the top of the method (can break code semantics) *//*
+
     MapViewModel$saveImage$1(MapViewModel mapViewModel, File file, String str, Continuation continuation) {
         super(2, continuation);
         this.this$0 = mapViewModel;
@@ -43,11 +54,18 @@ final class MapViewModel$saveImage$1 extends SuspendLambda implements Function2<
         return ((MapViewModel$saveImage$1) create(obj, (Continuation) obj2)).invokeSuspend(Unit.INSTANCE);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:16:0x0090  */
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x009a  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
+    */
+/* JADX WARNING: Removed duplicated region for block: B:16:0x0090  *//*
+
+    */
+/* JADX WARNING: Removed duplicated region for block: B:17:0x009a  *//*
+
+    */
+/* Code decompiled incorrectly, please refer to instructions dump. *//*
+
     public final Object invokeSuspend(Object r13) {
-        /*
+        */
+/*
             r12 = this;
             java.lang.Object r0 = kotlin.coroutines.intrinsics.IntrinsicsKt.getCOROUTINE_SUSPENDED()
             int r1 = r12.label
@@ -130,7 +148,9 @@ final class MapViewModel$saveImage$1 extends SuspendLambda implements Function2<
         L_0x009c:
             kotlin.Unit r13 = kotlin.Unit.INSTANCE
             return r13
-        */
+        *//*
+
         throw new UnsupportedOperationException("Method not decompiled: kz.sapasoft.emark.app.ui.map.MapViewModel$saveImage$1.invokeSuspend(java.lang.Object):java.lang.Object");
     }
 }
+*/

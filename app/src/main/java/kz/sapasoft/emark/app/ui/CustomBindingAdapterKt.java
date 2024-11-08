@@ -59,6 +59,6 @@ public final class CustomBindingAdapterKt {
     @BindingAdapter({"visibility_bool"})
     public static final void visibilityBool(View view, boolean z) {
         Intrinsics.checkParameterIsNotNull(view, "view");
-        view.setVisibility(z ? 0 : 8);
+        view.setVisibility(z ? View.VISIBLE : View.GONE);
     }
 }

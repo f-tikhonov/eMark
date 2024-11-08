@@ -2,6 +2,8 @@ package kz.sapasoft.emark.app.databinding;
 
 import android.util.SparseIntArray;
 import android.view.View;
+import android.widget.ImageView;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingComponent;
 import androidx.databinding.ViewDataBinding;
@@ -33,9 +35,9 @@ public class ItemPhotoFooterBindingImpl extends ItemPhotoFooterBinding {
     }
 
     private ItemPhotoFooterBindingImpl(DataBindingComponent dataBindingComponent, View view, Object[] objArr) {
-        super(dataBindingComponent, view, 0, objArr[1]);
+        super(dataBindingComponent, view, 0, (ImageView) objArr[1]);
         this.mDirtyFlags = -1;
-        ConstraintLayout constraintLayout = objArr[0];
+        ConstraintLayout constraintLayout = (ConstraintLayout) objArr[0];
         this.mboundView0 = constraintLayout;
         constraintLayout.setTag((Object) null);
         setRootTag(view);

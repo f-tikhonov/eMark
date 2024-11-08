@@ -1,3 +1,4 @@
+/*
 package kz.sapasoft.emark.app.ui.settings;
 
 import androidx.lifecycle.MutableLiveData;
@@ -19,14 +20,20 @@ import kz.sapasoft.emark.app.data.cloud.repository.BaseCloudRepository;
 
 @Metadata(bv = {1, 0, 3}, d1 = {"\u0000\u000e\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H@¢\u0006\u0004\b\u0003\u0010\u0004"}, d2 = {"<anonymous>", "", "Lkotlinx/coroutines/CoroutineScope;", "invoke", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"}, k = 3, mv = {1, 1, 16})
 @DebugMetadata(c = "kz.sapasoft.emark.app.ui.settings.SettingsViewModel$getTags$1", f = "SettingsViewModel.kt", i = {0}, l = {118}, m = "invokeSuspend", n = {"$this$launchIO"}, s = {"L$0"})
-/* compiled from: SettingsViewModel.kt */
+*/
+/* compiled from: SettingsViewModel.kt *//*
+
 final class SettingsViewModel$getTags$1 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
     Object L$0;
     int label;
     private CoroutineScope p$;
-    final /* synthetic */ SettingsViewModel this$0;
+    final */
+/* synthetic *//*
+ SettingsViewModel this$0;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    */
+/* JADX INFO: super call moved to the top of the method (can break code semantics) *//*
+
     SettingsViewModel$getTags$1(SettingsViewModel settingsViewModel, Continuation continuation) {
         super(2, continuation);
         this.this$0 = settingsViewModel;
@@ -86,3 +93,4 @@ final class SettingsViewModel$getTags$1 extends SuspendLambda implements Functio
         return Unit.INSTANCE;
     }
 }
+*/

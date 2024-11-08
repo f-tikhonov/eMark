@@ -43,7 +43,7 @@ final class BaseViewModel$launchIO$2 extends SuspendLambda implements Function2<
     @DebugMetadata(c = "kz.sapasoft.emark.app.core.BaseViewModel$launchIO$2$1", f = "BaseViewModel.kt", i = {0}, l = {17}, m = "invokeSuspend", n = {"$this$withContext"}, s = {"L$0"})
     /* renamed from: kz.sapasoft.emark.app.core.BaseViewModel$launchIO$2$1  reason: invalid class name */
     /* compiled from: BaseViewModel.kt */
-    static final class AnonymousClass1 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super P>, Object> {
+    static final class AnonymousClass1<P> extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super P>, Object> {
         Object L$0;
         int label;
         private CoroutineScope p$;

@@ -138,14 +138,14 @@ public final class FieldViewLong extends FieldView {
         FieldModel fieldModel = this.mField;
         EditText editText = (EditText) _$_findCachedViewById(R.id.et_text);
         Intrinsics.checkExpressionValueIsNotNull(editText, "et_text");
-        fieldModel.setLongValue(stringToLong(editText.getText().toString()));
+        fieldModel.longValue = stringToLong(editText.getText().toString());
         return this.mField;
     }
 
     public void setFieldModel(FieldModel fieldModel) {
         Intrinsics.checkParameterIsNotNull(fieldModel, "field");
         this.mField = FieldModel.copy$default(fieldModel, (String) null, (Long) null, (String) null, (Long) null, (String) null, (String) null, (String) null, (String) null, (String) null, (Boolean) null, (Boolean) null, (String) null, (String) null, (String) null, (Long) null, (Double) null, (String) null, (String) null, (TagModel) null, (Long) null, 1048575, (Object) null);
-        ((EditText) _$_findCachedViewById(R.id.et_text)).setText(longToString(fieldModel.getLongValue()));
+        ((EditText) _$_findCachedViewById(R.id.et_text)).setText(longToString(fieldModel.longValue));
     }
 
     private final Long stringToLong(String str) {
@@ -176,7 +176,7 @@ public final class FieldViewLong extends FieldView {
     }
 
     public boolean isRequired() {
-        Boolean required = this.mField.getRequired();
+        Boolean required = this.mField.required;
         if (required != null) {
             return required.booleanValue();
         }

@@ -19,7 +19,7 @@ final class WelcomeActivity$setObservers$3<T> implements Observer<ResultWrapper.
 
     public final void onChanged(ResultWrapper.Error error) {
         MaterialButton materialButton = (MaterialButton) this.this$0._$_findCachedViewById(R.id.btn_start);
-        String error2 = error.getError();
+        String error2 = error.toString();
         if (error2 == null) {
             error2 = this.this$0.getString(kz.ss.emark.R.string.error);
         }

@@ -1,3 +1,4 @@
+/*
 package kz.sapasoft.emark.app.ui.marker;
 
 import kotlin.Metadata;
@@ -16,14 +17,22 @@ import kz.sapasoft.emark.app.domain.model.MarkerModel;
 
 @Metadata(bv = {1, 0, 3}, d1 = {"\u0000\u000e\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H@¢\u0006\u0004\b\u0003\u0010\u0004"}, d2 = {"<anonymous>", "", "Lkotlinx/coroutines/CoroutineScope;", "invoke", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"}, k = 3, mv = {1, 1, 16})
 @DebugMetadata(c = "kz.sapasoft.emark.app.ui.marker.MarkerViewModel$deleteLocal$1", f = "MarkerViewModel.kt", i = {}, l = {}, m = "invokeSuspend", n = {}, s = {})
-/* compiled from: MarkerViewModel.kt */
+*/
+/* compiled from: MarkerViewModel.kt *//*
+
 final class MarkerViewModel$deleteLocal$1 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
-    final /* synthetic */ MarkerModel $markerModel;
+    final */
+/* synthetic *//*
+ MarkerModel $markerModel;
     int label;
     private CoroutineScope p$;
-    final /* synthetic */ MarkerViewModel this$0;
+    final */
+/* synthetic *//*
+ MarkerViewModel this$0;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    */
+/* JADX INFO: super call moved to the top of the method (can break code semantics) *//*
+
     MarkerViewModel$deleteLocal$1(MarkerViewModel markerViewModel, MarkerModel markerModel, Continuation continuation) {
         super(2, continuation);
         this.this$0 = markerViewModel;
@@ -47,7 +56,7 @@ final class MarkerViewModel$deleteLocal$1 extends SuspendLambda implements Funct
             ResultKt.throwOnFailure(obj);
             this.this$0.markerSyncRepository.deleteById(this.$markerModel.getId());
             ImageRepository access$getImageRepository$p = this.this$0.imageRepository;
-            String idLocal = this.$markerModel.getIdLocal();
+            String idLocal = this.$markerModel.idLocal;
             if (idLocal == null) {
                 Intrinsics.throwNpe();
             }
@@ -58,3 +67,4 @@ final class MarkerViewModel$deleteLocal$1 extends SuspendLambda implements Funct
         throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
     }
 }
+*/
