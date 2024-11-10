@@ -7,6 +7,9 @@ import android.widget.ImageView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingComponent;
 import androidx.databinding.ViewDataBinding;
+
+import java.io.UnsupportedEncodingException;
+
 import kz.sapasoft.emark.app.domain.model.ImageDataModel;
 import kz.sapasoft.emark.app.ui.CustomBindingAdapterKt;
 
@@ -101,7 +104,11 @@ public class ItemPhotoBindingImpl extends ItemPhotoBinding {
             CustomBindingAdapterKt.visibilityBool(this.ivDelete, z);
         }
         if (j3 != 0) {
-            CustomBindingAdapterKt.loadImage(this.ivPhoto, imageDataModel);
+            try {
+                CustomBindingAdapterKt.loadImage(this.ivPhoto, imageDataModel);
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
