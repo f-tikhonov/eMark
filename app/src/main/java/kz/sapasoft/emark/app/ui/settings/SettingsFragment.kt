@@ -14,16 +14,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 import kz.sapasoft.emark.app.databinding.FragmentSettingsBinding
-import kz.sapasoft.emark.app.di.builder.MainActivityProviders_ProvideSettingsFragment
 import kz.sapasoft.emark.app.ui.MainActivity
 import kz.sapasoft.emark.app.ui.base.DaggerFragmentExtended
+import kz.sapasoft.emark.app.ui.welcome.WelcomeViewModel
 import kz.sapasoft.emark.app.utils.MarkerDrawer
 import kz.ss.emark.R
 import javax.inject.Inject
-import kotlin.jvm.internal.DefaultConstructorMarker
 import kotlin.jvm.internal.Intrinsics
 
 class SettingsFragment : DaggerFragmentExtended() {
@@ -31,13 +31,12 @@ class SettingsFragment : DaggerFragmentExtended() {
     private val TAG: String
     private var `_$_findViewCache`: HashMap<*, *>? = null
     private val `viewModel$delegate`: SettingsViewModel by lazy {
-        TODO()
-       // SettingsViewModel()
+        ViewModelProvider(this, viewModelFactory).get(SettingsViewModel::class.java)
     }
 
-    @JvmField
     @Inject
-    var viewModelFactory: MainActivityProviders_ProvideSettingsFragment.SettingsFragmentSubcomponent.Factory? = null
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     val viewModel: SettingsViewModel
         /* access modifiers changed from: private */
         get() = `viewModel$delegate` as SettingsViewModel
@@ -71,19 +70,6 @@ class SettingsFragment : DaggerFragmentExtended() {
         val simpleName = javaClass.simpleName
         Intrinsics.checkExpressionValueIsNotNull(simpleName, "this::class.java.simpleName")
         TAG = simpleName
-    }
-
-    fun getViewModelFactory(): MainActivityProviders_ProvideSettingsFragment.SettingsFragmentSubcomponent.Factory? {
-        val factory: MainActivityProviders_ProvideSettingsFragment.SettingsFragmentSubcomponent.Factory?? = viewModelFactory
-        if (factory == null) {
-            Intrinsics.throwUninitializedPropertyAccessException("viewModelFactory")
-        }
-        return factory
-    }
-
-    fun setViewModelFactory(factory: MainActivityProviders_ProvideSettingsFragment.SettingsFragmentSubcomponent.Factory??) {
-        Intrinsics.checkParameterIsNotNull(factory, "<set-?>")
-        viewModelFactory = factory
     }
 
     override fun onCreateView(

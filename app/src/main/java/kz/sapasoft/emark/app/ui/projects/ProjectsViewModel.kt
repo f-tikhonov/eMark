@@ -64,13 +64,13 @@ class ProjectsViewModel @Inject constructor(
     @JvmField
     val tagsAll: ArrayList<TagModel> = ArrayList<TagModel>()
     val error: MutableLiveData<ResultWrapper.Error>
-        get() = `error$delegate`.value as MutableLiveData<ResultWrapper.Error>
+        get() = `error$delegate`
     val projectsData: MutableLiveData<List<ProjectModel>>
-        get() = `projectsData$delegate`.value as MutableLiveData<List<ProjectModel>>
+        get() = `projectsData$delegate`
     val searchString: MutableLiveData<String>
-        get() = `searchString$delegate`.value as MutableLiveData<String>
+        get() = `searchString$delegate`
     val isRefreshing: MutableLiveData<Boolean>
-        get() = `isRefreshing$delegate`.value as MutableLiveData<Boolean>
+        get() = `isRefreshing$delegate`
 
     init {
         Intrinsics.checkParameterIsNotNull(prefsImpl2, "prefsImpl")

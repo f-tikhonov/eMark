@@ -11,39 +11,37 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kz.sapasoft.emark.app.databinding.FragmentProjectsBinding
-import kz.sapasoft.emark.app.di.builder.MainActivityProviders_ProvideHomeFragment
 import kz.sapasoft.emark.app.domain.model.ProjectModel
 import kz.sapasoft.emark.app.ui.MainActivity
 import kz.sapasoft.emark.app.ui.base.DaggerFragmentExtended
 import kz.sapasoft.emark.app.ui.map.MapFragment
-import kz.sapasoft.emark.app.ui.map.MapFragment.Companion.newInstance
 import kz.sapasoft.emark.app.ui.projects.adapter.ProjectsAdapter
 import kz.sapasoft.emark.app.ui.projects.adapter.ProjectsAdapter.OnProjectClickListener
+import kz.sapasoft.emark.app.ui.welcome.WelcomeViewModel
 import kz.ss.emark.R
+import java.util.ArrayList
 import javax.inject.Inject
-import kotlin.jvm.internal.DefaultConstructorMarker
 import kotlin.jvm.internal.Intrinsics
 
 class ProjectsFragment : DaggerFragmentExtended(), OnProjectClickListener {
     private val TAG: String
     private var `_$_findViewCache`: HashMap<*, *>? = null
     private val `adapter$delegate`: ProjectsAdapter by lazy {
-        TODO()
-            // ProjectsAdapter()
+            ProjectsAdapter(emptyList<ProjectModel>() as ArrayList<ProjectModel>?, this)
     }
     private val `viewModel$delegate`: ProjectsViewModel by lazy {
-        TODO()
-       // ProjectsViewModel()
+        ViewModelProvider(this, viewModelFactory).get(ProjectsViewModel::class.java)
     }
 
-    @JvmField
     @Inject
-    var viewModelFactory: MainActivityProviders_ProvideHomeFragment.ProjectsFragmentSubcomponent.Factory? = null
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     val adapter: ProjectsAdapter
         /* access modifiers changed from: private */
         get() = `adapter$delegate` as ProjectsAdapter
@@ -79,19 +77,6 @@ class ProjectsFragment : DaggerFragmentExtended(), OnProjectClickListener {
         val simpleName = javaClass.simpleName
         Intrinsics.checkExpressionValueIsNotNull(simpleName, "this::class.java.simpleName")
         TAG = simpleName
-    }
-
-    fun getViewModelFactory(): MainActivityProviders_ProvideHomeFragment.ProjectsFragmentSubcomponent.Factory? {
-        val factory: MainActivityProviders_ProvideHomeFragment.ProjectsFragmentSubcomponent.Factory? = viewModelFactory
-        if (factory == null) {
-            Intrinsics.throwUninitializedPropertyAccessException("viewModelFactory")
-        }
-        return factory
-    }
-
-    fun setViewModelFactory(factory: MainActivityProviders_ProvideHomeFragment.ProjectsFragmentSubcomponent.Factory?) {
-        Intrinsics.checkParameterIsNotNull(factory, "<set-?>")
-        viewModelFactory = factory
     }
 
     override fun onCreateView(

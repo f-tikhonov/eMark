@@ -34,17 +34,18 @@ class WelcomeViewModel @Inject constructor(
     /* access modifiers changed from: private */
     @JvmField
     val prefsImpl: PrefsImpl
-    private val `server$delegate`: MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
+
+    private val `server$delegate`: MutableLiveData<String?> by lazy {
+        MutableLiveData<String?>()
     }
     val error: MutableLiveData<ResultWrapper.Error>
-        get() = `error$delegate`.value as MutableLiveData<ResultWrapper.Error>
+        get() = `error$delegate`
     val loginData: MutableLiveData<Boolean>
-        get() = `loginData$delegate`.value as MutableLiveData<Boolean>
-    val server: MutableLiveData<String>
-        get() = `server$delegate`.value as MutableLiveData<String>
+        get() = `loginData$delegate`
+    val server: MutableLiveData<String?>
+        get() = `server$delegate`
     val isRefreshing: MutableLiveData<Boolean>
-        get() = `isRefreshing$delegate`.value as MutableLiveData<Boolean>
+        get() = `isRefreshing$delegate`
 
     init {
         Intrinsics.checkParameterIsNotNull(prefsImpl2, "prefsImpl")

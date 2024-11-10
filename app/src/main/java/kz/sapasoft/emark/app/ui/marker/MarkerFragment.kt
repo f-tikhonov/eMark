@@ -10,11 +10,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import kz.sapasoft.emark.app.databinding.FragmentMarkerBinding
-import kz.sapasoft.emark.app.di.builder.MainActivityProviders_ProvideMarkerFragment
 import kz.sapasoft.emark.app.domain.model.*
 import kz.sapasoft.emark.app.ui.MainActivity
 import kz.sapasoft.emark.app.ui.base.DaggerFragmentExtended
@@ -41,7 +41,7 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
     private val viewModel by lazy { easyImage as MarkerViewModel }
 
     @Inject
-    var viewModelFactory: MainActivityProviders_ProvideMarkerFragment.MarkerFragmentSubcomponent.Factory? = null
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

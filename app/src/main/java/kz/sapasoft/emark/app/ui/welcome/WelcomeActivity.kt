@@ -1,60 +1,31 @@
 package kz.sapasoft.emark.app.ui.welcome
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
+import com.example.decompiledapk.R
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import dagger.android.support.DaggerAppCompatActivity
-import kz.sapasoft.emark.app.di.builder.ActivityBuilder_BindWelcomeActivity
-import kz.ss.emark.R
+import kz.sapasoft.emark.app.ui.MainActivity
 import javax.inject.Inject
-import kotlin.jvm.internal.Intrinsics
 
 class WelcomeActivity : DaggerAppCompatActivity() {
-    private val TAG = javaClass.simpleName
-    private var `_$_findViewCache`: HashMap<*, *>? = null
+
+
     private val `viewModel$delegate`: WelcomeViewModel by lazy {
-        TODO()
-       // WelcomeViewModel()
+        ViewModelProvider(this, viewModelFactory).get(WelcomeViewModel::class.java)
     }
 
-    @JvmField
     @Inject
-    var viewModelFactory: ActivityBuilder_BindWelcomeActivity.WelcomeActivitySubcomponent.Factory? = null
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     val viewModel: WelcomeViewModel
         /* access modifiers changed from: private */
         get() = `viewModel$delegate` as WelcomeViewModel
 
-    fun `_$_clearFindViewByIdCache`() {
-        val hashMap = `_$_findViewCache`
-        hashMap?.clear()
-    }
-
-    fun `_$_findCachedViewById`(i: Int): View {
-        if (`_$_findViewCache` == null) {
-            `_$_findViewCache` = HashMap<Any?, Any?>()
-        }
-        val view = `_$_findViewCache`!![Integer.valueOf(i)] as View?
-        if (view != null) {
-            return view
-        }
-        val findViewById = findViewById<View>(i)
-       // `_$_findViewCache`!![Integer.valueOf(i)] = findViewById
-        return findViewById
-    }
-
-    fun getViewModelFactory(): ActivityBuilder_BindWelcomeActivity.WelcomeActivitySubcomponent.Factory? {
-        val factory: ActivityBuilder_BindWelcomeActivity.WelcomeActivitySubcomponent.Factory? = viewModelFactory
-        if (factory == null) {
-            Intrinsics.throwUninitializedPropertyAccessException("viewModelFactory")
-        }
-        return factory
-    }
-
-    fun setViewModelFactory(factory: ActivityBuilder_BindWelcomeActivity.WelcomeActivitySubcomponent.Factory?) {
-        Intrinsics.checkParameterIsNotNull(factory, "<set-?>")
-        viewModelFactory = factory
-    }
 
     /* access modifiers changed from: protected */
     public override fun onCreate(bundle: Bundle?) {
@@ -65,16 +36,38 @@ class WelcomeActivity : DaggerAppCompatActivity() {
     }
 
     private fun setOnClickListeners() {
-        (`_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.btn_start) as MaterialButton).setOnClickListener(
-            `WelcomeActivity$setOnClickListeners$1`(this)
-        )
+        findViewById<MaterialButton>(R.id.btn_start).setOnClickListener { view ->
+        //    Utils.hideKeyboard(view)
+            val username = findViewById<TextInputEditText>(R.id.et_username).text.toString()
+            val password = findViewById<TextInputEditText>(R.id.et_password).text.toString()
+            val serverUrl = findViewById<TextInputEditText>(R.id.et_server).text.toString()
+
+            viewModel.login(username, password, serverUrl)
+        }
     }
 
     private fun setObservers() {
         val lifecycleOwner: LifecycleOwner = this
-        viewModel.isRefreshing.observe(lifecycleOwner, `WelcomeActivity$setObservers$1`<Any?>(this))
-        viewModel.loginData.observe(lifecycleOwner, `WelcomeActivity$setObservers$2`<Any?>(this))
-        viewModel.error.observe(lifecycleOwner, `WelcomeActivity$setObservers$3`<Any?>(this))
-        viewModel.server.observe(lifecycleOwner, `WelcomeActivity$setObservers$4`<Any?>(this))
+        viewModel.isRefreshing.observe(this as LifecycleOwner) { isRefreshing ->
+            val materialButton = findViewById<MaterialButton>(R.id.btn_start)
+            materialButton.isEnabled = !isRefreshing
+        }
+
+        viewModel.loginData.observe(this as LifecycleOwner) { isLoggedIn ->
+            if (isLoggedIn) {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
+        }
+
+        viewModel.error.observe(this as LifecycleOwner) { error ->
+            val errorMessage = error.toString() ?: getString(R.string.error)
+            val materialButton: MaterialButton = findViewById(R.id.btn_start)
+            Snackbar.make(materialButton, errorMessage, Snackbar.LENGTH_SHORT).show()
+        }
+
+        viewModel.server.observe(this as LifecycleOwner) { serverUrl ->
+            //findViewById<TextInputEditText>(R.id.et_server).setText(serverUrl)
+        }
     }
 }

@@ -3,9 +3,10 @@ package kz.sapasoft.emark.app.ui.photo
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButton
 import dagger.android.support.DaggerAppCompatActivity
-import kz.sapasoft.emark.app.di.builder.ActivityBuilder_BindPhotoActivity
+import kz.sapasoft.emark.app.ui.welcome.WelcomeViewModel
 import kz.ss.emark.R
 import javax.inject.Inject
 import kotlin.jvm.internal.Intrinsics
@@ -14,13 +15,12 @@ class PhotoActivity : DaggerAppCompatActivity() {
     private val TAG = javaClass.simpleName
     private var `_$_findViewCache`: HashMap<*, *>? = null
     private val `viewModel$delegate`: PhotoViewModel by lazy {
-        TODO()
-        //PhotoViewModel()
+        ViewModelProvider(this, viewModelFactory).get(PhotoViewModel::class.java)
     }
 
-    @JvmField
     @Inject
-    var viewModelFactory: ActivityBuilder_BindPhotoActivity.PhotoActivitySubcomponent.Factory? = null
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     val viewModel: PhotoViewModel
         /* access modifiers changed from: private */
         get() = `viewModel$delegate` as PhotoViewModel
@@ -41,19 +41,6 @@ class PhotoActivity : DaggerAppCompatActivity() {
         val findViewById = findViewById<View>(i)
         //`_$_findViewCache`!![Integer.valueOf(i)] = findViewById
         return findViewById
-    }
-
-    fun getViewModelFactory(): ActivityBuilder_BindPhotoActivity.PhotoActivitySubcomponent.Factory? {
-        val factory: ActivityBuilder_BindPhotoActivity.PhotoActivitySubcomponent.Factory? = viewModelFactory
-        if (factory == null) {
-            Intrinsics.throwUninitializedPropertyAccessException("viewModelFactory")
-        }
-        return factory
-    }
-
-    fun setViewModelFactory(factory: ActivityBuilder_BindPhotoActivity.PhotoActivitySubcomponent.Factory?) {
-        Intrinsics.checkParameterIsNotNull(factory, "<set-?>")
-        viewModelFactory = factory
     }
 
     /* access modifiers changed from: protected */

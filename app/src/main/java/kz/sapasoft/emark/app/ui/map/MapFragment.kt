@@ -1,6 +1,5 @@
 package kz.sapasoft.emark.app.ui.map
 
-import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
@@ -22,9 +21,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.felhr.usbserial.UsbSerialInterface
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -32,16 +31,15 @@ import com.google.android.material.snackbar.Snackbar
 //import com.hoho.android.usbserial.driver.UsbSerialDriver
 import kz.sapasoft.emark.app.BuildConfig
 import kz.sapasoft.emark.app.databinding.FragmentMapBinding
-import kz.sapasoft.emark.app.di.builder.MainActivityProviders_ProvideHomeDetailsFragment
 import kz.sapasoft.emark.app.domain.model.MarkerModel
 import kz.sapasoft.emark.app.domain.model.ProjectModel
 import kz.sapasoft.emark.app.ui.MainActivity
 import kz.sapasoft.emark.app.ui.OnNewDeviceAttached
 import kz.sapasoft.emark.app.ui.base.DaggerFragmentExtended
 import kz.sapasoft.emark.app.ui.marker.OnMarkerChangeListener
+import kz.sapasoft.emark.app.ui.welcome.WelcomeViewModel
 import kz.sapasoft.emark.app.utils.Utils
 import kz.ss.emark.R
-import okhttp3.internal.cache.DiskLruCache
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.config.Configuration
 import org.osmdroid.config.IConfigurationProvider
@@ -82,13 +80,11 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     /* access modifiers changed from: private */
   //  var poiMarkers: RadiusMarkerClusterer? = null
     private val `viewModel$delegate`: MapViewModel by lazy {
-        TODO()
-        //MapViewModel()
+        ViewModelProvider(this, viewModelFactory).get(MapViewModel::class.java)
     }
 
-    @JvmField
     @Inject
-    var viewModelFactory: MainActivityProviders_ProvideHomeDetailsFragment.MapFragmentSubcomponent.Factory? = null
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
    // @Metadata(bv = [1, 0, 3], k = 3, mv = [1, 1, 16])
     object WhenMappings {
@@ -134,19 +130,6 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         val simpleName = javaClass.simpleName
         Intrinsics.checkExpressionValueIsNotNull(simpleName, "this::class.java.simpleName")
         TAG = simpleName
-    }
-
-    fun getViewModelFactory(): MainActivityProviders_ProvideHomeDetailsFragment.MapFragmentSubcomponent.Factory? {
-        val factory: MainActivityProviders_ProvideHomeDetailsFragment.MapFragmentSubcomponent.Factory? = viewModelFactory
-        if (factory == null) {
-            Intrinsics.throwUninitializedPropertyAccessException("viewModelFactory")
-        }
-        return factory
-    }
-
-    fun setViewModelFactory(factory: MainActivityProviders_ProvideHomeDetailsFragment.MapFragmentSubcomponent.Factory?) {
-        Intrinsics.checkParameterIsNotNull(factory, "<set-?>")
-        viewModelFactory = factory
     }
 
     override fun onCreateView(

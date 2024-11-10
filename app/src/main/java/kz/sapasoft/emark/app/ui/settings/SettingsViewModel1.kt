@@ -49,7 +49,9 @@ class SettingsViewModel @Inject constructor(
 
     /* access modifiers changed from: private */
     var markersPages: Int
-    private val `offlineMode$delegate`: Lazy<*> = lazy(`SettingsViewModel$offlineMode$2`.INSTANCE)
+    val offlineMode: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
 
     /* access modifiers changed from: private */
     @JvmField
@@ -79,15 +81,13 @@ class SettingsViewModel @Inject constructor(
     /* access modifiers changed from: private */
     val templateRepository: TemplateRepository
     val dateDb: MutableLiveData<String>
-        get() = `dateDb$delegate`.value as MutableLiveData<String>
+        get() = `dateDb$delegate`
     val loadButtonEnabled: MutableLiveData<Boolean>
-        get() = `loadButtonEnabled$delegate`.value as MutableLiveData<Boolean>
-    val offlineMode: MutableLiveData<Boolean>
-        get() = `offlineMode$delegate`.value as MutableLiveData<Boolean>
+        get() = `loadButtonEnabled$delegate`
     val progress: MutableLiveData<Int>
-        get() = `progress$delegate`.value as MutableLiveData<Int>
+        get() = `progress$delegate`
     val progressVisibility: MutableLiveData<Boolean>
-        get() = `progressVisibility$delegate`.value as MutableLiveData<Boolean>
+        get() = `progressVisibility$delegate`
 
     init {
         Intrinsics.checkParameterIsNotNull(prefsImpl2, "prefsImpl")

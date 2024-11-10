@@ -69,9 +69,9 @@ class MapViewModel @Inject constructor(
     val prefsImpl: PrefsImpl
     private val templateRepository: TemplateRepository
     val error: MutableLiveData<ResultWrapper.Error>
-        get() = `error$delegate`.value as MutableLiveData<ResultWrapper.Error>
-    val markerModelListData: MutableLiveData<List<Any>>
-        get() = `markerModelListData$delegate`.value as MutableLiveData<List<Any>>
+        get() = `error$delegate`
+    val markerModelListData: MutableLiveData<List<MarkerModel>>
+        get() = `markerModelListData$delegate`
 
     init {
         Intrinsics.checkParameterIsNotNull(baseCloudRepository2, "baseCloudRepository")

@@ -35,11 +35,11 @@ class PhotoViewModel @Inject constructor(
     @JvmField
     val prefsImpl: PrefsImpl
     val error: MutableLiveData<ResultWrapper.Error>
-        get() = `error$delegate`.value as MutableLiveData<ResultWrapper.Error>
+        get() = `error$delegate`
     val loginData: MutableLiveData<Boolean>
-        get() = `loginData$delegate`.value as MutableLiveData<Boolean>
+        get() = `loginData$delegate`
     val isRefreshing: MutableLiveData<Boolean>
-        get() = `isRefreshing$delegate`.value as MutableLiveData<Boolean>
+        get() = `isRefreshing$delegate`
 
     init {
         Intrinsics.checkParameterIsNotNull(prefsImpl2, "prefsImpl")

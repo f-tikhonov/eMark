@@ -11,27 +11,23 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import dagger.android.support.DaggerFragment
-import kz.sapasoft.emark.app.data.cloud.repository.BaseCloudRepository
-import kz.sapasoft.emark.app.data.local.prefs.PrefsImpl
 import kz.sapasoft.emark.app.databinding.FragmentAboutBinding
-import kz.sapasoft.emark.app.di.builder.MainActivityProviders_ProvideAboutFragment
 import kz.sapasoft.emark.app.ui.MainActivity
+import kz.sapasoft.emark.app.ui.welcome.WelcomeViewModel
 import kz.ss.emark.R
 import javax.inject.Inject
-import kotlin.jvm.internal.DefaultConstructorMarker
 import kotlin.jvm.internal.Intrinsics
 class AboutFragment : DaggerFragment() {
     private val TAG: String
     private var `_$_findViewCache`: HashMap<*, *>? = null
     private val `viewModel$delegate`: AboutViewModel by lazy {
-        TODO()
-       // AboutViewModel(PrefsImpl(this.context), BaseCloudRepository())
+        ViewModelProvider(this, viewModelFactory).get(AboutViewModel::class.java)
     }
 
-    @JvmField
     @Inject
-    var viewModelFactory: MainActivityProviders_ProvideAboutFragment.AboutFragmentSubcomponent.Factory? = null
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private fun setListeners() {}
     private fun setObservers() {}
@@ -63,19 +59,6 @@ class AboutFragment : DaggerFragment() {
         val simpleName = javaClass.simpleName
         Intrinsics.checkExpressionValueIsNotNull(simpleName, "this::class.java.simpleName")
         TAG = simpleName
-    }
-
-    fun getViewModelFactory(): MainActivityProviders_ProvideAboutFragment.AboutFragmentSubcomponent.Factory? {
-        val factory: MainActivityProviders_ProvideAboutFragment.AboutFragmentSubcomponent.Factory? = viewModelFactory
-        if (factory == null) {
-            Intrinsics.throwUninitializedPropertyAccessException("viewModelFactory")
-        }
-        return factory
-    }
-
-    fun setViewModelFactory(factory: MainActivityProviders_ProvideAboutFragment.AboutFragmentSubcomponent.Factory?) {
-        Intrinsics.checkParameterIsNotNull(factory, "<set-?>")
-        viewModelFactory = factory
     }
 
     override fun onCreateView(

@@ -74,7 +74,7 @@ dependencies {
     // implementation("org.osmdroid:osmbonuspack:6.1.13")
    // implementation("com.github.mik3y:usb-serial-for-android:3.3.0")
 
-    implementation("androidx.appcompat:appcompat:1.3.1")
+    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("org.osmdroid:osmdroid-android:6.1.16")
 
     implementation("com.github.bumptech.glide:glide:4.16.0")
@@ -92,9 +92,13 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.5.0")
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+
+    implementation("com.google.dagger:dagger:2.51")
+    kapt("com.google.dagger:dagger-compiler:2.51")
+
     implementation("com.google.dagger:dagger-android:2.51")
     implementation("com.google.dagger:dagger-android-support:2.51")
-    annotationProcessor("com.google.dagger:dagger-android-processor:2.51")
+    kapt("com.google.dagger:dagger-android-processor:2.51")
 
     implementation("androidx.room:room-runtime:2.1.0-alpha06")
     implementation("id.zelory:compressor:3.0.1")
