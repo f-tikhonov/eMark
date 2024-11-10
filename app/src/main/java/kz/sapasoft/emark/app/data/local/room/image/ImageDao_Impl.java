@@ -1,3 +1,4 @@
+/*
 package kz.sapasoft.emark.app.data.local.room.image;
 
 import android.database.Cursor;
@@ -12,7 +13,9 @@ import kz.sapasoft.emark.app.data.local.room.DataConverter;
 import kz.sapasoft.emark.app.domain.model.ImageDataModel;
 
 public final class ImageDao_Impl implements ImageDao {
-    /* access modifiers changed from: private */
+    */
+/* access modifiers changed from: private *//*
+
     public final DataConverter __dataConverter = new DataConverter();
     private final RoomDatabase __db;
     private final EntityInsertionAdapter __insertionAdapterOfImageDataModel;
@@ -111,3 +114,4 @@ public final class ImageDao_Impl implements ImageDao {
         }
     }
 }
+*/

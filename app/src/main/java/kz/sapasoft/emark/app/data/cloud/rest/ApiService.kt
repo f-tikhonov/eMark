@@ -33,7 +33,7 @@ interface ApiService {
         @Query("privelege") str: String?,
         @Query("parentType") str2: String?,
         @Query("parentId") str3: String?,
-    ): MutableList<ImageDataModel?>?
+    ): List<ImageDataModel>?
 
     @POST("marker/getById")
     suspend fun getMarker(
@@ -47,30 +47,30 @@ interface ApiService {
 
     @POST("project/getByNamePart")
     suspend fun getProjectList(
-        @Query("namePart") str: String?,
-        @Query("offset") i: Int,
-        @Query("limit") i2: Int,
-        @Query("light") z: Boolean,
-        @Query("calculatePermissions") z2: Boolean,
-    ): MutableList<ProjectModel?>?
+        @Query("namePart") namePart: String?,
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int,
+        @Query("light") light: Boolean,
+        @Query("calculatePermissions") calculatePermissions: Boolean,
+    ): List<ProjectModel>?
 
     @POST("tag/getByNamePart")
     suspend fun getTagList(
-        @Query("namePart") str: String?,
-        @Query("offset") i: Int,
-        @Query("limit") i2: Int,
-    ): MutableList<TagModel?>?
+        @Query("namePart") namePart: String?,
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int,
+    ): List<TagModel>?
 
     @POST("markerTemplate/getByIds")
     suspend fun getTemplateList(
         @Query("ids") list: List<String?>?,
-    ): MutableList<TemplateModel?>?
+    ): List<TemplateModel?>?
 
     @POST
     suspend fun login(
-        @Url str: String?,
-        @Query("username") str2: String?,
-        @Query("password") str3: String?,
+        @Url url: String?,
+        @Query("username") username: String?,
+        @Query("password") password: String?,
     ): ResponseBody?
 
     @PUT("data/save")

@@ -1,3 +1,4 @@
+/*
 package kz.sapasoft.emark.app.data.local.room.project;
 
 import android.database.Cursor;
@@ -13,7 +14,9 @@ import kz.sapasoft.emark.app.data.local.room.DataConverter;
 import kz.sapasoft.emark.app.domain.model.ProjectModel;
 
 public final class ProjectDao_Impl implements ProjectDao {
-    /* access modifiers changed from: private */
+    */
+/* access modifiers changed from: private *//*
+
     public final DataConverter __dataConverter = new DataConverter();
     private final RoomDatabase __db;
     private final EntityInsertionAdapter __insertionAdapterOfProjectModel;
@@ -108,3 +111,4 @@ public final class ProjectDao_Impl implements ProjectDao {
         }
     }
 }
+*/

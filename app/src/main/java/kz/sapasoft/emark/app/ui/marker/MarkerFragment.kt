@@ -2,7 +2,6 @@ package kz.sapasoft.emark.app.ui.marker
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -10,7 +9,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -167,7 +165,7 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
             templateId = (_findViewCache?.get(R.id.view_marker_type) as MarkerTypeView).templateId,
             depth = (_findViewCache?.get(R.id.view_marker_depth) as MarkerDepthView).getValue(),
             idLocal = markerModel.idLocal ?: UUID.randomUUID().toString(),
-            fields = mFieldViewList.map { it.fieldModel }
+            fields = mFieldViewList.map { it.getFieldModel() }
         )
         return markerModelCopy
     }
@@ -177,11 +175,6 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
         mMarkerModel?.fields?.let {
             //fillFields(it)
         }
-    }
-
-    override fun onFieldValueChange() {
-        (_findViewCache?.get(R.id.btn_save) as MaterialButton).isEnabled =
-            checkMainHasChanges() || checkFieldsHasChanges()
     }
 
     private fun checkMainHasChanges(): Boolean {
@@ -194,13 +187,13 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
 
     private fun checkFieldsHasChanges(): Boolean {
         return mFieldViewList.any { fieldView ->
-            mMarkerModel?.fields?.find { it.id == fieldView.fieldModel.id }?.toString() != fieldView.fieldModel.toString()
+            mMarkerModel?.fields?.find { it.id == fieldView.getFieldModel().id }?.toString() != fieldView.getFieldModel().toString()
         }
     }
 
     private fun checkAllRequiredFilled(): Boolean {
         return (_findViewCache?.get(R.id.view_marker_depth) as MarkerDepthView).hasValue() &&
-                mFieldViewList.all { !it.isRequired || it.hasValue() }
+                mFieldViewList.all { !it.isRequired() || it.hasValue() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -231,5 +224,10 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
                 mOnMarkerChangeListener = onMarkerChangeListener
             }
         }
+    }
+
+    override fun onFieldValueChange() {
+        (_findViewCache?.get(R.id.btn_save) as MaterialButton).isEnabled =
+            checkMainHasChanges() || checkFieldsHasChanges()
     }
 }

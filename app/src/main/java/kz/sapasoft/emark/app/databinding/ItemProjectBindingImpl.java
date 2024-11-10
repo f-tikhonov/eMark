@@ -1,5 +1,6 @@
 package kz.sapasoft.emark.app.databinding;
 
+import android.annotation.SuppressLint;
 import android.util.SparseIntArray;
 import android.view.View;
 import android.widget.TextView;
@@ -71,6 +72,7 @@ public class ItemProjectBindingImpl extends ItemProjectBinding {
     }
 
     /* access modifiers changed from: protected */
+    @SuppressLint("RestrictedApi")
     public void executeBindings() {
         long j;
         String str;
@@ -84,8 +86,8 @@ public class ItemProjectBindingImpl extends ItemProjectBinding {
         if (j2 == 0 || projectModel == null) {
             str = null;
         } else {
-            String regionName = projectModel.regionName;
-            str2 = projectModel.name;
+            String regionName = projectModel.getRegionName();
+            str2 = projectModel.getRegionName();
             str = regionName;
         }
         if (j2 != 0) {

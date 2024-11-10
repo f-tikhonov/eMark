@@ -1,3 +1,4 @@
+/*
 package kz.sapasoft.emark.app.data.local.room.tag;
 
 import android.database.Cursor;
@@ -133,3 +134,4 @@ public final class TagDao_Impl implements TagDao {
         }
     }
 }
+*/

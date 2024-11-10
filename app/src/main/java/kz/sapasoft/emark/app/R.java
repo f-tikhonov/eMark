@@ -1,6 +1,6 @@
 package kz.sapasoft.emark.app;
 
-//import net.bytebuddy.jar.asm.Opcodes;
+import net.bytebuddy.jar.asm.Opcodes;
 
 public final class R {
 

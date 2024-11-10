@@ -1,3 +1,4 @@
+/*
 package kz.sapasoft.emark.app.core;
 
 import kotlin.Metadata;
@@ -15,14 +16,20 @@ import kotlinx.coroutines.Dispatchers;
 
 @Metadata(bv = {1, 0, 3}, d1 = {"\u0000\u0010\n\u0000\n\u0002\u0010\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\u0010\u0000\u001a\u00020\u0001\"\u0004\b\u0000\u0010\u0002*\u00020\u0003H@¢\u0006\u0004\b\u0004\u0010\u0005"}, d2 = {"<anonymous>", "", "P", "Lkotlinx/coroutines/CoroutineScope;", "invoke", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"}, k = 3, mv = {1, 1, 16})
 @DebugMetadata(c = "kz.sapasoft.emark.app.core.BaseViewModel$launchIO$2", f = "BaseViewModel.kt", i = {0}, l = {16}, m = "invokeSuspend", n = {"$this$launch"}, s = {"L$0"})
-/* compiled from: BaseViewModel.kt */
+*/
+/* compiled from: BaseViewModel.kt *//*
+
 final class BaseViewModel$launchIO$2 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
-    final /* synthetic */ Function2 $doOnAsyncBlock;
+    final */
+/* synthetic *//*
+ Function2 $doOnAsyncBlock;
     Object L$0;
     int label;
     private CoroutineScope p$;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    */
+/* JADX INFO: super call moved to the top of the method (can break code semantics) *//*
+
     BaseViewModel$launchIO$2(Function2 function2, Continuation continuation) {
         super(2, continuation);
         this.$doOnAsyncBlock = function2;
@@ -41,13 +48,19 @@ final class BaseViewModel$launchIO$2 extends SuspendLambda implements Function2<
 
     @Metadata(bv = {1, 0, 3}, d1 = {"\u0000\f\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\u0010\u0000\u001a\u0002H\u0001\"\u0004\b\u0000\u0010\u0001*\u00020\u0002H@¢\u0006\u0004\b\u0003\u0010\u0004"}, d2 = {"<anonymous>", "P", "Lkotlinx/coroutines/CoroutineScope;", "invoke", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"}, k = 3, mv = {1, 1, 16})
     @DebugMetadata(c = "kz.sapasoft.emark.app.core.BaseViewModel$launchIO$2$1", f = "BaseViewModel.kt", i = {0}, l = {17}, m = "invokeSuspend", n = {"$this$withContext"}, s = {"L$0"})
-    /* renamed from: kz.sapasoft.emark.app.core.BaseViewModel$launchIO$2$1  reason: invalid class name */
-    /* compiled from: BaseViewModel.kt */
+    */
+/* renamed from: kz.sapasoft.emark.app.core.BaseViewModel$launchIO$2$1  reason: invalid class name *//*
+
+    */
+/* compiled from: BaseViewModel.kt *//*
+
     static final class AnonymousClass1<P> extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super P>, Object> {
         Object L$0;
         int label;
         private CoroutineScope p$;
-        final /* synthetic */ BaseViewModel$launchIO$2 this$0;
+        final */
+/* synthetic *//*
+ BaseViewModel$launchIO$2 this$0;
 
         {
             this.this$0 = r1;
@@ -106,3 +119,4 @@ final class BaseViewModel$launchIO$2 extends SuspendLambda implements Function2<
         return Unit.INSTANCE;
     }
 }
+*/

@@ -140,7 +140,7 @@ public final class PhotoAdapter extends RecyclerView.Adapter<DataBindingViewHold
     public final List<ImageDataModel> getChangedModelList() {
         Collection arrayList = new ArrayList();
         for (Object next : this.items) {
-            if (((ImageDataModel) next).file != null) {
+            if (((ImageDataModel) next).getFile() != null) {
                 arrayList.add(next);
             }
         }

@@ -1,5 +1,7 @@
 package kz.sapasoft.emark.app.data.cloud.repository
 
+import android.annotation.SuppressLint
+import androidx.room.RoomDatabase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers.IO
 import kz.sapasoft.emark.app.data.cloud.ResultWrapper
@@ -10,8 +12,11 @@ import kz.sapasoft.emark.app.domain.model.MarkerModelNullable
 import kz.sapasoft.emark.app.domain.model.ProjectModel
 import kz.sapasoft.emark.app.domain.model.TagModel
 import kz.sapasoft.emark.app.domain.model.TemplateModel
+import kz.sapasoft.emark.app.domain.model.request.GetMarkersRequest
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
+import safeApiCall
+import java.util.UUID
 
 class CloudRepository(
     apiService: ApiService,
@@ -32,106 +37,110 @@ class CloudRepository(
         i: Int,
     ) : this(apiService, (if (i and 2 != 0) IO else coroutineDispatcher)!!)
 
-    override suspend fun getImage(str: String?): ResultWrapper<MarkerModel?>? {
-        return null
-//        return safeApiCall(
-//            dispatcher,
-//            apIs.getImage(true, 600, 600, str, this)
-//        )
+    override suspend fun getImage(queryKey: String): ResultWrapper<MarkerModel?> {
+        return safeApiCall(dispatcher) {
+            apIs.getImage(true, 600, 600, queryKey)
+        }
     }
 
-    override suspend fun getImageData(str: String?): ResultWrapper<out MutableList<ImageDataModel?>?>? {
-        return null
-//        return safeApiCall(
-//            dispatcher,
-//            `CloudRepository$getImageData$2`(this, str, null as Continuation<*>?),
-//            continuation
-//        )
+    override suspend fun getImageData(parentId: String?): ResultWrapper<List<ImageDataModel>?> {
+        return safeApiCall(dispatcher) {
+            val response = apIs.getImageData("VIEW_DataEntity", "MarkerEntity", parentId)
+            response
+        }
     }
 
-    override suspend fun getMarker(str: String?): ResultWrapper<MarkerModel?>? {
-        TODO("Not yet implemented")
+    override suspend fun getMarker(str: String?): ResultWrapper<MarkerModel?> {
+        return safeApiCall(dispatcher) {
+            val response = apIs.getMarker(str)
+            response
+        }
     }
 
+    @SuppressLint("RestrictedApi")
     override suspend fun getMarkerList(
         i: Int,
-        list: List<String?>?
-    ): ResultWrapper<out MutableList<MarkerModel?>?>? {
-        return null
-//        return safeApiCall(
-//            dispatcher,
-//            `CloudRepository$getMarkerList$2`(
-//                this,
-//                GetMarkersRequest(
-//                    (i - 1) * RoomDatabase.MAX_BIND_PARAMETER_CNT,
-//                    RoomDatabase.MAX_BIND_PARAMETER_CNT,
-//                    "VIEW_MarkerEntity",
-//                    list,
-//                    emptyList<String>()
-//                ),
-//                null as Continuation<*>?
-//            ),
-//            continuation
-//        )
+        list: List<String?>
+    ): ResultWrapper<MutableList<MarkerModel?>?> {
+        return safeApiCall(dispatcher) {
+            apIs.getMarkerList(
+                GetMarkersRequest(
+                    offset = (i - 1) * RoomDatabase.MAX_BIND_PARAMETER_CNT,
+                    limit = RoomDatabase.MAX_BIND_PARAMETER_CNT,
+                    privilege = "VIEW_MarkerEntity",
+                    projectIds = list,
+                    lineIds = emptyList()
+                )
+            )
+        }
     }
 
-    override suspend fun getProjectList(i: Int): ResultWrapper<out MutableList<ProjectModel?>?>? {
-        return null
-//        return safeApiCall(
-//            dispatcher,
-//            `CloudRepository$getProjectList$2`(this, i, null as Continuation<*>?),
-//            continuation
-//        )
+    override suspend fun getProjectList(i: Int): ResultWrapper<List<ProjectModel>?> {
+        return safeApiCall(dispatcher) {
+            apIs.getProjectList(
+                namePart = "*",
+                offset = (i - 1) * 50,
+                limit = 50,
+                light = false,
+                calculatePermissions = true
+            )
+        }
     }
 
-    override suspend fun getTagList(i: Int): ResultWrapper<out MutableList<TagModel?>?>? {
-        return null
-//        return safeApiCall(
-//            dispatcher,
-//            `CloudRepository$getTagList$2`(this, i, null as Continuation<*>?),
-//            continuation
-//        )
+    @SuppressLint("RestrictedApi")
+    override suspend fun getTagList(i: Int): ResultWrapper<List<TagModel>?> {
+        return safeApiCall(dispatcher) {
+            val offset = (i - 1) * RoomDatabase.MAX_BIND_PARAMETER_CNT
+            apIs.getTagList(
+                namePart = "*",
+                offset = offset,
+                limit = RoomDatabase.MAX_BIND_PARAMETER_CNT
+            )
+        }
     }
 
-    override suspend fun getTemplateList(list: List<String?>?): ResultWrapper<out MutableList<TemplateModel?>?>? {
-        return null
-//        return safeApiCall(
-//            dispatcher,
-//            `CloudRepository$getTemplateList$2`(this, list, null as Continuation<*>?),
-//            continuation
-//        )
+    override suspend fun getTemplateList(list: List<String?>?): ResultWrapper<List<TemplateModel?>?> {
+        return safeApiCall(dispatcher) {
+            apIs.getTemplateList(list)
+        }
     }
 
     override suspend fun login(
         str: String?,
         str2: String?,
         str3: String?
-    ): ResultWrapper<out ResponseBody?>? {
-        return null
-//        return safeApiCall(
-//            dispatcher,
-//            apIs.login(str = str, str2 = str2, str3 = str3)
-//        )
+    ): ResultWrapper<ResponseBody?> {
+        return safeApiCall(dispatcher) {
+            apIs.login(
+                url = str,
+                username = str2,
+                password = str3
+            )
+        }
     }
 
     override suspend fun saveImage(
         str: String?,
         part: MultipartBody.Part?
-    ): ResultWrapper<MarkerModel?>? {
-        return null
-//        return safeApiCall(
-//            dispatcher,
-//            `CloudRepository$saveImage$2`(this, str, part, null as Continuation<*>?),
-//            continuation
-//        )
+    ): ResultWrapper<MarkerModel?> {
+        return safeApiCall(dispatcher) {
+            val uuid = UUID.randomUUID().toString()
+            apIs.saveImage(
+                uuid,
+                "-",
+                "image/jpeg",
+                "MarkerEntity",
+                str,
+                part
+            )
+        }
     }
 
-    override suspend fun saveMarker(markerModelNullable: MarkerModelNullable?): ResultWrapper<MarkerModel?>? {
-        return null
-//        return safeApiCall(
-//            dispatcher,
-//            `CloudRepository$saveMarker$2`(this, markerModelNullable, null as Continuation<*>?),
-//            continuation
-//        )
+    override suspend fun saveMarker(markerModelNullable: MarkerModelNullable?): ResultWrapper<MarkerModel?> {
+        return safeApiCall(dispatcher) {
+            apIs.saveMarker(markerModelNullable)
+        }
     }
+
 }
+

@@ -12,42 +12,43 @@ import okhttp3.ResponseBody
 import kotlin.coroutines.Continuation
 
 interface BaseCloudRepository {
-    suspend fun getImage(str: String?): ResultWrapper<MarkerModel?>?
+    suspend fun getImage(queryKey: String): ResultWrapper<MarkerModel?>
 
     suspend fun getImageData(
         str: String?,
-    ): ResultWrapper<out MutableList<ImageDataModel?>?>?
+    ): ResultWrapper<List<ImageDataModel>?>
 
-    suspend fun getMarker(str: String?): ResultWrapper<MarkerModel?>?
+    suspend fun getMarker(str: String?): ResultWrapper<MarkerModel?>
+
     suspend fun getMarkerList(
         i: Int,
-        list: List<String?>?,
-    ): ResultWrapper<out MutableList<MarkerModel?>?>?
+        list: List<String?>,
+    ): ResultWrapper<MutableList<MarkerModel?>?>
 
     suspend fun getProjectList(
         i: Int,
-    ): ResultWrapper<out MutableList<ProjectModel?>?>?
+    ): ResultWrapper<List<ProjectModel>?>
 
     suspend fun getTagList(
         i: Int,
-    ): ResultWrapper<out MutableList<TagModel?>?>?
+    ): ResultWrapper<List<TagModel>?>
 
     suspend fun getTemplateList(
         list: List<String?>?,
-    ): ResultWrapper<out MutableList<TemplateModel?>?>?
+    ): ResultWrapper<List<TemplateModel?>?>
 
     suspend fun login(
         str: String?,
         str2: String?,
         str3: String?,
-    ): ResultWrapper<out ResponseBody?>?
+    ): ResultWrapper<ResponseBody?>
 
     suspend fun saveImage(
         str: String?,
         part: MultipartBody.Part?,
-    ): ResultWrapper<MarkerModel?>?
+    ): ResultWrapper<MarkerModel?>
 
     suspend fun saveMarker(
         markerModelNullable: MarkerModelNullable?,
-    ): ResultWrapper<MarkerModel?>?
+    ): ResultWrapper<MarkerModel?>
 }

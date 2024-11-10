@@ -10,6 +10,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
+
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import kotlin.Metadata;
 import kotlin.jvm.internal.Intrinsics;
@@ -22,7 +24,7 @@ import kz.ss.emark.R;
 /* compiled from: CustomBindingAdapter.kt */
 public final class CustomBindingAdapterKt {
     @BindingAdapter({"image_url"})
-    public static final void loadImage(ImageView imageView, ImageDataModel imageDataModel) {
+    public static final void loadImage(ImageView imageView, ImageDataModel imageDataModel) throws UnsupportedEncodingException {
         Intrinsics.checkParameterIsNotNull(imageView, "imageView");
         Intrinsics.checkParameterIsNotNull(imageDataModel, "imageDataModel");
         if (imageDataModel.getMetadata() != null) {

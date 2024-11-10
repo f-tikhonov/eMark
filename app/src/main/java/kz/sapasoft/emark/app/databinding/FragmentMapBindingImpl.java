@@ -1,5 +1,6 @@
 package kz.sapasoft.emark.app.databinding;
 
+import android.annotation.SuppressLint;
 import android.util.SparseIntArray;
 import android.view.View;
 import android.widget.ImageView;
@@ -85,6 +86,7 @@ public class FragmentMapBindingImpl extends FragmentMapBinding {
     }
 
     /* access modifiers changed from: protected */
+    @SuppressLint("RestrictedApi")
     public void executeBindings() {
         long j;
         synchronized (this) {
@@ -95,7 +97,7 @@ public class FragmentMapBindingImpl extends FragmentMapBinding {
         ProjectModel projectModel = this.mItem;
         long j2 = j & 3;
         if (!(j2 == 0 || projectModel == null)) {
-            str = projectModel.name;
+            str = projectModel.getName();
         }
         if (j2 != 0) {
             TextViewBindingAdapter.setText(this.tvName, str);

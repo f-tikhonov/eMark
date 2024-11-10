@@ -50,20 +50,28 @@ class PhotoViewModel @Inject constructor(
         baseCloudRepository = baseCloudRepository2
     }
 
-    fun login(str: String?, str2: String?, str3: String?) {
-        Intrinsics.checkParameterIsNotNull(str, "username")
-        Intrinsics.checkParameterIsNotNull(str2, "password")
-        Intrinsics.checkParameterIsNotNull(str3, "server")
+    fun login(username: String, password: String, server: String) {
+        requireNotNull(username) { "username" }
+        requireNotNull(password) { "password" }
+        requireNotNull(server) { "server" }
+
         if (verifyAvailableNetwork()) {
-            launchIO(`PhotoViewModel$login$1`(this, str3, str, str2, null as Continuation<*>?))
-        } else if (Intrinsics.areEqual(
-                str as Any?,
-                prefsImpl.username as Any
-            ) && Intrinsics.areEqual(
-                str2 as Any?,
-                prefsImpl.password as Any
-            ) && Intrinsics.areEqual(str3 as Any?, prefsImpl.server as Any)
-        ) {
+            launchIO {
+                isRefreshing.postValue(true)
+                val response = baseCloudRepository.login("$server/service/auth/login", username, password)
+
+                when (response) {
+                    is ResultWrapper.Error -> error.postValue(response)
+                    is ResultWrapper.Success -> {
+                        prefsImpl.username = username
+                        prefsImpl.password  = password
+                        prefsImpl.server  = server
+                        loginData.postValue(true)
+                    }
+                }
+                isRefreshing.postValue(false)
+            }
+        } else if (username == prefsImpl.username && password == prefsImpl.password && server == prefsImpl.server) {
             loginData.postValue(true)
         }
     }

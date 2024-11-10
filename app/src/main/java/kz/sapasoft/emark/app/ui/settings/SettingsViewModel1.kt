@@ -1,8 +1,10 @@
 package kz.sapasoft.emark.app.ui.settings
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import kz.sapasoft.emark.app.core.BaseViewModel
+import kz.sapasoft.emark.app.data.cloud.ResultWrapper
 import kz.sapasoft.emark.app.data.cloud.repository.BaseCloudRepository
 import kz.sapasoft.emark.app.data.local.prefs.PrefsImpl
 import kz.sapasoft.emark.app.data.local.room.marker.MarkerRepository
@@ -13,7 +15,9 @@ import kz.sapasoft.emark.app.domain.model.MarkerModel
 import kz.sapasoft.emark.app.domain.model.ProjectModel
 import kz.sapasoft.emark.app.domain.model.TagModel
 import kz.sapasoft.emark.app.domain.model.TemplateModel
+import kz.sapasoft.emark.app.utils.DateConverter
 import kz.ss.emark.R
+import java.util.Calendar
 import javax.inject.Inject
 import kotlin.coroutines.Continuation
 import kotlin.jvm.internal.Intrinsics
@@ -144,60 +148,153 @@ class SettingsViewModel @Inject constructor(
     }
 
     val projectList: Unit
-        /* access modifiers changed from: private */
         get() {
-         //   launchIO(`SettingsViewModel$getProjectList$1`(this, null as Continuation<*>?))
-        }
-    val templateList: Unit
-        /* access modifiers changed from: private */
-        get() {
-           // launchIO(`SettingsViewModel$getTemplateList$1`(this, null as Continuation<*>?))
-        }
-    val tags: Unit
-        /* access modifiers changed from: private */
-        get() {
-          //  launchIO(`SettingsViewModel$getTags$1`(this, null as Continuation<*>?))
-        }
-    val markerList: Unit
-        /* access modifiers changed from: private */
-        get() {
-           // launchIO(`SettingsViewModel$getMarkerList$1`(this, null as Continuation<*>?))
-        }
-    val markerDetails: Unit
-        /* access modifiers changed from: private */
-        get() {
-            var i: Int
-            val arrayList: ArrayList<*> = ArrayList<Any?>()
-            var i2 = 1
-            while (true) {
-                i = 0
-                if (i2 <= 0) {
-                    break
+            launchIO {
+                if (projectsPages == 1) {
+                    projectRepository.deleteAll()
                 }
-                val i3 = i2 + 1
-                val findAll: Collection<*> = markerRepository.findAll(i2)
-                i2 = if (!findAll.isEmpty()) {
-                    arrayList.addAll(findAll as Collection<Nothing>)
-                    i3
-                } else {
-                    0
+
+                val result = baseCloudRepository.getProjectList(projectsPages)
+                projectsPages += 1
+
+                when (result) {
+                    is ResultWrapper.Success -> {
+                        val projects = result.value
+                        if (projects?.isNotEmpty() == true) {
+                            insertProjectEntityList(projects)
+                            projectList // Recursive call to fetch the next page
+                        } else {
+                            progress.value?.let { currentProgress ->
+                                progress.postValue(currentProgress + 100)
+                            }
+                            templateList
+                            markerList
+                        }
+                    }
+                    is ResultWrapper.Error -> {
+                        Log.d("terra"," ResultWrapper.Error $result" )
+                        //error().postValue(result)
+                    }
                 }
             }
-            for (next in arrayList) {
-                val i4 = i + 1
-                if (i < 0) {
-                    throw IndexOutOfBoundsException("")
+        }
+    val templateList: Unit
+        get() {
+            launchIO {
+                templateRepository.deleteAll()
+
+                val templateIds = ArrayList<String>()
+                val projectEntityList = projectRepository.findAll()
+
+                projectEntityList.forEach { project ->
+                    templateIds.addAll(project.markerTemplateIds)
                 }
-//                launchIO<Unit>(
-//                    `SettingsViewModel$getMarkerDetails$$inlined$forEachIndexed$lambda$1`(
-//                        next as MarkerModel,
-//                        i,
-//                        null as Continuation<*>?,
-//                        this,
-//                        arrayList
-//                    )
-//                )
-                i = i4
+
+                val distinctTemplateIds = templateIds.distinct()
+                val result = baseCloudRepository.getTemplateList(distinctTemplateIds)
+
+                if (result is ResultWrapper.Success && result.value?.isNotEmpty() == true) {
+                    progress.value?.let { currentProgress ->
+                        progress.postValue(currentProgress + 100)
+                    }
+                    insertTemplateEntityList(result.value)
+                } else if (result is ResultWrapper.Error) {
+                    Log.d("terra"," ResultWrapper.Error $result" )
+                    //getError().postValue(result)
+                }
+            }
+        }
+    val tags: Unit
+        get() {
+            launchIO {
+                if (tagsPages == 1) {
+                    tagRepository.deleteAll()
+                }
+
+                val currentTagsPage = tagsPages
+                tagsPages++
+
+                val result = baseCloudRepository.getTagList(currentTagsPage)
+                if (result is ResultWrapper.Success && result.value?.isNotEmpty() == true) {
+                    insertTagEntityList(result.value)
+                    tags
+                } else if (result is ResultWrapper.Success) {
+                    progress.value?.let { currentProgress ->
+                        progress.postValue(currentProgress + 100)
+                    }
+                } else if (result is ResultWrapper.Error) {
+                    Log.d("terra"," ResultWrapper.Error $result" )
+                   // getError().postValue(result)
+                } else {
+                    Log.d("terra"," tags elese " )
+                }
+            }
+        }
+    val markerList: Unit
+        get() {
+            launchIO {
+                if (markersPages == 1) {
+                    markerRepository.deleteAll()
+                }
+
+                val projectEntityList = projectRepository.findAll()
+                val ids = projectEntityList.map { it.id }
+                val currentMarkersPage = markersPages
+                markersPages++
+
+                val result = baseCloudRepository.getMarkerList(currentMarkersPage, ids)
+                if (result is ResultWrapper.Success && result.value?.isNotEmpty() == true) {
+                    insertMarkerEntityList(result.value)
+                    markerList // recursively fetch the next page if needed
+                } else if (result is ResultWrapper.Success) {
+                    progress.value?.let { currentProgress ->
+                        progress.postValue(currentProgress + 100)
+                    }
+                    markerDetails
+                } else if (result is ResultWrapper.Error) {
+                    Log.d("terra"," ResultWrapper.Error $result" )
+                    //getError().postValue(result)
+                }
+            }
+        }
+
+    val markerDetails: Unit
+        get() {
+            val arrayList = ArrayList<MarkerModel>()
+            var page = 1
+
+            while (true) {
+                val findAll: Collection<MarkerModel> = markerRepository.findAll(page)
+                if (findAll.isNotEmpty()) {
+                    arrayList.addAll(findAll)
+                    page++
+                } else {
+                    break
+                }
+            }
+
+            arrayList.forEachIndexed { index, item ->
+                launchIO {
+                    val result = baseCloudRepository.getMarker(item.id)
+                    if (result is ResultWrapper.Success) {
+                        val progressValue = progress.value ?: 0
+                        progress.postValue(progressValue + (10000 - progressValue) / (arrayList.size - index))
+
+                        insertMarkerEntity(result.value as MarkerModel)
+
+                        if (index == arrayList.size - 1) {
+                            progressVisibility.postValue(false)
+
+                            val currentTime = Calendar.getInstance().time
+                            prefsImpl.dateDB = (DateConverter.dateToString(currentTime, "HH:mm:ss dd.MM.yyyy"))
+
+                            setLoadingDate()
+                        }
+                    } else if (result is ResultWrapper.Error) {
+                        Log.d("terra"," ResultWrapper.Error $result" )
+                       // error.postValue(result)
+                    }
+                }
             }
         }
 

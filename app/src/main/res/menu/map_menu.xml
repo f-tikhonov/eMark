@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt">
+    <item android:id="@+id/action_manual_nav" android:title="@string/manual_navigation" android:checkable="true" app:showAsAction="never"/>
+    <item android:id="@+id/action_synchronize" android:title="@string/synchronize" app:showAsAction="never"/>
+    <item android:id="@+id/action_to_last_marker" android:title="@string/to_last_marker" app:showAsAction="never"/>
+</menu>
