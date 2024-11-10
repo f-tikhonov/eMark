@@ -3,6 +3,7 @@ package kz.sapasoft.emark.app.ui.welcome
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import kz.sapasoft.emark.app.core.BaseViewModel
 import kz.sapasoft.emark.app.core.Config
@@ -12,6 +13,7 @@ import kz.sapasoft.emark.app.data.local.prefs.PrefsImpl
 import javax.inject.Inject
 import kotlin.coroutines.Continuation
 import kotlin.jvm.internal.Intrinsics
+
 class WelcomeViewModel @Inject constructor(
     prefsImpl2: PrefsImpl,
     context2: Context,
@@ -58,21 +60,24 @@ class WelcomeViewModel @Inject constructor(
     }
 
     fun login(username: String?, password: String?, server: String?) {
-        requireNotNull(username) { "username" }
-        requireNotNull(password) { "password" }
-        requireNotNull(server) { "server" }
 
         if (verifyAvailableNetwork()) {
             launchIO {
                 isRefreshing.postValue(true)
-                val result = baseCloudRepository.login("$server/service/auth/login", username, password)
+                Log.d("terra", "server $server username $username password $password ")
+                val result = baseCloudRepository.login(
+                    url = "service/auth/login",
+                    username = username.orEmpty(),
+                    password = password.orEmpty()
+                )
 
+                Log.d("terra", "result $result")
                 when (result) {
                     is ResultWrapper.Error -> error.postValue(result)
                     is ResultWrapper.Success -> {
                         Config.DOMAIN = "$server/service/"
                         prefsImpl.apply {
-                            this.username=(username)
+                            this.username = (username)
                             this.password = (password)
                             this.server = (server)
                         }

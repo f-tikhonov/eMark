@@ -27,7 +27,7 @@ class NetworkModule {
     @Provides
     fun providesRetrofit(gsonConverterFactory: GsonConverterFactory, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(Config.DOMAIN)
+            .baseUrl("https://emark.ktga.kz/")
             .addConverterFactory(gsonConverterFactory)
             .client(okHttpClient)
             .build()

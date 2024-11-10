@@ -66,6 +66,7 @@
         </activity>
         <activity
             android:name="kz.sapasoft.emark.app.ui.MainActivity"
+            android:theme="@style/AppTheme"
             android:exported="true"
             android:label="">
             <intent-filter>
@@ -74,6 +75,7 @@
         </activity>
         <activity
             android:name="kz.sapasoft.emark.app.ui.photo.PhotoActivity"
+            android:theme="@style/AppTheme"
             android:exported="true"
             android:label="" />
 

@@ -9,6 +9,7 @@ import kz.sapasoft.emark.app.domain.model.TagModel
 import kz.sapasoft.emark.app.domain.model.TemplateModel
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
+import retrofit2.Response
 import kotlin.coroutines.Continuation
 
 interface BaseCloudRepository {
@@ -38,10 +39,10 @@ interface BaseCloudRepository {
     ): ResultWrapper<List<TemplateModel?>?>
 
     suspend fun login(
-        str: String?,
-        str2: String?,
-        str3: String?,
-    ): ResultWrapper<ResponseBody?>
+        url: String,
+        username: String,
+        password: String,
+    ): ResultWrapper<ResponseBody>
 
     suspend fun saveImage(
         str: String?,

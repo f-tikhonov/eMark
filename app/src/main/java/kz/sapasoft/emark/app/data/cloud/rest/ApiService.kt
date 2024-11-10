@@ -9,7 +9,9 @@ import kz.sapasoft.emark.app.domain.model.TemplateModel
 import kz.sapasoft.emark.app.domain.model.request.GetMarkersRequest
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -41,12 +43,12 @@ interface ApiService {
     ): MarkerModel?
 
     @POST("marker/getList")
-    suspend fun getMarkerList(
+    fun getMarkerList(
         @Body getMarkersRequest: GetMarkersRequest?,
     ): MutableList<MarkerModel?>?
 
     @POST("project/getByNamePart")
-    suspend fun getProjectList(
+    fun getProjectList(
         @Query("namePart") namePart: String?,
         @Query("offset") offset: Int,
         @Query("limit") limit: Int,
@@ -55,23 +57,23 @@ interface ApiService {
     ): List<ProjectModel>?
 
     @POST("tag/getByNamePart")
-    suspend fun getTagList(
+    fun getTagList(
         @Query("namePart") namePart: String?,
         @Query("offset") offset: Int,
         @Query("limit") limit: Int,
     ): List<TagModel>?
 
     @POST("markerTemplate/getByIds")
-    suspend fun getTemplateList(
+    fun getTemplateList(
         @Query("ids") list: List<String?>?,
     ): List<TemplateModel?>?
 
     @POST
     suspend fun login(
-        @Url url: String?,
-        @Query("username") username: String?,
-        @Query("password") password: String?,
-    ): ResponseBody?
+        @Url url: String,
+        @Query("username") username: String,
+        @Query("password") password: String,
+    ): ResponseBody
 
     @PUT("data/save")
     @Multipart

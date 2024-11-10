@@ -31,6 +31,7 @@ class SettingsViewModel @Inject constructor(
     templateRepository2: TemplateRepository,
     markerRepository2: MarkerRepository
 ) : BaseViewModel() {
+
     private val TAG = javaClass.simpleName
 
     /* access modifiers changed from: private */

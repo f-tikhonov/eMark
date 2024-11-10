@@ -15,6 +15,7 @@ import kz.sapasoft.emark.app.domain.model.TemplateModel
 import kz.sapasoft.emark.app.domain.model.request.GetMarkersRequest
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
+import retrofit2.Response
 import safeApiCall
 import java.util.UUID
 
@@ -106,15 +107,15 @@ class CloudRepository(
     }
 
     override suspend fun login(
-        str: String?,
-        str2: String?,
-        str3: String?
-    ): ResultWrapper<ResponseBody?> {
+        url: String,
+        username: String,
+        password: String
+    ): ResultWrapper<ResponseBody> {
         return safeApiCall(dispatcher) {
             apIs.login(
-                url = str,
-                username = str2,
-                password = str3
+                url = url,
+                username = username,
+                password = password
             )
         }
     }
