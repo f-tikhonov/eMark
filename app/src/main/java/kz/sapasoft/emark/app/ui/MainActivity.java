@@ -94,6 +94,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
     }
 
 
+
     /* access modifiers changed from: private */
     public final void updateNavigationBarState(int i) {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.nav_view);

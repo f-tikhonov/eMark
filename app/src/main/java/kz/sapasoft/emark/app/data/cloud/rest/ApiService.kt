@@ -43,12 +43,12 @@ interface ApiService {
     ): MarkerModel?
 
     @POST("marker/getList")
-    fun getMarkerList(
+    suspend fun getMarkerList(
         @Body getMarkersRequest: GetMarkersRequest?,
     ): MutableList<MarkerModel?>?
 
     @POST("project/getByNamePart")
-    fun getProjectList(
+    suspend fun getProjectList(
         @Query("namePart") namePart: String?,
         @Query("offset") offset: Int,
         @Query("limit") limit: Int,
@@ -57,14 +57,14 @@ interface ApiService {
     ): List<ProjectModel>?
 
     @POST("tag/getByNamePart")
-    fun getTagList(
+    suspend fun getTagList(
         @Query("namePart") namePart: String?,
         @Query("offset") offset: Int,
         @Query("limit") limit: Int,
     ): List<TagModel>?
 
     @POST("markerTemplate/getByIds")
-    fun getTemplateList(
+    suspend fun getTemplateList(
         @Query("ids") list: List<String?>?,
     ): List<TemplateModel?>?
 

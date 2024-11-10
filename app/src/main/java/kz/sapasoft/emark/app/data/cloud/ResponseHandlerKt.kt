@@ -1,3 +1,4 @@
+import android.util.Log
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -12,15 +13,22 @@ suspend fun <T> safeApiCall(
 ): ResultWrapper<T> {
     return withContext(dispatcher) {
         try {
+            Log.d("terra", "apiCall()")
             ResultWrapper.Success(apiCall())
         } catch (throwable: Throwable) {
             when (throwable) {
-                is HttpException -> ResultWrapper.Error(
-                    ErrorStatus.BAD_RESPONSE,
-                    throwable.code(),
-                    "convertErrorBody(throwable)"
-                )
-                else -> ResultWrapper.Error(ErrorStatus.NOT_DEFINED, null, throwable.message)
+                is HttpException -> {
+                    Log.d("terra", "HttpException ${throwable.message()}")
+                    ResultWrapper.Error(
+                        ErrorStatus.BAD_RESPONSE,
+                        throwable.code(),
+                        convertErrorBody(throwable)
+                    )
+                }
+                else -> {
+                    Log.d("terra", "other else ${throwable.message}")
+                    ResultWrapper.Error(ErrorStatus.NOT_DEFINED, null, throwable.message)
+                }
             }
         }
     }

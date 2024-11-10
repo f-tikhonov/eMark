@@ -4,7 +4,7 @@
         <!-- Customize your theme here -->
     </style>
 
-    <style name="SAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="SAppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Отключаем стандартный ActionBar -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
