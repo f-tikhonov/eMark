@@ -100,9 +100,13 @@ dependencies {
     implementation("com.google.dagger:dagger-android-support:2.51")
     kapt("com.google.dagger:dagger-android-processor:2.51")
 
-    implementation("androidx.room:room-runtime:2.1.0-alpha06")
+    implementation("androidx.room:room-runtime:2.6.1")
     implementation("id.zelory:compressor:3.0.1")
-    annotationProcessor("androidx.room:room-compiler:2.1.0-alpha06")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+
+    kapt("androidx.room:room-compiler:2.6.1")
+
+    implementation("androidx.room:room-ktx:2.6.1")
 
     implementation("androidx.legacy:legacy-preference-v14:1.0.0")
     implementation("androidx.preference:preference:1.0.0")

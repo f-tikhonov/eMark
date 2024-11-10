@@ -1,5 +1,7 @@
 package kz.sapasoft.emark.app.data.local.room.marker;
 
+import android.annotation.SuppressLint;
+
 import androidx.room.RoomDatabase;
 import java.util.List;
 import javax.inject.Inject;
@@ -33,6 +35,7 @@ public final class MarkerDataSource implements MarkerRepository {
         return this.markerDao.findByProjectId(str);
     }
 
+    @SuppressLint("RestrictedApi")
     public List<MarkerModel> findAll(int i) {
         return this.markerDao.findAll(RoomDatabase.MAX_BIND_PARAMETER_CNT, (i - 1) * RoomDatabase.MAX_BIND_PARAMETER_CNT);
     }

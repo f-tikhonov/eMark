@@ -15,6 +15,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import com.example.decompiledapk.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 import kz.sapasoft.emark.app.databinding.FragmentSettingsBinding
@@ -22,7 +23,6 @@ import kz.sapasoft.emark.app.ui.MainActivity
 import kz.sapasoft.emark.app.ui.base.DaggerFragmentExtended
 import kz.sapasoft.emark.app.ui.welcome.WelcomeViewModel
 import kz.sapasoft.emark.app.utils.MarkerDrawer
-import kz.ss.emark.R
 import javax.inject.Inject
 import kotlin.jvm.internal.Intrinsics
 
@@ -77,49 +77,38 @@ class SettingsFragment : DaggerFragmentExtended() {
         viewGroup: ViewGroup?,
         bundle: Bundle?
     ): View? {
-        Intrinsics.checkParameterIsNotNull(layoutInflater, "inflater")
-        val fragmentSettingsBinding: FragmentSettingsBinding =
-            DataBindingUtil.inflate<ViewDataBinding>(
-                layoutInflater,
-                R.layout.fragment_settings,
-                viewGroup,
-                false
-            ) as FragmentSettingsBinding
-        Intrinsics.checkExpressionValueIsNotNull(fragmentSettingsBinding, "binding")
-        fragmentSettingsBinding.setLifecycleOwner(this)
-        fragmentSettingsBinding.setViewModel(viewModel)
-        return fragmentSettingsBinding.getRoot()
+        return layoutInflater.inflate(R.layout.fragment_settings, viewGroup, false)
     }
 
     override fun onViewCreated(view: View, bundle: Bundle?) {
         Intrinsics.checkParameterIsNotNull(view, "view")
         super.onViewCreated(view, bundle)
-        initView()
+        initView(view)
         setObservers()
-        setListeners()
+        setListeners(view)
     }
 
-    private fun initView() {
-        val textView = `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.tv_toolbar) as TextView
+    private fun initView(view: View) {
+        val textView = view.findViewById(R.id.tv_toolbar) as TextView
         Intrinsics.checkExpressionValueIsNotNull(textView, "tv_toolbar")
         textView.text = getString(R.string.nav_item_settings)
         val activity: FragmentActivity? = activity
         if (activity != null) {
-            (activity as MainActivity?)?.setSupportActionBar(`_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.toolbar) as Toolbar)
+            (activity as MainActivity?)?.setSupportActionBar(view.findViewById(R.id.toolbar) as Toolbar)
             val activity2: FragmentActivity? = getActivity()
             if (activity2 != null) {
                 val supportActionBar: ActionBar? = (activity2 as MainActivity?)?.getSupportActionBar()
                 if (supportActionBar != null) {
                     supportActionBar.setDisplayHomeAsUpEnabled(false)
                 }
-                (`_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.iv_circle) as ImageView).setImageDrawable(
+                (view.findViewById(R.id.iv_circle) as ImageView).setImageDrawable(
                     MarkerDrawer.INSTANCE.makeCircle(
                         InputDeviceCompat.SOURCE_ANY,
                         viewModel.markerSize
                     )
                 )
                 val seekBar: SeekBar =
-                    `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.sb_size) as SeekBar
+                    view.findViewById(R.id.sb_size) as SeekBar
                 Intrinsics.checkExpressionValueIsNotNull(seekBar, "sb_size")
                 seekBar.setProgress(viewModel.markerSize.toInt() - 20)
                 return
@@ -129,14 +118,14 @@ class SettingsFragment : DaggerFragmentExtended() {
         throw TypeCastException("null cannot be cast to non-null type kz.sapasoft.emark.app.ui.MainActivity")
     }
 
-    private fun setListeners() {
-        (`_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.btn_download) as MaterialButton).setOnClickListener(
+    private fun setListeners(view: View) {
+        (view.findViewById<MaterialButton>(R.id.btn_download) as MaterialButton).setOnClickListener(
             `SettingsFragment$setListeners$1`(this)
         )
-        (`_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.sw_offline) as SwitchMaterial).setOnCheckedChangeListener(
+        (view.findViewById<SwitchMaterial>(R.id.sw_offline) as SwitchMaterial).setOnCheckedChangeListener(
             `SettingsFragment$setListeners$2`(this)
         )
-        (`_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.sb_size) as SeekBar).setOnSeekBarChangeListener(
+        (view.findViewById<SeekBar>(R.id.sb_size) as SeekBar).setOnSeekBarChangeListener(
             `SettingsFragment$setListeners$3`(this)
         )
     }

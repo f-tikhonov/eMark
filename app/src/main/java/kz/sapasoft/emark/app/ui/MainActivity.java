@@ -49,7 +49,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
     /* access modifiers changed from: private */
     public final Fragment fragment3 = MainFragment.Companion.newInstance(3);
     private final Lazy mUsbManager$delegate;
-    private final MainActivity$usbReceiver$1 usbReceiver;
+   // private final MainActivity$usbReceiver$1 usbReceiver;
 
     private final UsbManager getMUsbManager() {
         return (UsbManager) this.mUsbManager$delegate.getValue();
@@ -62,19 +62,6 @@ public final class MainActivity extends DaggerAppCompatActivity {
         }
     }
 
-    public View _$_findCachedViewById(int i) {
-        if (this._$_findViewCache == null) {
-            this._$_findViewCache = new HashMap();
-        }
-        View view = (View) this._$_findViewCache.get(Integer.valueOf(i));
-        if (view != null) {
-            return view;
-        }
-        View findViewById = findViewById(i);
-        this._$_findViewCache.put(Integer.valueOf(i), findViewById);
-        return findViewById;
-    }
-
     public MainActivity() {
         FragmentManager supportFragmentManager = getSupportFragmentManager();
         Intrinsics.checkExpressionValueIsNotNull(supportFragmentManager, "supportFragmentManager");
@@ -82,7 +69,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
         this.active = this.fragment2;
         this.ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
         this.mUsbManager$delegate = LazyKt.lazy(new MainActivity$mUsbManager$2(this));
-        this.usbReceiver = new MainActivity$usbReceiver$1(this);
+     //   this.usbReceiver = new MainActivity$usbReceiver$1(this);
     }
 
     /* access modifiers changed from: protected */
@@ -91,8 +78,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
         setContentView((R.layout.activity_main));
         setupNavigation();
         Utils utils = Utils.INSTANCE;
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) _$_findCachedViewById(kz.sapasoft.emark.app.R.id.nav_view);
-        Intrinsics.checkExpressionValueIsNotNull(bottomNavigationView, "nav_view");
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.nav_view);
         utils.hideKeyboard(bottomNavigationView);
         registerReceiver();
         requestPermission();
@@ -103,12 +89,14 @@ public final class MainActivity extends DaggerAppCompatActivity {
         this.fm.beginTransaction().add((int) R.id.fl_content, this.fragment2, ExifInterface.GPS_MEASUREMENT_2D).hide(this.fragment2).commit();
         this.fm.beginTransaction().add((int) R.id.fl_content, this.fragment3, ExifInterface.GPS_MEASUREMENT_3D).hide(this.fragment3).commit();
         updateNavigationBarState(R.id.nav_item_projects);
-        ((BottomNavigationView) _$_findCachedViewById(kz.sapasoft.emark.app.R.id.nav_view)).setOnNavigationItemSelectedListener(new MainActivity$setupNavigation$1(this));
+        ((BottomNavigationView) findViewById(R.id.nav_view)).setOnNavigationItemSelectedListener(
+                new MainActivity$setupNavigation$1(this));
     }
+
 
     /* access modifiers changed from: private */
     public final void updateNavigationBarState(int i) {
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) _$_findCachedViewById(kz.sapasoft.emark.app.R.id.nav_view);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.nav_view);
         Intrinsics.checkExpressionValueIsNotNull(bottomNavigationView, "nav_view");
         MenuItem findItem = bottomNavigationView.getMenu().findItem(i);
         Intrinsics.checkExpressionValueIsNotNull(findItem, "menuItem");
@@ -120,7 +108,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
     }
 
     public final void openProjectsFragment() {
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) _$_findCachedViewById(kz.sapasoft.emark.app.R.id.nav_view);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.nav_view);
         Intrinsics.checkExpressionValueIsNotNull(bottomNavigationView, "nav_view");
         bottomNavigationView.setSelectedItemId(R.id.nav_item_projects);
     }
@@ -132,7 +120,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
 
     public void onBackPressed() {
         Utils utils = Utils.INSTANCE;
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) _$_findCachedViewById(kz.sapasoft.emark.app.R.id.nav_view);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.nav_view);
         Intrinsics.checkExpressionValueIsNotNull(bottomNavigationView, "nav_view");
         utils.hideKeyboard(bottomNavigationView);
         List<Fragment> fragments = this.fm.getFragments();
@@ -152,7 +140,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
 
     /* access modifiers changed from: private */
     public final void requestPermission() {
-        PendingIntent broadcast = PendingIntent.getBroadcast(this, 0, new Intent(this.ACTION_USB_PERMISSION), 0);
+        PendingIntent broadcast = PendingIntent.getBroadcast(this, 0, new Intent(this.ACTION_USB_PERMISSION), PendingIntent.FLAG_IMMUTABLE);
         Collection<UsbDevice> values = getMUsbManager().getDeviceList().values();
         Intrinsics.checkExpressionValueIsNotNull(values, "mUsbManager.deviceList.values");
 //        for (T requestPermission : CollectionsKt.toMutableList(values)) {
@@ -165,11 +153,11 @@ public final class MainActivity extends DaggerAppCompatActivity {
         intentFilter.addAction(this.ACTION_USB_PERMISSION);
         intentFilter.addAction("android.hardware.usb.action.USB_DEVICE_ATTACHED");
         intentFilter.addAction("android.hardware.usb.action.USB_DEVICE_DETACHED");
-        registerReceiver(this.usbReceiver, intentFilter);
+       // registerReceiver(this.usbReceiver, intentFilter);
     }
 
     private final void unregisterReceiver() {
-        unregisterReceiver(this.usbReceiver);
+      //  unregisterReceiver(this.usbReceiver);
     }
 
     /* access modifiers changed from: protected */

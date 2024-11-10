@@ -12,11 +12,10 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import com.example.decompiledapk.R
 import dagger.android.support.DaggerFragment
 import kz.sapasoft.emark.app.databinding.FragmentAboutBinding
 import kz.sapasoft.emark.app.ui.MainActivity
-import kz.sapasoft.emark.app.ui.welcome.WelcomeViewModel
-import kz.ss.emark.R
 import javax.inject.Inject
 import kotlin.jvm.internal.Intrinsics
 class AboutFragment : DaggerFragment() {
@@ -31,29 +30,6 @@ class AboutFragment : DaggerFragment() {
 
     private fun setListeners() {}
     private fun setObservers() {}
-    fun `_$_clearFindViewByIdCache`() {
-        val hashMap = `_$_findViewCache`
-        hashMap?.clear()
-    }
-
-    fun `_$_findCachedViewById`(i: Int): View? {
-        if (`_$_findViewCache` == null) {
-            `_$_findViewCache` = HashMap<Any?, Any?>()
-        }
-        val view = `_$_findViewCache`!![Integer.valueOf(i)] as View?
-        if (view != null) {
-            return view
-        }
-        val view2 = getView() ?: return null
-        val findViewById = view2.findViewById<View>(i)
-       // `_$_findViewCache`!![Integer.valueOf(i)] = findViewById
-        return findViewById
-    }
-
-    /* synthetic */ override fun onDestroyView() {
-        super.onDestroyView()
-        `_$_clearFindViewByIdCache`()
-    }
 
     init {
         val simpleName = javaClass.simpleName
@@ -66,32 +42,24 @@ class AboutFragment : DaggerFragment() {
         viewGroup: ViewGroup?,
         bundle: Bundle?
     ): View? {
-        Intrinsics.checkParameterIsNotNull(layoutInflater, "inflater")
-        val fragmentAboutBinding: FragmentAboutBinding = DataBindingUtil.inflate<ViewDataBinding>(
-            layoutInflater,
-            R.layout.fragment_about,
-            viewGroup,
-            false
-        ) as FragmentAboutBinding
-        Intrinsics.checkExpressionValueIsNotNull(fragmentAboutBinding, "binding")
-        return fragmentAboutBinding.getRoot()
+        return layoutInflater.inflate(R.layout.fragment_about, viewGroup, false)
     }
 
     override fun onViewCreated(view: View, bundle: Bundle?) {
         Intrinsics.checkParameterIsNotNull(view, "view")
         super.onViewCreated(view, bundle)
-        initView()
+        initView(view)
         setObservers()
         setListeners()
     }
 
-    private fun initView() {
-        val textView = `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.tv_toolbar) as TextView?
+    private fun initView(view: View) {
+        val textView = view.findViewById(R.id.tv_toolbar) as TextView?
         Intrinsics.checkExpressionValueIsNotNull(textView, "tv_toolbar")
         textView!!.text = getString(R.string.nav_item_about)
         val activity: FragmentActivity? = activity
         if (activity != null) {
-            (activity as MainActivity?)?.setSupportActionBar(`_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.toolbar) as Toolbar?)
+            (activity as MainActivity?)?.setSupportActionBar(view.findViewById(R.id.toolbar) as Toolbar?)
             val activity2: FragmentActivity? = getActivity()
             if (activity2 != null) {
                 val supportActionBar: ActionBar? = (activity2 as MainActivity?)?.getSupportActionBar()

@@ -34,9 +34,7 @@ public final class DatabaseModule {
     @Singleton
     @Provides
     public final LocalDatabase providesRoomDatabase() {
-        LocalDatabase build = Room.databaseBuilder(App.Companion.getInstance(), LocalDatabase.class, "emark_db").build();
-        Intrinsics.checkExpressionValueIsNotNull(build, "Room.databaseBuilder(App…java, \"emark_db\").build()");
-        return build;
+        return Room.databaseBuilder(App.Companion.getInstance(), LocalDatabase.class, "emark_db").build();
     }
 
     @Singleton

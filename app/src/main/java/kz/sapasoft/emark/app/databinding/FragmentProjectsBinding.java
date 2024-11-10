@@ -1,5 +1,6 @@
 package kz.sapasoft.emark.app.databinding;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +12,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.example.decompiledapk.R;
 import com.google.android.material.appbar.AppBarLayout;
 import kz.sapasoft.emark.app.ui.projects.ProjectsViewModel;
-import kz.ss.emark.R;
 
 public abstract class FragmentProjectsBinding extends ViewDataBinding {
     public final AppBarLayout ablToolbar;
@@ -47,6 +49,7 @@ public abstract class FragmentProjectsBinding extends ViewDataBinding {
         return inflate(layoutInflater, viewGroup, z, DataBindingUtil.getDefaultComponent());
     }
 
+    @SuppressLint("RestrictedApi")
     @Deprecated
     public static FragmentProjectsBinding inflate(LayoutInflater layoutInflater, ViewGroup viewGroup, boolean z, Object obj) {
         return (FragmentProjectsBinding) ViewDataBinding.inflateInternal(layoutInflater, R.layout.fragment_projects, viewGroup, z, obj);
@@ -56,6 +59,7 @@ public abstract class FragmentProjectsBinding extends ViewDataBinding {
         return inflate(layoutInflater, DataBindingUtil.getDefaultComponent());
     }
 
+    @SuppressLint("RestrictedApi")
     @Deprecated
     public static FragmentProjectsBinding inflate(LayoutInflater layoutInflater, Object obj) {
         return (FragmentProjectsBinding) ViewDataBinding.inflateInternal(layoutInflater, R.layout.fragment_projects, (ViewGroup) null, false, obj);

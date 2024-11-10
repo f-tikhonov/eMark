@@ -37,7 +37,7 @@ final class MainActivity$setupNavigation$1 implements BottomNavigationView.OnNav
         }
         this.this$0.updateNavigationBarState(menuItem.getItemId());
         Utils utils = Utils.INSTANCE;
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) this.this$0._$_findCachedViewById(kz.sapasoft.emark.app.R.id.nav_view);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) this.this$0.findViewById(kz.sapasoft.emark.app.R.id.nav_view);
         Intrinsics.checkExpressionValueIsNotNull(bottomNavigationView, "nav_view");
         utils.hideKeyboard(bottomNavigationView);
         return false;

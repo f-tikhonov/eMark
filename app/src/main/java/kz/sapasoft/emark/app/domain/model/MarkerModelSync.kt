@@ -1,10 +1,13 @@
 package kz.sapasoft.emark.app.domain.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kz.sapasoft.emark.app.utils.Constants
 import java.io.Serializable
 
+@Entity("marker_sync")
 data class MarkerModelSync(
-    var id: String,
+    @PrimaryKey var id: String,
     var updated: Long? = null,
     var templateId: String? = null,
     var markerId: String? = null,

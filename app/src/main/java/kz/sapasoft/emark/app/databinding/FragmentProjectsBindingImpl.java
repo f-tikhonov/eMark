@@ -16,10 +16,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.decompiledapk.R;
 import com.google.android.material.appbar.AppBarLayout;
 
 import kz.sapasoft.emark.app.ui.projects.ProjectsViewModel;
-import kz.ss.emark.R;
 
 public class FragmentProjectsBindingImpl extends FragmentProjectsBinding {
     private static final ViewDataBinding.IncludedLayouts sIncludes = null;
