@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.decompiledapk.R
 import kz.sapasoft.emark.app.domain.model.ProjectModel
+import kz.sapasoft.emark.app.domain.model.response.ErrorStatus
 import kz.sapasoft.emark.app.ui.MainActivity
 import kz.sapasoft.emark.app.ui.base.DaggerFragmentExtended
 import kz.sapasoft.emark.app.ui.map.MapFragment
@@ -43,11 +46,6 @@ class ProjectsFragment : DaggerFragmentExtended(), OnProjectClickListener {
     val viewModel: ProjectsViewModel
         /* access modifiers changed from: private */
         get() = `viewModel$delegate` as ProjectsViewModel
-
-    /* synthetic */ override fun onDestroyView() {
-        super.onDestroyView()
-        `_$_clearFindViewByIdCache`()
-    }
 
     init {
         val simpleName = javaClass.simpleName
@@ -85,9 +83,10 @@ class ProjectsFragment : DaggerFragmentExtended(), OnProjectClickListener {
                     supportActionBar.setDisplayHomeAsUpEnabled(false)
                 }
                 initRecyclerView(view)
-                view.findViewById<SwipeRefreshLayout>(R.id.swipe).setOnRefreshListener(
-                    `ProjectsFragment$initView$1`(this)
-                )
+                view.findViewById<SwipeRefreshLayout>(R.id.swipe).setOnRefreshListener {
+                    adapter.clear()
+                    viewModel.projects
+                }
                 return
             }
             throw TypeCastException("null cannot be cast to non-null type kz.sapasoft.emark.app.ui.MainActivity")
@@ -113,18 +112,31 @@ class ProjectsFragment : DaggerFragmentExtended(), OnProjectClickListener {
 
     private fun setObservers() {
         val viewModel = viewModel
-        viewModel.searchString.observe(
-            viewLifecycleOwner,
-            `ProjectsFragment$setObservers$$inlined$with$lambda$1`<Any?>(viewModel, this)
-        )
-        viewModel.projectsData.observe(
-            viewLifecycleOwner,
-            `ProjectsFragment$setObservers$$inlined$with$lambda$2`<Any?>(this)
-        )
-        viewModel.error.observe(
-            viewLifecycleOwner,
-            `ProjectsFragment$setObservers$$inlined$with$lambda$3`<Any?>(this)
-        )
+        viewModel.searchString.observe(viewLifecycleOwner) { it ->
+            it?.let { query ->
+                this.adapter.clear()
+                viewModel.getFilteredProjects(query)
+            }
+        }
+        viewModel.projectsData.observe(viewLifecycleOwner) { projectModels ->
+            val linearLayout = view?.findViewById<LinearLayout>(R.id.ll_connection_error)
+            linearLayout?.visibility = View.GONE
+
+            projectModels?.let {
+                if (it.isNotEmpty()) {
+                    this.adapter.add(it)
+                }
+            }
+        }
+        viewModel.error.observe(viewLifecycleOwner) { error ->
+            if (listOf(ErrorStatus.NO_CONNECTION, ErrorStatus.TIMEOUT).contains(error?.status) && this.adapter.itemCount == 0) {
+                val linearLayout = view?.findViewById<LinearLayout>(R.id.ll_connection_error)
+                linearLayout?.visibility = View.VISIBLE
+            }
+
+            Toast.makeText(context, error?.message ?: "Unknown error", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     private fun setListeners(view: View) {

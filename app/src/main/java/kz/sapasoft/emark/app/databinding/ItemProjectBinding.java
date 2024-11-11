@@ -7,8 +7,10 @@ import android.widget.TextView;
 import androidx.databinding.Bindable;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
+
+import com.example.decompiledapk.R;
+
 import kz.sapasoft.emark.app.domain.model.ProjectModel;
-import kz.ss.emark.R;
 
 public abstract class ItemProjectBinding extends ViewDataBinding {
     @Bindable

@@ -64,7 +64,7 @@ class WelcomeViewModel @Inject constructor(
         if (verifyAvailableNetwork()) {
             launchIO {
                 isRefreshing.postValue(true)
-                Log.d("terra", "server $server username $username password $password ")
+                val localServer = "https://emark.ktga.kz"
                 val result = baseCloudRepository.login(
                     url = "service/auth/login",
                     username = username.orEmpty(),
@@ -75,18 +75,18 @@ class WelcomeViewModel @Inject constructor(
                 when (result) {
                     is ResultWrapper.Error -> error.postValue(result)
                     is ResultWrapper.Success -> {
-                        Config.DOMAIN = "$server/service/"
+                        Config.DOMAIN = "$localServer/service/"
                         prefsImpl.apply {
-                            this.username = (username)
-                            this.password = (password)
-                            this.server = (server)
+                            this.username = username
+                            this.password = password
+                            this.server = localServer
                         }
                         loginData.postValue(true)
                     }
                 }
                 isRefreshing.postValue(false)
             }
-        } else if (username == prefsImpl.username && password == prefsImpl.password && server == prefsImpl.server) {
+        } else if (username == prefsImpl.username && password == prefsImpl.password) {
             loginData.postValue(true)
         }
     }

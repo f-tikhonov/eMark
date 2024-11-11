@@ -103,7 +103,7 @@ class ProjectsViewModel @Inject constructor(
                         val tags = result.value
                         if (tags?.isNotEmpty() == true) {
                             tagsAll.addAll(tags)
-                            getTags()  // Recursive call for additional tags
+                            //getTags()  // Recursive call for additional tags
                         } else {
                             insertTagEntityList(tagsAll)
                         }
