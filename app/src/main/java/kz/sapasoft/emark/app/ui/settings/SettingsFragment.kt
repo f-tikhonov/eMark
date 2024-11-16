@@ -119,15 +119,27 @@ class SettingsFragment : DaggerFragmentExtended() {
     }
 
     private fun setListeners(view: View) {
-        (view.findViewById<MaterialButton>(R.id.btn_download) as MaterialButton).setOnClickListener(
-            `SettingsFragment$setListeners$1`(this)
-        )
-        (view.findViewById<SwitchMaterial>(R.id.sw_offline) as SwitchMaterial).setOnCheckedChangeListener(
-            `SettingsFragment$setListeners$2`(this)
-        )
-        (view.findViewById<SeekBar>(R.id.sb_size) as SeekBar).setOnSeekBarChangeListener(
-            `SettingsFragment$setListeners$3`(this)
-        )
+        view.findViewById<MaterialButton>(R.id.btn_download)?.setOnClickListener {
+            viewModel.downloadAllDataFromServer()
+        }
+        view.findViewById<SwitchMaterial>(R.id.sw_offline)?.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setOfflineMode(isChecked)
+        }
+        view.findViewById<SeekBar>(R.id.sb_size)?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                // No action required on start
+            }
+
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                val imageView = view.findViewById<ImageView>(R.id.iv_circle)
+                imageView.setImageDrawable(MarkerDrawer.INSTANCE.makeCircle(InputDeviceCompat.SOURCE_ANY, progress + 20f))
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                val size = (seekBar?.progress ?: 0) + 20f
+                viewModel.saveMarkerSize(size)
+            }
+        })
     }
 
     companion object {

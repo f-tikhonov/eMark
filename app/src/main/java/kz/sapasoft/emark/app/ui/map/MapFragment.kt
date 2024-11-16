@@ -4,6 +4,7 @@ package kz.sapasoft.emark.app.ui.map
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Build
@@ -20,11 +21,14 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.internal.view.SupportMenu
 import androidx.core.os.bundleOf
+import androidx.core.view.InputDeviceCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.decompiledapk.R
 import com.felhr.usbserial.UsbSerialInterface
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -36,9 +40,11 @@ import kz.sapasoft.emark.app.ui.MainActivity
 import kz.sapasoft.emark.app.ui.OnNewDeviceAttached
 import kz.sapasoft.emark.app.ui.base.DaggerFragmentExtended
 import kz.sapasoft.emark.app.ui.marker.OnMarkerChangeListener
+import kz.sapasoft.emark.app.utils.Constants
 import kz.sapasoft.emark.app.utils.MarkerDrawer
 import kz.sapasoft.emark.app.utils.Utils
 import org.osmdroid.api.IGeoPoint
+import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer
 import org.osmdroid.config.Configuration
 import org.osmdroid.config.IConfigurationProvider
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -78,7 +84,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     private val onMarkerClickListener: Marker.OnMarkerClickListener? = null
 
     /* access modifiers changed from: private */
-  //  var poiMarkers: RadiusMarkerClusterer? = null
+    var poiMarkers: RadiusMarkerClusterer? = null
     private val `viewModel$delegate`: MapViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(MapViewModel::class.java)
     }
@@ -88,14 +94,14 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
 
    // @Metadata(bv = [1, 0, 3], k = 3, mv = [1, 1, 16])
     object WhenMappings {
-//        /* synthetic */ val `$EnumSwitchMapping$0`: IntArray
-//
-//        init {
-//            val iArr = IntArray(Constants.MarkerStatus.MarkerStatus.entries.toTypedArray().size)
-//            `$EnumSwitchMapping$0` = iArr
-//            iArr[Constants.MarkerStatus.NEW.ordinal] = 1
-//            `$EnumSwitchMapping$0`[Constants.MarkerStatus.EDITED.ordinal] = 2
-//        }
+        /* synthetic */ val `$EnumSwitchMapping$0`: IntArray
+
+        init {
+            val iArr = IntArray(Constants.MarkerStatus.entries.toTypedArray().size)
+            `$EnumSwitchMapping$0` = iArr
+            iArr[Constants.MarkerStatus.NEW.ordinal] = 1
+            `$EnumSwitchMapping$0`[Constants.MarkerStatus.EDITED.ordinal] = 2
+        }
     }
 
     val viewModel: MapViewModel
@@ -193,14 +199,22 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
 
     private fun setObservers() {
         val viewModel = viewModel
-//        viewModel.markerModelListData.observe(
-//            getViewLifecycleOwner(),
-//            `MapFragment$setObservers$$inlined$with$lambda$1`<Any?>(this)
-//        )
-//        viewModel.error.observe(
-//            getViewLifecycleOwner(),
-//            `MapFragment$setObservers$$inlined$with$lambda$2`<Any?>(this)
-//        )
+        viewModel.markerModelListData.observe(viewLifecycleOwner) { markerModels ->
+            mMarkerModelList.clear()
+            mMarkerList.clear()
+
+            val mapView = requireView().findViewById<MapView>(R.id.map_view)
+            mapView.overlays.clear()
+            mapView.overlays.add(mMyLocationOverlay)
+            mapView.invalidate()
+
+            // Add map markers from the updated list
+            addMapMarkers(markerModels)
+        }
+        viewModel.error.observe(viewLifecycleOwner) { error ->
+            val errorMessage = error?.toString() ?: "Error ______"
+            showSnackBar(errorMessage)
+        }
     }
 
     /* access modifiers changed from: private */
@@ -297,10 +311,11 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     }
 
     /* access modifiers changed from: private */
+    @SuppressLint("RestrictedApi")
     fun addMapMarkers(list: List<MarkerModel>) {
-        /*//poiMarkers = RadiusMarkerClusterer(getContext())
+        poiMarkers = RadiusMarkerClusterer(getContext())
         mMarkerModelList.addAll(list)
-        val drawable: Drawable = getResources().getDrawable(R.drawable.ic_cluster)
+        val drawable: Drawable = getResources().getDrawable(R.drawable.ic_menu_compass)
         if (drawable != null) {
             val bitmap: Bitmap = (drawable as BitmapDrawable).getBitmap()
             val radiusMarkerClusterer: RadiusMarkerClusterer? = poiMarkers
@@ -316,7 +331,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
             Intrinsics.checkExpressionValueIsNotNull(mapView, "map_view")
             mapView.getOverlays().add(poiMarkers)
             for (next in list) {
-                val status: MarkerStatus = next.getStatus()
+                val status: Constants.MarkerStatus = next.status
                 if (status != null) {
                     val i = WhenMappings.`$EnumSwitchMapping$0`[status.ordinal]
                     if (i == 1) {
@@ -328,7 +343,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
                 addGasMarkerToMapMarkers(next, InputDeviceCompat.SOURCE_ANY)
             }
             return
-        }*/
+        }
         throw TypeCastException("null cannot be cast to non-null type android.graphics.drawable.BitmapDrawable")
     }
 
