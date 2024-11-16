@@ -64,6 +64,7 @@ android {
 
 dependencies {
 
+    implementation("com.github.mik3y:usb-serial-for-android:3.8.1")
     implementation("org.osmdroid:osmdroid-android:6.1.16")
     implementation("org.apache.commons:commons-lang3:3.8.1")
     implementation("com.github.MKergall:osmbonuspack:6.9.0")
