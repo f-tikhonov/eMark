@@ -19,6 +19,7 @@ import kz.sapasoft.emark.app.domain.model.MarkerModel
 import kz.sapasoft.emark.app.domain.model.TemplateModel
 import kz.sapasoft.emark.app.utils.Constants
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -211,7 +212,7 @@ class MapViewModel @Inject constructor(
 
         // Prepare the multipart body for the request
         val requestFile =
-            RequestBody.create(MediaType.parse("multipart/form-data"), compressedImageFile)
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(), compressedImageFile)
         val body = MultipartBody.Part.createFormData("data", compressedImageFile.name, requestFile)
 
         // Save the image using the BaseCloudRepository

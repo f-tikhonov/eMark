@@ -1,5 +1,7 @@
 package kz.sapasoft.emark.app.ui.map
 
+//import com.hoho.android.usbserial.driver.UsbSerialDriver
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
@@ -19,27 +21,23 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
+import com.example.decompiledapk.R
 import com.felhr.usbserial.UsbSerialInterface
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-//import com.hoho.android.usbserial.driver.UsbSerialDriver
 import kz.sapasoft.emark.app.BuildConfig
-import kz.sapasoft.emark.app.databinding.FragmentMapBinding
 import kz.sapasoft.emark.app.domain.model.MarkerModel
 import kz.sapasoft.emark.app.domain.model.ProjectModel
 import kz.sapasoft.emark.app.ui.MainActivity
 import kz.sapasoft.emark.app.ui.OnNewDeviceAttached
 import kz.sapasoft.emark.app.ui.base.DaggerFragmentExtended
 import kz.sapasoft.emark.app.ui.marker.OnMarkerChangeListener
-import kz.sapasoft.emark.app.ui.welcome.WelcomeViewModel
+import kz.sapasoft.emark.app.utils.MarkerDrawer
 import kz.sapasoft.emark.app.utils.Utils
-import kz.ss.emark.R
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.config.Configuration
 import org.osmdroid.config.IConfigurationProvider
@@ -63,6 +61,8 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     private val buffer = ByteArrayOutputStream()
     private val kzGeoPoint: GeoPoint = GeoPoint(48.005284, 66.9045435)
     private var mIsManualNavigation = false
+
+    private var rootView: View? = null
 
     /* access modifiers changed from: private */
     @JvmField
@@ -102,25 +102,6 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         /* access modifiers changed from: private */
         get() = `viewModel$delegate` as MapViewModel
 
-    override fun `_$_clearFindViewByIdCache`() {
-        val hashMap = `_$_findViewCache`
-        hashMap?.clear()
-    }
-
-    override fun `_$_findCachedViewById`(i: Int): View? {
-        if (`_$_findViewCache` == null) {
-            `_$_findViewCache` = HashMap<Any?, Any?>()
-        }
-        val view = `_$_findViewCache`!![Integer.valueOf(i)] as View?
-        if (view != null) {
-            return view
-        }
-        val view2: View = getView() ?: return null
-        val findViewById = view2.findViewById<View>(i)
-      //  `_$_findViewCache`!![Integer.valueOf(i)] = findViewById
-        return findViewById
-    }
-
     /* synthetic */ override fun onDestroyView() {
         super.onDestroyView()
         `_$_clearFindViewByIdCache`()
@@ -137,31 +118,21 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         viewGroup: ViewGroup?,
         bundle: Bundle?
     ): View? {
-        Intrinsics.checkParameterIsNotNull(layoutInflater, "inflater")
-        val fragmentMapBinding: FragmentMapBinding = DataBindingUtil.inflate<ViewDataBinding>(
-            layoutInflater,
-            R.layout.fragment_map,
-            viewGroup,
-            false
-        ) as FragmentMapBinding
-        setHasOptionsMenu(true)
-        Intrinsics.checkExpressionValueIsNotNull(fragmentMapBinding, "binding")
-        fragmentMapBinding.setItem(projectModel)
-        return fragmentMapBinding.getRoot()
+        rootView = layoutInflater.inflate(R.layout.fragment_map, viewGroup, false)
+        return rootView
     }
 
     override fun onViewCreated(view: View, bundle: Bundle?) {
         Intrinsics.checkParameterIsNotNull(view, "view")
         super.onViewCreated(view, bundle)
-        val textView = `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.tv_toolbar) as TextView
+        val textView = view.findViewById(R.id.tv_toolbar) as TextView
         Intrinsics.checkExpressionValueIsNotNull(textView, "tv_toolbar")
         textView.setText(getString(R.string.map))
         val activity: FragmentActivity = requireActivity()
         if (activity != null) {
-            (activity as MainActivity).setSupportActionBar(`_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.toolbar) as Toolbar)
+            (activity as MainActivity).setSupportActionBar(view.findViewById(R.id.toolbar) as Toolbar)
             val utils = Utils.INSTANCE
-            val textView2 =
-                `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.tv_toolbar) as TextView
+            val textView2 = view.findViewById(R.id.tv_toolbar) as TextView
             Intrinsics.checkExpressionValueIsNotNull(textView2, "tv_toolbar")
             utils.hideKeyboard(textView2)
             viewModel.getMarkerList(arrayListOf(projectModel.id))
@@ -169,8 +140,8 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
             val activity2: FragmentActivity = requireActivity()
             if (activity2 != null) {
                 (activity2 as MainActivity).setDeviceListener(this)
-                mapInit()
-                drawPin()
+                mapInit(view)
+                drawPin(view)
                 setObservers()
                 setListeners()
                 requestGpsPermission()
@@ -192,7 +163,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         }
 
     private fun setListeners() {
-        val systemService: Any = requireContext().getSystemService(android.content.Context.USB_SERVICE)
+ //       val systemService: Any = requireContext().getSystemService(android.content.Context.USB_SERVICE)
 //        if (systemService != null) {
 //            val usbManager: UsbManager = systemService as UsbManager
 //            val findAllDrivers: List<UsbSerialDriver> =
@@ -217,7 +188,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
 //            }
 //            return
 //        }
-        throw TypeCastException("null cannot be cast to non-null type android.hardware.usb.UsbManager")
+//        throw TypeCastException("null cannot be cast to non-null type android.hardware.usb.UsbManager")
     }
 
     private fun setObservers() {
@@ -235,13 +206,13 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     /* access modifiers changed from: private */
     fun showSnackBar(str: String?) {
         Snackbar.make(
-            `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView as View,
+            rootView?.findViewById(R.id.map_view) as MapView as View,
             "str as CharSequence?",
             BaseTransientBottomBar.LENGTH_INDEFINITE
         ).show()
     }
 
-    private fun drawPin() {
+    private fun drawPin(view: View) {
         val drawable: Drawable = getResources().getDrawable(R.drawable.ic_pin)
         Intrinsics.checkExpressionValueIsNotNull(
             drawable,
@@ -249,10 +220,10 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         )
         val `bitmap$default`: Bitmap =
             toBitmap(drawable, 0, 0, null as Bitmap.Config?, 7, null as Any?)
-        (`_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.iv_pin) as ImageView).setImageBitmap(
+        (view.findViewById<ImageView>(R.id.iv_pin) as ImageView).setImageBitmap(
             `bitmap$default`
         )
-        (`_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.iv_pin) as ImageView).setPadding(
+        (view.findViewById<ImageView>(R.id.iv_pin) as ImageView).setPadding(
             0,
             0,
             0,
@@ -260,50 +231,51 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         )
     }
 
-    private fun mapInit() {
+    @SuppressLint("CutPasteId")
+    private fun mapInit(view: View) {
         Configuration.getInstance()
             .load(getContext(), PreferenceManager.getDefaultSharedPreferences(getContext()))
         val instance: IConfigurationProvider = Configuration.getInstance()
         Intrinsics.checkExpressionValueIsNotNull(instance, "Configuration.getInstance()")
         instance.setUserAgentValue(BuildConfig.APPLICATION_ID)
         val myLocationNewOverlay =
-            MyLocationNewOverlay(`_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView)
+            MyLocationNewOverlay(view.findViewById(R.id.map_view) as MapView)
         mMyLocationOverlay = myLocationNewOverlay
         if (myLocationNewOverlay != null) {
             myLocationNewOverlay.enableMyLocation()
         }
         val mapView: MapView =
-            `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView
+            view.findViewById(R.id.map_view) as MapView
         Intrinsics.checkExpressionValueIsNotNull(mapView, "map_view")
         mapView.getOverlays().clear()
         val mapView2: MapView =
-            `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView
+            view.findViewById(R.id.map_view) as MapView
         Intrinsics.checkExpressionValueIsNotNull(mapView2, "map_view")
         mapView2.getOverlays().add(mMyLocationOverlay)
-        (`_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView).setTileSource(
+        (view.findViewById<MapView>(R.id.map_view) as MapView).setTileSource(
             TileSourceFactory.MAPNIK
         )
-        (`_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView).setMultiTouchControls(
+        (view.findViewById<MapView>(R.id.map_view) as MapView).setMultiTouchControls(
             true
         )
         val mapView3: MapView =
-            `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView
+            view.findViewById(R.id.map_view) as MapView
         Intrinsics.checkExpressionValueIsNotNull(mapView3, "map_view")
         mapView3.setMaxZoomLevel(java.lang.Double.valueOf(22.0))
         val mapView4: MapView =
-            `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView
+            view.findViewById(R.id.map_view) as MapView
         Intrinsics.checkExpressionValueIsNotNull(mapView4, "map_view")
         mapView4.setMinZoomLevel(java.lang.Double.valueOf(5.0))
         val mapView5: MapView =
-            `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView
+            view.findViewById(R.id.map_view) as MapView
         Intrinsics.checkExpressionValueIsNotNull(mapView5, "map_view")
         mapView5.getController().setZoom(5.0)
         val mapView6: MapView =
-            `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView
+            view.findViewById(R.id.map_view) as MapView
         Intrinsics.checkExpressionValueIsNotNull(mapView6, "map_view")
         mapView6.getController().setCenter(kzGeoPoint)
         val mapView7: MapView =
-            `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView
+            view.findViewById(R.id.map_view) as MapView
         Intrinsics.checkExpressionValueIsNotNull(mapView7, "map_view")
         mapView7.getZoomController()
             .setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT)
@@ -313,12 +285,12 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         if (geoPoint != null) {
             if (d != null) {
                 val mapView: MapView =
-                    `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView
+                    rootView?.findViewById(R.id.map_view) as MapView
                 Intrinsics.checkExpressionValueIsNotNull(mapView, "map_view")
                 mapView.getController().setZoom(12.0)
             }
             val mapView2: MapView =
-                `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView
+                rootView?.findViewById(R.id.map_view) as MapView
             Intrinsics.checkExpressionValueIsNotNull(mapView2, "map_view")
             mapView2.getController().setCenter(geoPoint)
         }
@@ -361,21 +333,22 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     }
 
     private fun addGasMarkerToMapMarkers(markerModel: MarkerModel, i: Int) {
-//        val marker = Marker(`_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView)
-//        val location: List<Double> = markerModel.getLocation()
-//        if (location == null) {
-//            Intrinsics.throwNpe()
-//        }
-//        val doubleValue = location[0]
-//        val location2: List<Double> = markerModel.getLocation()
-//        if (location2 == null) {
-//            Intrinsics.throwNpe()
-//        }
-//        marker.position = GeoPoint(doubleValue, location2[1])
-//        marker.setOnMarkerClickListener(onMarkerClickListener)
-//        marker.icon = MarkerDrawer.INSTANCE.makeCircle(i, viewModel.markerSize)
-//        marker.id = markerModel.getId()
-//        mMarkerList.add(marker)
+        val marker = Marker(rootView?.findViewById(kz.sapasoft.emark.app.R.id.map_view) as MapView)
+        val location: List<Double>? = markerModel.location
+        if (location == null) {
+            Intrinsics.throwNpe()
+        }
+        val doubleValue = location?.get(0)
+        val location2: List<Double>? = markerModel.location
+        if (location2 == null) {
+            Intrinsics.throwNpe()
+        }
+        marker.position = doubleValue?.let { GeoPoint(it, location2?.get(1) ?: 0.0) }
+        marker.setOnMarkerClickListener(onMarkerClickListener)
+        marker.icon = MarkerDrawer.INSTANCE.makeCircle(i, viewModel.markerSize)
+        marker.id = markerModel.id
+        mMarkerList.add(marker)
+        //TODO
 //        val radiusMarkerClusterer: RadiusMarkerClusterer? = poiMarkers
 //        if (radiusMarkerClusterer != null) {
 //            radiusMarkerClusterer.add(marker)
@@ -385,12 +358,12 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     private fun enableManualNavigation(z: Boolean) {
         mIsManualNavigation = z
         if (z) {
-            val imageView = `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.iv_pin) as ImageView
+            val imageView =rootView?.findViewById(R.id.iv_pin) as ImageView
             Intrinsics.checkExpressionValueIsNotNull(imageView, "iv_pin")
             imageView.visibility = View.VISIBLE
             return
         }
-        val imageView2 = `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.iv_pin) as ImageView
+        val imageView2 = rootView?.findViewById(R.id.iv_pin) as ImageView
         Intrinsics.checkExpressionValueIsNotNull(imageView2, "iv_pin")
         imageView2.visibility = View.GONE
     }
@@ -422,15 +395,15 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
             }
 
             R.id.action_synchronize -> viewModel.synchronizeMarkers(projectModel.id)
-//            R.id.action_to_last_marker -> {
-//                MapFragment.Companion.`moveCamera$default`(
-//                    this,
-//                    mMarkerList.lastOrNull()?.position,
-//                    null as Double?,
-//                    2,
-//                    null as Any?
-//                )
-//            }
+            R.id.action_to_last_marker -> {
+                MapFragment.Companion.`moveCamera$default`(
+                    this,
+                    mMarkerList.lastOrNull()?.position,
+                    null as Double?,
+                    2,
+                    null as Any?
+                )
+            }
         }
         return super.onOptionsItemSelected(menuItem)
     }
@@ -559,20 +532,20 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
                 return
             }
             val mapView: MapView =
-                `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView
+                rootView?.findViewById(R.id.map_view) as MapView
             Intrinsics.checkExpressionValueIsNotNull(mapView, "map_view")
             mapView.getOverlays().remove(mMyLocationOverlay)
             val myLocationNewOverlay =
-                MyLocationNewOverlay(`_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView)
+                MyLocationNewOverlay(rootView?.findViewById(R.id.map_view) as MapView)
             mMyLocationOverlay = myLocationNewOverlay
             if (myLocationNewOverlay != null) {
                 myLocationNewOverlay.enableMyLocation()
             }
             val mapView2: MapView =
-                `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView
+                rootView?.findViewById(R.id.map_view) as MapView
             Intrinsics.checkExpressionValueIsNotNull(mapView2, "map_view")
             mapView2.getOverlays().add(mMyLocationOverlay)
-            (`_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView).invalidate()
+            (rootView?.findViewById(R.id.map_view) as MapView).invalidate()
         }
     }
 
@@ -583,24 +556,24 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
                 val location = Location("map_center")
                 location.accuracy = 0.0f
                 val mapView: MapView =
-                    `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView
+                    rootView?.findViewById(R.id.map_view) as MapView
                 Intrinsics.checkExpressionValueIsNotNull(mapView, "map_view")
                 val mapCenter: IGeoPoint = mapView.getMapCenter()
                 Intrinsics.checkExpressionValueIsNotNull(mapCenter, "map_view.mapCenter")
                 location.latitude = mapCenter.getLatitude()
                 val mapView2: MapView =
-                    `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView
+                    rootView?.findViewById(R.id.map_view) as MapView
                 Intrinsics.checkExpressionValueIsNotNull(mapView2, "map_view")
                 val mapCenter2: IGeoPoint = mapView2.getMapCenter()
                 Intrinsics.checkExpressionValueIsNotNull(mapCenter2, "map_view.mapCenter")
                 location.longitude = mapCenter2.getLongitude()
                 val mapView3: MapView =
-                    `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView
+                    rootView?.findViewById(R.id.map_view) as MapView
                 Intrinsics.checkExpressionValueIsNotNull(mapView3, "map_view")
                 val mapCenter3: IGeoPoint = mapView3.getMapCenter()
                 Intrinsics.checkExpressionValueIsNotNull(mapCenter3, "map_view.mapCenter")
                 val mapView4: MapView =
-                    `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView
+                    rootView?.findViewById(R.id.map_view) as MapView
                 Intrinsics.checkExpressionValueIsNotNull(mapView4, "map_view")
                 val mapCenter4: IGeoPoint = mapView4.getMapCenter()
                 Intrinsics.checkExpressionValueIsNotNull(mapCenter4, "map_view.mapCenter")

@@ -29,7 +29,6 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
 
     private val REQUEST_CAMERA_PERMISSION = 1
     private val TAG: String = this::class.java.simpleName
-    private var _findViewCache: MutableMap<Int, View>? = null
     private val easyImage by lazy { EasyImage() }
     private val localImageList = ArrayList<ImageDataModel>()
     private val mFieldViewList = ArrayList<FieldView>()
@@ -39,6 +38,7 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
     private var mTagList: List<TagModel>? = null
     private var mTemplateList: List<TemplateModel>? = null
     private val viewModel by lazy { easyImage as MarkerViewModel }
+    private var rootView: View? = null
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -46,34 +46,30 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentMarkerBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_marker, container, false)
         mProjectModel = requireArguments().getSerializable("projectModel") as? ProjectModel
         mMarkerModel = requireArguments().getSerializable("marker") as? MarkerModel
-        mMarkerModel?.let {
-            setHasOptionsMenu(true)
-            binding.item = it
-        } ?: throw TypeCastException("Invalid marker or project model")
-        return binding.root
+        rootView =  layoutInflater.inflate(com.example.decompiledapk.R.layout.fragment_marker, container, false)
+        return rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getAllData(mMarkerModel!!, mProjectModel!!.markerTemplateIds)
-        initView()
-        setListeners()
+        initView(view)
+        setListeners(view)
         setObservers()
     }
 
-    private fun initView() {
-        (_findViewCache?.get(R.id.tv_toolbar) as TextView).text = getString(R.string.marker)
-        (activity as? MainActivity)?.setSupportActionBar(_findViewCache?.get(R.id.toolbar) as Toolbar)
+    private fun initView(view: View) {
+        (view.findViewById(R.id.tv_toolbar) as TextView).text = getString(R.string.marker)
+        (activity as? MainActivity)?.setSupportActionBar(view.findViewById(R.id.toolbar) as Toolbar)
         if (mMarkerModel?.status == null) {
-            (_findViewCache?.get(R.id.btn_save) as MaterialButton).visibility = View.GONE
+            (view.findViewById(R.id.btn_save) as MaterialButton).visibility = View.GONE
         }
     }
 
-    private fun setListeners() {
-        (_findViewCache?.get(R.id.btn_save) as MaterialButton).setOnClickListener {
+    private fun setListeners(view: View) {
+        (view.findViewById(R.id.btn_save) as MaterialButton).setOnClickListener {
             // Save button logic
         }
     }
@@ -83,29 +79,29 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
     }
 
     private fun drawMainList(list: List<TemplateModel>) {
-        val markerTypeView = _findViewCache?.get(R.id.view_marker_type) as MarkerTypeView
+        val markerTypeView = rootView?.findViewById(R.id.view_marker_type) as MarkerTypeView
         val templateId = mMarkerModel?.templateId ?: list.first().id
         markerTypeView.setData(list, templateId, this)
 
-        _findViewCache?.get(R.id.view_marker_identifier)?.let { view ->
+        rootView?.findViewById<MarkerIdentifierView>(R.id.view_marker_identifier)?.let { view ->
             (view as MarkerIdentifierView).setData(mMarkerModel?.generalId ?: "", this)
         }
 
-        _findViewCache?.get(R.id.view_marker_model)?.let { view ->
+        rootView?.findViewById<MarkerModelView>(R.id.view_marker_model)?.let { view ->
             (view as MarkerModelView).setData(mMarkerModel?.markerModel ?: "")
         }
 
-        (_findViewCache?.get(R.id.view_marker_depth) as MarkerDepthView).setData(null, this)
-        (_findViewCache?.get(R.id.view_marker_photo) as MarkerPhotoView).setListeners(this, this)
+        (rootView?.findViewById<MarkerDepthView>(R.id.view_marker_depth) as MarkerDepthView).setData(null, this)
+        (rootView?.findViewById<MarkerPhotoView>(R.id.view_marker_photo) as MarkerPhotoView).setListeners(this, this)
     }
 
     private fun drawFieldList(list: List<FieldModel>) {
-        (_findViewCache?.get(R.id.ll_additional_fields) as LinearLayout).removeAllViews()
+        (rootView?.findViewById<LinearLayout>(R.id.ll_additional_fields) as LinearLayout).removeAllViews()
         mFieldViewList.clear()
         list.forEach { field ->
             val fieldView = drawField(field)
             mFieldViewList.add(fieldView)
-            (_findViewCache?.get(R.id.ll_additional_fields) as LinearLayout).addView(fieldView)
+            (rootView?.findViewById<LinearLayout>(R.id.ll_additional_fields) as LinearLayout).addView(fieldView)
         }
     }
 
@@ -147,7 +143,7 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CAMERA_PERMISSION && grantResults.firstOrNull() != 0) {
             Snackbar.make(
-                _findViewCache?.get(R.id.toolbar) ?: return,
+                rootView?.findViewById<Toolbar>(R.id.toolbar) ?: return,
                 getString(R.string.permission_camera_needed),
                 BaseTransientBottomBar.LENGTH_INDEFINITE
             ).show()
@@ -160,10 +156,10 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
 
         val markerModelCopy = markerModel.copy(
             projectIds = arrayListOf(projectModel.id),
-            markerModel = (_findViewCache?.get(R.id.view_marker_model) as MarkerModelView).markerModel,
-            markerType = (_findViewCache?.get(R.id.view_marker_type) as MarkerTypeView).markerType,
-            templateId = (_findViewCache?.get(R.id.view_marker_type) as MarkerTypeView).templateId,
-            depth = (_findViewCache?.get(R.id.view_marker_depth) as MarkerDepthView).getValue(),
+            markerModel = (rootView?.findViewById<MarkerModelView>(R.id.view_marker_model) as MarkerModelView).markerModel,
+            markerType = (rootView?.findViewById<MarkerTypeView>(R.id.view_marker_type) as MarkerTypeView).markerType,
+            templateId = (rootView?.findViewById<MarkerTypeView>(R.id.view_marker_type) as MarkerTypeView).templateId,
+            depth = (rootView?.findViewById<MarkerDepthView>(R.id.view_marker_depth) as MarkerDepthView).getValue(),
             idLocal = markerModel.idLocal ?: UUID.randomUUID().toString(),
             fields = mFieldViewList.map { it.getFieldModel() }
         )
@@ -178,9 +174,9 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
     }
 
     private fun checkMainHasChanges(): Boolean {
-        val newMarkerModel = (_findViewCache?.get(R.id.view_marker_model) as MarkerModelView).markerModel
+        val newMarkerModel = (rootView?.findViewById<MarkerModelView>(R.id.view_marker_model) as MarkerModelView).markerModel
         val currentMarkerModel = mMarkerModel?.markerModel
-        val newDepth = (_findViewCache?.get(R.id.view_marker_depth) as MarkerDepthView).getValue()
+        val newDepth = (rootView?.findViewById<MarkerDepthView>(R.id.view_marker_depth) as MarkerDepthView).getValue()
         val currentDepth = mMarkerModel?.depth
         return newMarkerModel != currentMarkerModel || newDepth != currentDepth
     }
@@ -192,7 +188,7 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
     }
 
     private fun checkAllRequiredFilled(): Boolean {
-        return (_findViewCache?.get(R.id.view_marker_depth) as MarkerDepthView).hasValue() &&
+        return (rootView?.findViewById<MarkerDepthView>(R.id.view_marker_depth) as MarkerDepthView).hasValue() &&
                 mFieldViewList.all { !it.isRequired() || it.hasValue() }
     }
 
@@ -227,7 +223,7 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
     }
 
     override fun onFieldValueChange() {
-        (_findViewCache?.get(R.id.btn_save) as MaterialButton).isEnabled =
+        (rootView?.findViewById<MaterialButton>(R.id.btn_save) as MaterialButton).isEnabled =
             checkMainHasChanges() || checkFieldsHasChanges()
     }
 }
