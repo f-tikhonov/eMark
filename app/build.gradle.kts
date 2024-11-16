@@ -64,12 +64,18 @@ android {
 
 dependencies {
 
+    implementation("org.osmdroid:osmdroid-android:6.1.16")
+    implementation("org.apache.commons:commons-lang3:3.8.1")
+    implementation("com.github.MKergall:osmbonuspack:6.9.0")
+
     implementation("com.github.jkwiecien:EasyImage:1.2.1")
     implementation("com.github.felHR85:UsbSerial:6.1.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
-    implementation("com.squareup.okhttp3:okhttp:3.4.1")
-    implementation("com.squareup.okhttp3:logging-interceptor:3.4.1")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0") // Latest stable version as of now
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0") // Matches Retrofit version
+    implementation("com.squareup.okhttp3:okhttp:4.9.2") // Compatible with Retrofit 2.9.0
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.2") // Matches OkHttp version
     implementation("net.bytebuddy:byte-buddy:1.12.20")
     // implementation("org.osmdroid:osmbonuspack:6.1.13")
    // implementation("com.github.mik3y:usb-serial-for-android:3.3.0")
@@ -88,8 +94,6 @@ dependencies {
     implementation("androidx.databinding:databinding-compiler:7.2.1")
     implementation("com.google.firebase:firebase-core:16.0.8")
 
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 

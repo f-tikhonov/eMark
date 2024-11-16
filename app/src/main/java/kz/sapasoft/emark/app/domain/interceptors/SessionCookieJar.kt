@@ -13,7 +13,7 @@ class SessionCookieJar(private val context: Context) : CookieJar {
 
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
         val prefsImpl = PrefsImpl(context)
-        val cookieValues = cookies.map { it.value() }.toSet()
+        val cookieValues = cookies.map { it.value }.toSet()
 
         // Save cookies to shared preferences
        // prefsImpl.setCookie(cookieValues)

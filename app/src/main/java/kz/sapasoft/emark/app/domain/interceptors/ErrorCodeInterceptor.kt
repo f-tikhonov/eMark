@@ -13,7 +13,7 @@ class ErrorCodeInterceptor(private val context: Context) : Interceptor {
         val response = chain.proceed(chain.request())
 
         // If response code is 403, redirect to WelcomeActivity
-        if (response.code() == 403) {
+        if (response.code == 403) {
             val intent = Intent(context, WelcomeActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             }

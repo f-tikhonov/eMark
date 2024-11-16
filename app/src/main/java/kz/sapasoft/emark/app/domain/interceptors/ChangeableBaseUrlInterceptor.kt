@@ -3,6 +3,7 @@ package kz.sapasoft.emark.app.domain.interceptors
 import com.google.firebase.analytics.FirebaseAnalytics
 import kz.sapasoft.emark.app.core.Config
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -17,21 +18,21 @@ class ChangeableBaseUrlInterceptor : Interceptor {
         val request = chain.request()
 
         // Proceed without modification if the request is for the login endpoint
-        if (request.url().encodedPath().endsWith(FirebaseAnalytics.Event.LOGIN, ignoreCase = true)) {
+        if (request.url.encodedPath.endsWith(FirebaseAnalytics.Event.LOGIN, ignoreCase = true)) {
             return chain.proceed(request)
         }
 
-        val domainUrl = HttpUrl.parse(Config.DOMAIN) ?: throw NullPointerException("Domain URL is null")
-        val newUrlBuilder = request.url().newBuilder()
+        val domainUrl = Config.DOMAIN.toHttpUrlOrNull() ?: throw NullPointerException("Domain URL is null")
+        val newUrlBuilder = request.url.newBuilder()
 
-        val domainUri = domainUrl.url().toURI()
+        val domainUri = domainUrl.toUrl().toURI()
         val host = domainUri.host ?: throw NullPointerException("Host is null in Domain URL")
 
         val updatedUrl = newUrlBuilder
             .host(host)
-            .port(domainUrl.port())
-            .scheme(domainUrl.scheme())
-            .encodedPath(domainUri.path + request.url().encodedPath())
+            .port(domainUrl.port)
+            .scheme(domainUrl.scheme)
+            .encodedPath(domainUri.path + request.url.encodedPath)
             .build()
 
         return chain.proceed(request.newBuilder().url(updatedUrl).build())
