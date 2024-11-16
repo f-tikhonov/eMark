@@ -131,6 +131,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     override fun onViewCreated(view: View, bundle: Bundle?) {
         Intrinsics.checkParameterIsNotNull(view, "view")
         super.onViewCreated(view, bundle)
+        setHasOptionsMenu(true);
         val textView = view.findViewById(R.id.tv_toolbar) as TextView
         Intrinsics.checkExpressionValueIsNotNull(textView, "tv_toolbar")
         textView.setText(getString(R.string.map))
@@ -327,7 +328,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
                 radiusMarkerClusterer2.setRadius(ItemTouchHelper.Callback.DEFAULT_DRAG_ANIMATION_DURATION)
             }
             val mapView: MapView =
-                `_$_findCachedViewById`(kz.sapasoft.emark.app.R.id.map_view) as MapView
+               rootView?.findViewById(R.id.map_view) as MapView
             Intrinsics.checkExpressionValueIsNotNull(mapView, "map_view")
             mapView.getOverlays().add(poiMarkers)
             for (next in list) {
@@ -348,7 +349,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     }
 
     private fun addGasMarkerToMapMarkers(markerModel: MarkerModel, i: Int) {
-        val marker = Marker(rootView?.findViewById(kz.sapasoft.emark.app.R.id.map_view) as MapView)
+        val marker = Marker(rootView?.findViewById(R.id.map_view) as MapView)
         val location: List<Double>? = markerModel.location
         if (location == null) {
             Intrinsics.throwNpe()
