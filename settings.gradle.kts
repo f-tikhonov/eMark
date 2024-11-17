@@ -6,6 +6,7 @@ pluginManagement {
             dirs("libs")
         }
         gradlePluginPortal()
+        maven { url = uri("https://jitpack.io") }
     }
 }
 dependencyResolutionManagement {
