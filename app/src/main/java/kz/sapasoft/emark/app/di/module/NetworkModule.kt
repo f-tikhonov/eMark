@@ -1,12 +1,11 @@
 package kz.sapasoft.emark.app.di.module
 
 import android.content.Context
+import android.util.Log
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kz.sapasoft.emark.app.core.Config
 import kz.sapasoft.emark.app.data.cloud.repository.BaseCloudRepository
 import kz.sapasoft.emark.app.data.cloud.repository.CloudRepository
 import kz.sapasoft.emark.app.data.cloud.rest.ApiService
@@ -36,16 +35,20 @@ class NetworkModule {
     @Singleton
     @Provides
     fun providesOkHttpClient(context: Context): OkHttpClient {
-        val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
+        val customLogger: HttpLoggingInterceptor.Logger =
+            HttpLoggingInterceptor.Logger { message ->
+                Log.d("NETWORK", "-> $message")
+            }
+        val logging = HttpLoggingInterceptor(customLogger)
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+
         return OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .readTimeout(20, TimeUnit.SECONDS)
             .addInterceptor(ErrorCodeInterceptor(context))
             .addInterceptor(ChangeableBaseUrlInterceptor())
-            .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(logging)
             .cookieJar(SessionCookieJar(context))
             .build()
     }
