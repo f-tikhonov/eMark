@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -46,7 +47,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
     packaging {
         resources {
@@ -107,7 +108,7 @@ dependencies {
     implementation("id.zelory:compressor:3.0.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
 
-    kapt("androidx.room:room-compiler:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
 
     implementation("androidx.room:room-ktx:2.6.1")
 
