@@ -64,6 +64,7 @@ import java.nio.charset.Charset
 import javax.inject.Inject
 import kotlin.jvm.internal.Intrinsics
 
+@Suppress("UNREACHABLE_CODE")
 class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     UsbSerialInterface.UsbReadCallback,
     OnNewDeviceAttached {
@@ -318,39 +319,33 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     }
 
     /* access modifiers changed from: private */
-    @SuppressLint("RestrictedApi")
+    @SuppressLint("RestrictedApi", "UseCompatLoadingForDrawables")
     fun addMapMarkers(list: List<MarkerModel>) {
         poiMarkers = RadiusMarkerClusterer(getContext())
         mMarkerModelList.addAll(list)
         val drawable: Drawable = getResources().getDrawable(R.drawable.ic_menu_compass)
-        if (drawable != null) {
-            val bitmap: Bitmap = (drawable as BitmapDrawable).getBitmap()
-            val radiusMarkerClusterer: RadiusMarkerClusterer? = poiMarkers
-            if (radiusMarkerClusterer != null) {
-                radiusMarkerClusterer.setIcon(bitmap)
-            }
-            val radiusMarkerClusterer2: RadiusMarkerClusterer? = poiMarkers
-            if (radiusMarkerClusterer2 != null) {
-                radiusMarkerClusterer2.setRadius(ItemTouchHelper.Callback.DEFAULT_DRAG_ANIMATION_DURATION)
-            }
-            val mapView: MapView =
-               rootView?.findViewById(R.id.map_view) as MapView
-            Intrinsics.checkExpressionValueIsNotNull(mapView, "map_view")
-            mapView.getOverlays().add(poiMarkers)
-            for (next in list) {
-                val status: Constants.MarkerStatus = next.status
-                if (status != null) {
-                    val i = WhenMappings.`$EnumSwitchMapping$0`[status.ordinal]
-                    if (i == 1) {
-                        addGasMarkerToMapMarkers(next, -16711936)
-                    } else if (i == 2) {
-                        addGasMarkerToMapMarkers(next, SupportMenu.CATEGORY_MASK)
-                    }
-                }
-                addGasMarkerToMapMarkers(next, InputDeviceCompat.SOURCE_ANY)
-            }
-            return
+        val bitmap: Bitmap = (drawable as BitmapDrawable).getBitmap()
+        val radiusMarkerClusterer: RadiusMarkerClusterer? = poiMarkers
+        if (radiusMarkerClusterer != null) {
+            radiusMarkerClusterer.setIcon(bitmap)
         }
+        val radiusMarkerClusterer2: RadiusMarkerClusterer? = poiMarkers
+        radiusMarkerClusterer2?.setRadius(ItemTouchHelper.Callback.DEFAULT_DRAG_ANIMATION_DURATION)
+        val mapView: MapView = rootView?.findViewById(R.id.map_view)!!
+        Intrinsics.checkExpressionValueIsNotNull(mapView, "map_view")
+        mapView.overlays.add(poiMarkers)
+        for (next in list) {
+           // val status: Constants.MarkerStatus = next.status
+            val status = Constants.MarkerStatus.NORMAL
+            val i = WhenMappings.`$EnumSwitchMapping$0`[status.ordinal]
+            if (i == 1) {
+                addGasMarkerToMapMarkers(next, -16711936)
+            } else if (i == 2) {
+                addGasMarkerToMapMarkers(next, SupportMenu.CATEGORY_MASK)
+            }
+            addGasMarkerToMapMarkers(next, InputDeviceCompat.SOURCE_ANY)
+        }
+        return
         throw TypeCastException("null cannot be cast to non-null type android.graphics.drawable.BitmapDrawable")
     }
 
@@ -371,9 +366,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         marker.id = markerModel.id
         mMarkerList.add(marker)
         val radiusMarkerClusterer: RadiusMarkerClusterer? = poiMarkers
-        if (radiusMarkerClusterer != null) {
-            radiusMarkerClusterer.add(marker)
-        }
+        radiusMarkerClusterer?.add(marker)
     }
 
     private fun enableManualNavigation(z: Boolean) {

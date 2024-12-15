@@ -4,6 +4,9 @@ import android.content.res.Resources;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import androidx.core.content.ContextCompat;
+
+import net.bytebuddy.jar.asm.Opcodes;
+
 import kotlin.Metadata;
 import kotlin.jvm.internal.Intrinsics;
 //import net.bytebuddy.jar.asm.Opcodes;
@@ -17,17 +20,15 @@ public final class Utils {
     }
 
     public final float dpToPx(float f) {
-        return 5f;
-//        Resources system = Resources.getSystem();
-//        Intrinsics.checkExpressionValueIsNotNull(system, "Resources.getSystem()");
-//        return f * (((float) system.getDisplayMetrics().densityDpi) / ((float) Opcodes.IF_ICMPNE));
+        Resources system = Resources.getSystem();
+        Intrinsics.checkExpressionValueIsNotNull(system, "Resources.getSystem()");
+        return f * (((float) system.getDisplayMetrics().densityDpi) / ((float) Opcodes.IF_ICMPNE));
     }
 
     public final float pxToDp(float f) {
-        return 5f;
-//        Resources system = Resources.getSystem();
-//        Intrinsics.checkExpressionValueIsNotNull(system, "Resources.getSystem()");
-//        return f / (((float) system.getDisplayMetrics().densityDpi) / ((float) Opcodes.IF_ICMPNE));
+        Resources system = Resources.getSystem();
+        Intrinsics.checkExpressionValueIsNotNull(system, "Resources.getSystem()");
+        return f / (((float) system.getDisplayMetrics().densityDpi) / ((float) Opcodes.IF_ICMPNE));
     }
 
     public final void hideKeyboard(View view) {
