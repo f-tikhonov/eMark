@@ -33,9 +33,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.decompiledapk.R
-//import com.felhr.usbserial.UsbSerialInterface
-//import com.felhr.usbserial.UsbSerialDevice
-//import com.felhr.usbserial.UsbSerialInterface
+import com.felhr.usbserial.UsbSerialInterface
+import com.felhr.usbserial.UsbSerialDevice
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.hoho.android.usbserial.driver.UsbSerialDriver
@@ -66,7 +65,7 @@ import javax.inject.Inject
 import kotlin.jvm.internal.Intrinsics
 
 class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
-    /*UsbSerialInterface.UsbReadCallback,*/
+    UsbSerialInterface.UsbReadCallback,
     OnNewDeviceAttached {
     private val REQUEST_LOCATION_PERMISSIONS = 1
     private val TAG: String
@@ -177,32 +176,32 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         }
 
     private fun setListeners() {
-//        val systemService: Any = requireContext().getSystemService(android.content.Context.USB_SERVICE)
-//        if (systemService != null) {
-//            val usbManager: UsbManager = systemService as UsbManager
-//            val findAllDrivers: List<UsbSerialDriver> =
-//                UsbSerialProber.getDefaultProber().findAllDrivers(usbManager)
-//            if (!findAllDrivers.isEmpty()) {
-//                val usbSerialDriver: UsbSerialDriver = findAllDrivers[0]
-//                Intrinsics.checkExpressionValueIsNotNull(usbSerialDriver, "availableDrivers[0]")
-//                val openDevice: UsbDeviceConnection =
-//                    usbManager.openDevice(usbSerialDriver.getDevice())
-//                val usbSerialDriver2: UsbSerialDriver = findAllDrivers[0]
-//                Intrinsics.checkExpressionValueIsNotNull(usbSerialDriver2, "availableDrivers[0]")
-//                val createUsbSerialDevice: UsbSerialDevice =
-//                    UsbSerialDevice.createUsbSerialDevice(usbSerialDriver2.getDevice(), openDevice)
-//                createUsbSerialDevice.open()
-//                createUsbSerialDevice.setBaudRate(4800)
-//                createUsbSerialDevice.setDataBits(8)
-//                createUsbSerialDevice.setParity(0)
-//                createUsbSerialDevice.setFlowControl(0)
-//                createUsbSerialDevice.setStopBits(1)
-//                createUsbSerialDevice.read(this)
-//                return
-//            }
-//            return
-//        }
-//        throw TypeCastException("null cannot be cast to non-null type android.hardware.usb.UsbManager")
+        val systemService: Any = requireContext().getSystemService(android.content.Context.USB_SERVICE)
+        if (systemService != null) {
+            val usbManager: UsbManager = systemService as UsbManager
+            val findAllDrivers: List<UsbSerialDriver> =
+                UsbSerialProber.getDefaultProber().findAllDrivers(usbManager)
+            if (!findAllDrivers.isEmpty()) {
+                val usbSerialDriver: UsbSerialDriver = findAllDrivers[0]
+                Intrinsics.checkExpressionValueIsNotNull(usbSerialDriver, "availableDrivers[0]")
+                val openDevice: UsbDeviceConnection =
+                    usbManager.openDevice(usbSerialDriver.getDevice())
+                val usbSerialDriver2: UsbSerialDriver = findAllDrivers[0]
+                Intrinsics.checkExpressionValueIsNotNull(usbSerialDriver2, "availableDrivers[0]")
+                val createUsbSerialDevice: UsbSerialDevice =
+                    UsbSerialDevice.createUsbSerialDevice(usbSerialDriver2.getDevice(), openDevice)
+                createUsbSerialDevice.open()
+                createUsbSerialDevice.setBaudRate(4800)
+                createUsbSerialDevice.setDataBits(8)
+                createUsbSerialDevice.setParity(0)
+                createUsbSerialDevice.setFlowControl(0)
+                createUsbSerialDevice.setStopBits(1)
+                createUsbSerialDevice.read(this)
+                return
+            }
+            return
+        }
+        throw TypeCastException("null cannot be cast to non-null type android.hardware.usb.UsbManager")
     }
 
     private fun setObservers() {
@@ -430,57 +429,57 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         return super.onOptionsItemSelected(menuItem)
     }
 
-//    override fun onReceivedData(bArr: ByteArray) {
-//        if (bArr != null) {
-//           // Log.e("SCAN_MARKER", DiskLruCache.VERSION_1)
-//            buffer.write(bArr)
-//            val byteArray = buffer.toByteArray()
-//            Intrinsics.checkExpressionValueIsNotNull(byteArray, "buffer.toByteArray()")
-//            val str = String(byteArray, Charset.defaultCharset())
-//            Log.e("SCAN_MARKER", str)
-//            var d: Double? = null
-//            if (str.contains("DL,08,", ignoreCase = false)) {
-//                Log.e("SCAN_MARKER", str)
-//                buffer.reset()
-//                if (getMapLocation() != null) {
-//                    val location = getMapLocation()
-//                    if (location != null) {
-//                        d = java.lang.Double.valueOf(location.latitude)
-//                    }
-//                    if (d != null) {
-//                        val location2 = this.getMapLocation()
-//                        if (location2 == null) {
-//                            Intrinsics.throwNpe()
-//                        }
-//                        if (location2!!.accuracy > 5f) {
-//                            Log.e("SCAN_MARKER", "4")
-//                            val activity: FragmentActivity? = getActivity()
-//                            activity?.runOnUiThread {
-//                                val location = getMapLocation() ?: throw NullPointerException("Location is null")
-//                                alertLowAccuracy(str, location)
-//                            }
-//                            return
-//                        }
-//                        Log.e("SCAN_MARKER", "5")
-//                        val viewModel = viewModel
-//                        val location3 = this.getMapLocation()
-//                        if (location3 == null) {
-//                            Intrinsics.throwNpe()
-//                        }
-//                        openMarkerFragment(viewModel.getMakerModelFromByteStr(str, location3))
-//                        return
-//                    }
-//                }
-//                Log.e("SCAN_MARKER", ExifInterface.GPS_MEASUREMENT_3D)
-//                val string: String = getString(R.string.location_not_found)
-//                Intrinsics.checkExpressionValueIsNotNull(
-//                    string,
-//                    "getString(R.string.location_not_found)"
-//                )
-//                showSnackBar(string)
-//            }
-//        }
-//    }
+    override fun onReceivedData(bArr: ByteArray) {
+        if (bArr != null) {
+           // Log.e("SCAN_MARKER", DiskLruCache.VERSION_1)
+            buffer.write(bArr)
+            val byteArray = buffer.toByteArray()
+            Intrinsics.checkExpressionValueIsNotNull(byteArray, "buffer.toByteArray()")
+            val str = String(byteArray, Charset.defaultCharset())
+            Log.e("SCAN_MARKER", str)
+            var d: Double? = null
+            if (str.contains("DL,08,", ignoreCase = false)) {
+                Log.e("SCAN_MARKER", str)
+                buffer.reset()
+                if (getMapLocation() != null) {
+                    val location = getMapLocation()
+                    if (location != null) {
+                        d = java.lang.Double.valueOf(location.latitude)
+                    }
+                    if (d != null) {
+                        val location2 = this.getMapLocation()
+                        if (location2 == null) {
+                            Intrinsics.throwNpe()
+                        }
+                        if (location2!!.accuracy > 5f) {
+                            Log.e("SCAN_MARKER", "4")
+                            val activity: FragmentActivity? = getActivity()
+                            activity?.runOnUiThread {
+                                val location = getMapLocation() ?: throw NullPointerException("Location is null")
+                                alertLowAccuracy(str, location)
+                            }
+                            return
+                        }
+                        Log.e("SCAN_MARKER", "5")
+                        val viewModel = viewModel
+                        val location3 = this.getMapLocation()
+                        if (location3 == null) {
+                            Intrinsics.throwNpe()
+                        }
+                        openMarkerFragment(viewModel.getMakerModelFromByteStr(str, location3))
+                        return
+                    }
+                }
+                Log.e("SCAN_MARKER", ExifInterface.GPS_MEASUREMENT_3D)
+                val string: String = getString(R.string.location_not_found)
+                Intrinsics.checkExpressionValueIsNotNull(
+                    string,
+                    "getString(R.string.location_not_found)"
+                )
+                showSnackBar(string)
+            }
+        }
+    }
 
     fun getMapLocation(): Location? {
         return if (mIsManualNavigation) {

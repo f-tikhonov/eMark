@@ -3,6 +3,7 @@
 pluginManagement {
     repositories {
         google()
+        jcenter()
         mavenCentral()
         flatDir {
             dirs("libs")
@@ -15,6 +16,7 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
+        jcenter()
         mavenCentral()
         flatDir {
             dirs("libs")

@@ -65,7 +65,8 @@ android {
 
 dependencies {
 
-   // implementation("com.github.felHR85:UsbSerial:6.1.0")
+    implementation("com.github.felHR85:UsbSerial:6.0.6")
+
     implementation("com.github.mik3y:usb-serial-for-android:3.8.1")
     implementation("org.osmdroid:osmdroid-android:6.1.16")
     implementation("org.apache.commons:commons-lang3:3.8.1")
