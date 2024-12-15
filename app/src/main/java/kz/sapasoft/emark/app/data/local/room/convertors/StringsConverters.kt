@@ -3,6 +3,7 @@ package kz.sapasoft.emark.app.data.local.room.convertors
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kz.sapasoft.emark.app.utils.Constants
 
 class StringsConverters {
 
@@ -15,5 +16,22 @@ class StringsConverters {
     @TypeConverter
     fun fromList(list: List<String>): String {
         return Gson().toJson(list)
+    }
+}
+
+class MarkerStatusConverter {
+
+    @TypeConverter
+    fun fromMarkerStatus(status: Constants.MarkerStatus?): String {
+        return status?.name ?: Constants.MarkerStatus.NORMAL.name
+    }
+
+    @TypeConverter
+    fun toMarkerStatus(value: String?): Constants.MarkerStatus {
+        return try {
+            Constants.MarkerStatus.valueOf(value ?: Constants.MarkerStatus.NORMAL.name)
+        } catch (e: IllegalArgumentException) {
+            Constants.MarkerStatus.NORMAL
+        }
     }
 }

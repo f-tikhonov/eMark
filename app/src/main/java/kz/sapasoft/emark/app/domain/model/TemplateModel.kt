@@ -6,17 +6,17 @@ import java.io.Serializable
 
 @Entity("template")
 data class TemplateModel(
-    @PrimaryKey val id: String,
-    val createdById: String,
-    val created: Long,
-    val updatedById: String,
-    val updated: Long,
-    val privileges: List<String>,
-    val frontData: String,
-    val name: String,
-    val descr: String,
-    val fields: List<FieldModel>,
-    val color: String,
-    val markerModels: Map<String, String>,
-    val markerTypes: List<String>
+    @PrimaryKey val id: String = "",
+    val createdById: String = "",
+    val created: Long = 0L,
+    val updatedById: String? = "",
+    val updated: Long = 0L,
+    val privileges: List<String>? = emptyList(),
+    val frontData: String = "",
+    val name: String = "",
+    val descr: String = "",
+    val fields: List<FieldModel> = emptyList(),
+    val color: String = "",
+    val markerModels: Map<String, String> = emptyMap(),
+    val markerTypes: List<String> = emptyList()
 ) : Serializable

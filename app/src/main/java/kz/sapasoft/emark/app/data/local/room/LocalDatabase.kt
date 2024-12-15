@@ -9,6 +9,7 @@ import kz.sapasoft.emark.app.data.local.room.convertors.DoublesContainer
 import kz.sapasoft.emark.app.data.local.room.convertors.FieldModelConverters
 import kz.sapasoft.emark.app.data.local.room.convertors.FileConverter
 import kz.sapasoft.emark.app.data.local.room.convertors.MapConverter
+import kz.sapasoft.emark.app.data.local.room.convertors.MarkerStatusConverter
 import kz.sapasoft.emark.app.data.local.room.convertors.MetaDataConverter
 import kz.sapasoft.emark.app.data.local.room.convertors.StringsConverters
 import kz.sapasoft.emark.app.data.local.room.image.ImageDao
@@ -29,7 +30,7 @@ import kz.sapasoft.emark.app.domain.model.TemplateModel
     version = 1,
     exportSchema = false
 )
-@TypeConverters(StringsConverters::class, FieldModelConverters::class, DoublesContainer::class, MetaDataConverter::class, FileConverter::class, MapConverter::class)
+@TypeConverters(StringsConverters::class, FieldModelConverters::class, DoublesContainer::class, MetaDataConverter::class, FileConverter::class, MapConverter::class, MarkerStatusConverter::class)
 abstract class LocalDatabase : RoomDatabase() {
 
     abstract val imageDao: ImageDao

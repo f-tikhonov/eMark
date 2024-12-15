@@ -1,6 +1,7 @@
 package kz.sapasoft.emark.app.ui.map
 
 import android.location.Location
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import id.zelory.compressor.Compressor
 import kotlinx.coroutines.CoroutineScope
@@ -18,15 +19,12 @@ import kz.sapasoft.emark.app.data.local.room.template.TemplateRepository
 import kz.sapasoft.emark.app.domain.model.MarkerModel
 import kz.sapasoft.emark.app.domain.model.TemplateModel
 import kz.sapasoft.emark.app.utils.Constants
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 import java.util.UUID
 import javax.inject.Inject
-import kotlin.coroutines.Continuation
-import kotlin.jvm.internal.Intrinsics
 
 class MapViewModel @Inject constructor(
     baseCloudRepository2: BaseCloudRepository,
@@ -49,9 +47,6 @@ class MapViewModel @Inject constructor(
     /* access modifiers changed from: private */
     @JvmField
     val markerListAll: MutableList<MarkerModel> = mutableListOf<MarkerModel>()
-    private val `markerModelListData$delegate`: MutableLiveData<List<MarkerModel>> by lazy {
-        MutableLiveData<List<MarkerModel>>()
-    }
 
     /* access modifiers changed from: private */
     @JvmField
@@ -71,16 +66,9 @@ class MapViewModel @Inject constructor(
     private val templateRepository: TemplateRepository
     val error: MutableLiveData<ResultWrapper.Error>
         get() = `error$delegate`
-    val markerModelListData: MutableLiveData<List<MarkerModel>>
-        get() = `markerModelListData$delegate`
+    val markerModelListData: MutableLiveData<List<MarkerModel>> = MutableLiveData()
 
     init {
-        Intrinsics.checkParameterIsNotNull(baseCloudRepository2, "baseCloudRepository")
-        Intrinsics.checkParameterIsNotNull(templateRepository2, "templateRepository")
-        Intrinsics.checkParameterIsNotNull(imageRepository2, "imageRepository")
-        Intrinsics.checkParameterIsNotNull(markerRepository2, "markerRepository")
-        Intrinsics.checkParameterIsNotNull(markerSyncRepository2, "markerSyncRepository")
-        Intrinsics.checkParameterIsNotNull(prefsImpl2, "prefsImpl")
         baseCloudRepository = baseCloudRepository2
         templateRepository = templateRepository2
         imageRepository = imageRepository2
@@ -98,9 +86,9 @@ class MapViewModel @Inject constructor(
                 when (result) {
                     is ResultWrapper.Error -> error.postValue(result)
                     is ResultWrapper.Success -> {
-                        if (result.value?.isNotEmpty() == true) {
+                         if (result.value?.isNotEmpty() == true) {
                             markerListAll.addAll(result.value as Collection<MarkerModel>)
-                            getMarkerList(projectIds)
+                            markerModelListData.postValue(markerListAll)
                         } else {
                             insertMarkerEntityList(projectIds?.get(0)!!, markerListAll)
                             getMarkerEntityList(projectIds[0]!!)
@@ -185,7 +173,7 @@ class MapViewModel @Inject constructor(
     }
 
     fun getMarkerEntityList(str: String?) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             val markerModels = mutableListOf<MarkerModel>()
 
             // Get synchronized markers

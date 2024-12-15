@@ -71,7 +71,6 @@ class WelcomeViewModel @Inject constructor(
                     password = password.orEmpty()
                 )
 
-                Log.d("terra", "result $result")
                 when (result) {
                     is ResultWrapper.Error -> error.postValue(result)
                     is ResultWrapper.Success -> {

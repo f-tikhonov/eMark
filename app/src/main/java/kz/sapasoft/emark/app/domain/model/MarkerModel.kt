@@ -8,19 +8,19 @@ import kz.sapasoft.emark.app.utils.Constants
 @Entity("marker")
 data class MarkerModel(
     @PrimaryKey var id: String,
-    var updated: Long? = null,
-    var templateId: String? = null,
-    var markerId: String? = null,
-    var markerModel: String? = null,
-    var color: String? = null,
-    var passiveId: String? = null,
-    var projectIds: List<String>? = null,
-    var depth: Double? = null,
-    var location: List<Double>? = null,
-    var fields: List<FieldModel>? = null,
-    var generalId: String? = null,
-    var markerType: String? = null,
-    var idLocal: String? = null,
+    var updated: Long? = 0L,
+    var templateId: String? = "",
+    var markerId: String? = "",
+    var markerModel: String? = "",
+    var color: String? = "",
+    var passiveId: String? = "",
+    var projectIds: List<String>? = emptyList(),
+    var depth: Double? = 0.0,
+    var location: List<Double>? = emptyList(),
+    var fields: List<FieldModel>? = emptyList(),
+    var generalId: String? = "",
+    var markerType: String? = "",
+    var idLocal: String? = "",
     var status: Constants.MarkerStatus = Constants.MarkerStatus.NORMAL
 ) : Serializable {
 
