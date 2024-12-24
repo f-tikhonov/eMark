@@ -6,7 +6,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
-import kz.ss.emark.R;
+
+import com.example.decompiledapk.R;
 
 public abstract class ItemPhotoFooterBinding extends ViewDataBinding {
     public final ImageView ivFooter;

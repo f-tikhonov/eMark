@@ -8,7 +8,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
-import kz.sapasoft.emark.app.R
+import com.example.decompiledapk.R
 import kz.sapasoft.emark.app.domain.model.FieldModel
 import kz.sapasoft.emark.app.ui.marker.OnFieldValueChangeListener
 import kz.sapasoft.emark.app.utils.DateConverter

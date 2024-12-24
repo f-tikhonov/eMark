@@ -1,5 +1,6 @@
 package kz.sapasoft.emark.app.ui.marker
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import kz.sapasoft.emark.app.core.BaseViewModel
 import kz.sapasoft.emark.app.data.cloud.ResultWrapper
@@ -41,8 +42,8 @@ class MarkerViewModel @Inject constructor(
     private val `imagesData$delegate`: MutableLiveData<List<ImageDataModel>> by lazy {
         MutableLiveData<List<ImageDataModel>>()
     }
-    private val `loading$delegate`: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
+    private val `loading$delegate`: MutableLiveData<Boolean?> by lazy {
+        MutableLiveData<Boolean?>()
     }
     private val `localImagesData$delegate`: MutableLiveData<List<ImageDataModel>> by lazy {
         MutableLiveData<List<ImageDataModel>>()
@@ -69,24 +70,36 @@ class MarkerViewModel @Inject constructor(
         MutableLiveData<List<TemplateModel>>()
     }
     private val templateRepository: TemplateRepository
-    val error: MutableLiveData<ResultWrapper.Error>
-        get() = `error$delegate`.value as MutableLiveData<ResultWrapper.Error>
-    val imagesData: MutableLiveData<List<ImageDataModel>>
-        get() = `imagesData$delegate`.value as MutableLiveData<List<ImageDataModel>>
-    val loading: MutableLiveData<Boolean>
-        get() = `loading$delegate`.value as MutableLiveData<Boolean>
-    val localImagesData: MutableLiveData<List<Any>>
-        get() = `localImagesData$delegate`.value as MutableLiveData<List<Any>>
-    val markerChangeTask: MutableLiveData<Boolean>
-        get() = `markerChangeTask$delegate`.value as MutableLiveData<Boolean>
-    val markerModelData: MutableLiveData<Any>
-        get() = `markerModelData$delegate`.value as MutableLiveData<Any>
-    val saveImageData: MutableLiveData<List<Any>>
-        get() = `saveImageData$delegate`.value as MutableLiveData<List<Any>>
-    val tagModelData: MutableLiveData<List<Any>>
-        get() = `tagModelData$delegate`.value as MutableLiveData<List<Any>>
-    val templateModelData: MutableLiveData<List<Any>>
-        get() = `templateModelData$delegate`.value as MutableLiveData<List<Any>>
+    val error: MutableLiveData<ResultWrapper.Error> by lazy {
+        MutableLiveData<ResultWrapper.Error>()
+    }
+
+    val imagesData: MutableLiveData<List<ImageDataModel>> by lazy {
+        MutableLiveData<List<ImageDataModel>>()
+    }
+
+    val loading: MutableLiveData<Boolean?> by lazy {
+        MutableLiveData<Boolean?>()
+    }
+
+    val localImagesData: MutableLiveData<List<ImageDataModel>> by lazy {
+        MutableLiveData<List<ImageDataModel>>()
+    }
+    val markerChangeTask: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+    val markerModelData: MutableLiveData<MarkerModel> by lazy {
+        MutableLiveData<MarkerModel>()
+    }
+    val saveImageData: MutableLiveData<List<Any>> by lazy {
+        MutableLiveData<List<Any>>()
+    }
+    val tagModelData: MutableLiveData<List<TagModel>> by lazy {
+        MutableLiveData<List<TagModel>>()
+    }
+    val templateModelData: MutableLiveData<List<TemplateModel>> by lazy {
+        MutableLiveData<List<TemplateModel>>()
+    }
 
     init {
         Intrinsics.checkParameterIsNotNull(baseCloudRepository2, "baseCloudRepository")
@@ -108,6 +121,7 @@ class MarkerViewModel @Inject constructor(
         requireNotNull(markerTemplateIds) { "markerTemplateIds is required" }
 
         loading.postValue(true)
+        Log.d("terra", "getAllData")
 
         launchIO {
             tagList
@@ -122,10 +136,13 @@ class MarkerViewModel @Inject constructor(
 
     suspend fun getMarker(markerModel: MarkerModel): Unit {
         if (prefsImpl.offline) {
+            Log.d("terra", "getMarker ${prefsImpl.offline}")
             markerModelData.postValue(markerModel)
             return
         }
 
+        Log.d("terra", "getMarker ${prefsImpl.offline}")
+        Log.d("terra", "markerModel.status ${markerModel.status}")
         when (markerModel.status) {
             null -> {
                 getImages(markerModel)

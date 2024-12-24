@@ -6,11 +6,9 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.EditText
-import android.widget.TextView
+import com.example.decompiledapk.R
 import com.google.android.material.textview.MaterialTextView
-import kz.sapasoft.emark.app.R
 import kz.sapasoft.emark.app.domain.model.FieldModel
-import kz.sapasoft.emark.app.domain.model.TagModel
 import kz.sapasoft.emark.app.ui.marker.OnFieldValueChangeListener
 
 class FieldViewText @JvmOverloads constructor(

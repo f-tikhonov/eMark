@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+
+import com.example.decompiledapk.R;
 import com.google.android.gms.common.internal.ServiceSpecificExtraArgs;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,7 +21,6 @@ import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
 import kz.sapasoft.emark.app.domain.model.TemplateModel;
 import kz.sapasoft.emark.app.ui.marker.OnMarkerTypeChangeListener;
-import kz.ss.emark.R;
 
 @Metadata(bv = {1, 0, 3}, d1 = {"\u0000>\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\n\u0002\b\u0002\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0002\n\u0002\u0010\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0000\u0018\u00002\u00020\u0001B%\b\u0007\u0012\u0006\u0010\u0002\u001a\u00020\u0003\u0012\n\b\u0002\u0010\u0004\u001a\u0004\u0018\u00010\u0005\u0012\b\b\u0002\u0010\u0006\u001a\u00020\u0007¢\u0006\u0002\u0010\bJ\u0006\u0010\f\u001a\u00020\rJ\u0006\u0010\u000e\u001a\u00020\rJ$\u0010\u000f\u001a\u00020\u00102\f\u0010\u0011\u001a\b\u0012\u0004\u0012\u00020\u000b0\n2\u0006\u0010\u0012\u001a\u00020\r2\u0006\u0010\u0013\u001a\u00020\u0014R\u0014\u0010\t\u001a\b\u0012\u0004\u0012\u00020\u000b0\nX.¢\u0006\u0002\n\u0000¨\u0006\u0015"}, d2 = {"Lkz/sapasoft/emark/app/ui/custom_views/MarkerTypeView;", "Landroid/widget/LinearLayout;", "context", "Landroid/content/Context;", "attrs", "Landroid/util/AttributeSet;", "defStyleAttr", "", "(Landroid/content/Context;Landroid/util/AttributeSet;I)V", "mTemplateList", "", "Lkz/sapasoft/emark/app/domain/model/TemplateModel;", "getMarkerType", "", "getTemplateId", "setData", "", "templateList", "selectedTemplateId", "listener", "Lkz/sapasoft/emark/app/ui/marker/OnMarkerTypeChangeListener;", "app_release"}, k = 1, mv = {1, 1, 16})
 /* compiled from: MarkerTypeView.kt */
@@ -82,10 +83,10 @@ public final class MarkerTypeView extends LinearLayout {
             arrayList.add(name.getName());
         }
         ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), R.layout.item_spinner, CollectionsKt.toMutableList((List) arrayList));
-        Spinner spinner = (Spinner) _$_findCachedViewById(kz.sapasoft.emark.app.R.id.spinner);
+        Spinner spinner = (Spinner) _$_findCachedViewById(R.id.spinner);
         Intrinsics.checkExpressionValueIsNotNull(spinner, "spinner");
         spinner.setAdapter(arrayAdapter);
-        Spinner spinner2 = (Spinner) _$_findCachedViewById(kz.sapasoft.emark.app.R.id.spinner);
+        Spinner spinner2 = (Spinner) _$_findCachedViewById(R.id.spinner);
         Iterator it = iterable.iterator();
         while (true) {
             if (!it.hasNext()) {
@@ -98,7 +99,7 @@ public final class MarkerTypeView extends LinearLayout {
             }
         }
         spinner2.setSelection(CollectionsKt.indexOf(list, obj));
-        Spinner spinner3 = (Spinner) _$_findCachedViewById(kz.sapasoft.emark.app.R.id.spinner);
+        Spinner spinner3 = (Spinner) _$_findCachedViewById(R.id.spinner);
         Intrinsics.checkExpressionValueIsNotNull(spinner3, "spinner");
         spinner3.setOnItemSelectedListener(new MarkerTypeView$setData$2(onMarkerTypeChangeListener, list));
     }
@@ -108,7 +109,7 @@ public final class MarkerTypeView extends LinearLayout {
         if (list == null) {
             Intrinsics.throwUninitializedPropertyAccessException("mTemplateList");
         }
-        Spinner spinner = (Spinner) _$_findCachedViewById(kz.sapasoft.emark.app.R.id.spinner);
+        Spinner spinner = (Spinner) _$_findCachedViewById(R.id.spinner);
         Intrinsics.checkExpressionValueIsNotNull(spinner, "spinner");
         return list.get(spinner.getSelectedItemPosition()).getMarkerTypes().get(0);
     }
@@ -118,7 +119,7 @@ public final class MarkerTypeView extends LinearLayout {
         if (list == null) {
             Intrinsics.throwUninitializedPropertyAccessException("mTemplateList");
         }
-        Spinner spinner = (Spinner) _$_findCachedViewById(kz.sapasoft.emark.app.R.id.spinner);
+        Spinner spinner = (Spinner) _$_findCachedViewById(R.id.spinner);
         Intrinsics.checkExpressionValueIsNotNull(spinner, "spinner");
         return list.get(spinner.getSelectedItemPosition()).getId();
     }

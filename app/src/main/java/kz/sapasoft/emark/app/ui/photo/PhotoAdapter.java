@@ -84,16 +84,19 @@ public final class PhotoAdapter extends RecyclerView.Adapter<DataBindingViewHold
         dataBindingViewHolder.onBind(new ImageDataModel(uuid, (String) null, (ImageDataModel.MetaData) null, (File) null));
     }
 
-    public DataBindingViewHolder<ImageDataModel> onCreateViewHolder(ViewGroup viewGroup, int i) {
-        Intrinsics.checkParameterIsNotNull(viewGroup, "parent");
-        if (i == this.FOOTER_VIEW) {
-            ItemPhotoFooterBinding inflate = ItemPhotoFooterBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
-            Intrinsics.checkExpressionValueIsNotNull(inflate, "ItemPhotoFooterBinding.i….context), parent, false)");
-            return new FooterHolder(this, inflate);
+    @Override
+    public DataBindingViewHolder<ImageDataModel> onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+
+        if (viewType == this.FOOTER_VIEW) {
+            // Inflate footer view
+            ItemPhotoFooterBinding footerBinding = ItemPhotoFooterBinding.inflate(inflater, viewGroup, false);
+            return new FooterHolder(this, footerBinding);
         }
-        ItemPhotoBinding inflate2 = ItemPhotoBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
-        Intrinsics.checkExpressionValueIsNotNull(inflate2, "ItemPhotoBinding.inflate….context), parent, false)");
-        return new SimpleHolder(this, inflate2);
+
+        // Inflate normal item view
+        ItemPhotoBinding itemBinding = ItemPhotoBinding.inflate(inflater, viewGroup, false);
+         return new SimpleHolder(this, itemBinding);
     }
 
     @Metadata(bv = {1, 0, 3}, d1 = {"\u0000\u001e\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u0002\n\u0002\b\u0002\b\u0004\u0018\u00002\b\u0012\u0004\u0012\u00020\u00020\u0001B\r\u0012\u0006\u0010\u0003\u001a\u00020\u0004¢\u0006\u0002\u0010\u0005J\u0010\u0010\u0006\u001a\u00020\u00072\u0006\u0010\b\u001a\u00020\u0002H\u0016¨\u0006\t"}, d2 = {"Lkz/sapasoft/emark/app/ui/photo/PhotoAdapter$SimpleHolder;", "Lkz/sapasoft/emark/app/ui/DataBindingViewHolder;", "Lkz/sapasoft/emark/app/domain/model/ImageDataModel;", "dataBinding", "Landroidx/databinding/ViewDataBinding;", "(Lkz/sapasoft/emark/app/ui/photo/PhotoAdapter;Landroidx/databinding/ViewDataBinding;)V", "onBind", "", "t", "app_release"}, k = 1, mv = {1, 1, 16})
@@ -125,9 +128,8 @@ public final class PhotoAdapter extends RecyclerView.Adapter<DataBindingViewHold
         final /* synthetic */ PhotoAdapter this$0;
 
         /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-        public FooterHolder(PhotoAdapter photoAdapter, ViewDataBinding viewDataBinding) {
-            super(viewDataBinding);
-            Intrinsics.checkParameterIsNotNull(viewDataBinding, "dataBinding");
+        public FooterHolder(PhotoAdapter photoAdapter, ItemPhotoFooterBinding footerBinding) {
+            super(footerBinding);
             this.this$0 = photoAdapter;
         }
 

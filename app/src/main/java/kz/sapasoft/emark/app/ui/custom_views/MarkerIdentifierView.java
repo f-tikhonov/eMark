@@ -6,13 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+
+import com.example.decompiledapk.R;
 import com.google.android.gms.common.internal.ServiceSpecificExtraArgs;
 import java.util.HashMap;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
 import kz.sapasoft.emark.app.ui.marker.OnFieldValueChangeListener;
-import kz.ss.emark.R;
 
 @Metadata(bv = {1, 0, 3}, d1 = {"\u00004\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\n\u0002\b\u0002\n\u0002\u0010\u000e\n\u0002\b\u0002\n\u0002\u0010\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\u0018\u00002\u00020\u0001B%\b\u0007\u0012\u0006\u0010\u0002\u001a\u00020\u0003\u0012\n\b\u0002\u0010\u0004\u001a\u0004\u0018\u00010\u0005\u0012\b\b\u0002\u0010\u0006\u001a\u00020\u0007¢\u0006\u0002\u0010\bJ\u0006\u0010\u000b\u001a\u00020\nJ\u0018\u0010\f\u001a\u00020\r2\b\u0010\u000e\u001a\u0004\u0018\u00010\n2\u0006\u0010\u000f\u001a\u00020\u0010R\u0010\u0010\t\u001a\u0004\u0018\u00010\nX\u000e¢\u0006\u0002\n\u0000¨\u0006\u0011"}, d2 = {"Lkz/sapasoft/emark/app/ui/custom_views/MarkerIdentifierView;", "Landroid/widget/LinearLayout;", "context", "Landroid/content/Context;", "attrs", "Landroid/util/AttributeSet;", "defStyleAttr", "", "(Landroid/content/Context;Landroid/util/AttributeSet;I)V", "mValue", "", "getValue", "setData", "", "value", "listener", "Lkz/sapasoft/emark/app/ui/marker/OnFieldValueChangeListener;", "app_release"}, k = 1, mv = {1, 1, 16})
 /* compiled from: MarkerIdentifierView.kt */
@@ -66,14 +67,14 @@ public final class MarkerIdentifierView extends LinearLayout {
     public final void setData(String str, OnFieldValueChangeListener onFieldValueChangeListener) {
         Intrinsics.checkParameterIsNotNull(onFieldValueChangeListener, ServiceSpecificExtraArgs.CastExtraArgs.LISTENER);
         this.mValue = str;
-        ((EditText) _$_findCachedViewById(kz.sapasoft.emark.app.R.id.et_text)).setText(str);
-        EditText editText = (EditText) _$_findCachedViewById(kz.sapasoft.emark.app.R.id.et_text);
+        ((EditText) _$_findCachedViewById(R.id.et_text)).setText(str);
+        EditText editText = (EditText) _$_findCachedViewById(R.id.et_text);
         Intrinsics.checkExpressionValueIsNotNull(editText, "et_text");
         editText.addTextChangedListener(new MarkerIdentifierView$setData$$inlined$addTextChangedListener$1(onFieldValueChangeListener));
     }
 
     public final String getValue() {
-        EditText editText = (EditText) _$_findCachedViewById(kz.sapasoft.emark.app.R.id.et_text);
+        EditText editText = (EditText) _$_findCachedViewById(R.id.et_text);
         Intrinsics.checkExpressionValueIsNotNull(editText, "et_text");
         return editText.getText().toString();
     }

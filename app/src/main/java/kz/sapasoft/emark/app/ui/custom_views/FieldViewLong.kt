@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
-import kz.sapasoft.emark.app.R
+import com.example.decompiledapk.R
 import kz.sapasoft.emark.app.domain.model.FieldModel
 import kz.sapasoft.emark.app.domain.model.TagModel
 import kz.sapasoft.emark.app.ui.marker.OnFieldValueChangeListener

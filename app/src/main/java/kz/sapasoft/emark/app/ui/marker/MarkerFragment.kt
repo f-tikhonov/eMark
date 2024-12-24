@@ -2,28 +2,48 @@ package kz.sapasoft.emark.app.ui.marker
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import com.example.decompiledapk.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import kz.sapasoft.emark.app.databinding.FragmentMarkerBinding
-import kz.sapasoft.emark.app.domain.model.*
+import kz.sapasoft.emark.app.domain.model.FieldModel
+import kz.sapasoft.emark.app.domain.model.ImageDataModel
+import kz.sapasoft.emark.app.domain.model.MarkerModel
+import kz.sapasoft.emark.app.domain.model.ProjectModel
+import kz.sapasoft.emark.app.domain.model.TagModel
+import kz.sapasoft.emark.app.domain.model.TemplateModel
 import kz.sapasoft.emark.app.ui.MainActivity
 import kz.sapasoft.emark.app.ui.base.DaggerFragmentExtended
-import kz.sapasoft.emark.app.ui.custom_views.*
+import kz.sapasoft.emark.app.ui.custom_views.FieldView
+import kz.sapasoft.emark.app.ui.custom_views.FieldViewDate
+import kz.sapasoft.emark.app.ui.custom_views.FieldViewDouble
+import kz.sapasoft.emark.app.ui.custom_views.FieldViewLong
+import kz.sapasoft.emark.app.ui.custom_views.FieldViewSpinner
+import kz.sapasoft.emark.app.ui.custom_views.FieldViewText
+import kz.sapasoft.emark.app.ui.custom_views.MarkerDepthView
+import kz.sapasoft.emark.app.ui.custom_views.MarkerIdentifierView
+import kz.sapasoft.emark.app.ui.custom_views.MarkerModelView
+import kz.sapasoft.emark.app.ui.custom_views.MarkerPhotoView
+import kz.sapasoft.emark.app.ui.custom_views.MarkerTypeView
 import kz.sapasoft.emark.app.utils.Constants
-import kz.ss.emark.R
 import pl.aprilapps.easyphotopicker.EasyImage
 import java.util.UUID
 import javax.inject.Inject
+import kotlin.jvm.internal.Intrinsics
 
 class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnMarkerTypeChangeListener, OnImageClickListener {
 
@@ -37,18 +57,26 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
     private var mProjectModel: ProjectModel? = null
     private var mTagList: List<TagModel>? = null
     private var mTemplateList: List<TemplateModel>? = null
-    private val viewModel by lazy { easyImage as MarkerViewModel }
+
+    val viewModel: MarkerViewModel
+        /* access modifiers changed from: private */
+        get() = `viewModel$delegate` as MarkerViewModel
+
     private var rootView: View? = null
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val `viewModel$delegate`: MarkerViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory).get(MarkerViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         mProjectModel = requireArguments().getSerializable("projectModel") as? ProjectModel
         mMarkerModel = requireArguments().getSerializable("marker") as? MarkerModel
-        rootView =  layoutInflater.inflate(com.example.decompiledapk.R.layout.fragment_marker, container, false)
+        rootView =  layoutInflater.inflate(R.layout.fragment_marker, container, false)
         return rootView
     }
 
@@ -74,8 +102,141 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
         }
     }
 
+    fun fillMain(markerModel: MarkerModel) {
+        val onFieldValueChangeListener: OnFieldValueChangeListener = this
+        (rootView?.findViewById(R.id.view_marker_identifier) as MarkerIdentifierView).setData(
+            markerModel.generalId,
+            onFieldValueChangeListener
+        )
+        (rootView?.findViewById(R.id.view_marker_model) as MarkerModelView).setData(
+            markerModel.markerModel
+        )
+        (rootView?.findViewById(R.id.view_marker_depth) as MarkerDepthView).setData(
+            markerModel.depth,
+            onFieldValueChangeListener
+        )
+    }
+
+    fun fillFields(list: List<FieldModel>?) {
+        var obj: Any?
+        if (list != null) {
+            for (next in list) {
+                val it: Iterator<*> = mFieldViewList.iterator()
+                while (true) {
+                    if (!it.hasNext()) {
+                        obj = null
+                        break
+                    }
+                    obj = it.next()
+                    if (Intrinsics.areEqual(
+                            (obj as FieldView).getFieldModel().id as Any?,
+                            next.id as Any?
+                        )
+                    ) {
+                        break
+                    }
+                }
+                val fieldView = obj as FieldView?
+                fieldView?.setFieldModel(next)
+            }
+        }
+    }
+
     private fun setObservers() {
-        // Set observers for ViewModel data
+        viewModel.markerModelData.observe(viewLifecycleOwner) { markerModel ->
+            markerModel?.let {
+                // Сохраняем модель в переменной фрагмента
+                mMarkerModel = it
+
+                // Показываем ScrollView
+                val scrollView = requireView().findViewById<ScrollView>(R.id.sv_main)
+                scrollView.visibility = View.VISIBLE
+
+                // Скрываем ProgressBar
+                val progressBar = requireView().findViewById<ProgressBar>(R.id.pb_main)
+                progressBar.visibility = View.GONE
+
+                // Заполняем основной интерфейс
+                fillMain(it)
+                fillFields(it.fields)
+            }
+        }
+        viewModel.imagesData.observe(viewLifecycleOwner) { list ->
+            list?.let {
+                val markerPhotoView = requireView().findViewById<MarkerPhotoView>(R.id.view_marker_photo)
+                markerPhotoView.setImageDataModelList(it)
+            }
+        }
+
+
+        viewModel.localImagesData.observe(viewLifecycleOwner) { list ->
+            list?.let {
+                // Добавляем данные в локальный список
+                localImageList.addAll(it)
+
+                // Обновляем MarkerPhotoView
+                val markerPhotoView = requireView().findViewById<MarkerPhotoView>(R.id.view_marker_photo)
+                markerPhotoView.setImageDataModelList(it)
+            }
+        }
+        viewModel.error.observe(viewLifecycleOwner) { error ->
+            // Показываем ScrollView
+            val scrollView = requireView().findViewById<ScrollView>(R.id.sv_main)
+            scrollView.visibility = View.VISIBLE
+
+            // Скрываем ProgressBar
+            val progressBar = requireView().findViewById<ProgressBar>(R.id.pb_main)
+            progressBar.visibility = View.GONE
+
+            // Показываем Snackbar с сообщением об ошибке
+            val toolbar = requireView().findViewById<Toolbar>(R.id.toolbar)
+            Snackbar.make(
+                toolbar,
+                error?.toString() ?: "Unknown error",
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
+
+        viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading == false) { // Проверяем, что загрузка завершена
+                // Показываем ScrollView
+                val scrollView = requireView().findViewById<ScrollView>(R.id.sv_main)
+                scrollView.visibility = View.VISIBLE
+
+                // Скрываем ProgressBar
+                val progressBar = requireView().findViewById<ProgressBar>(R.id.pb_main)
+                progressBar.visibility = View.GONE
+            }
+        }
+        viewModel.markerChangeTask.observe(viewLifecycleOwner) { isChanged ->
+            if (isChanged == true) {
+                mOnMarkerChangeListener?.onMarkerChange()
+                activity?.onBackPressed()
+            }
+        }
+        viewModel.tagModelData.observe(viewLifecycleOwner) { tagList ->
+            tagList?.let {
+                mTagList = it
+            }
+        }
+        viewModel.templateModelData.observe(viewLifecycleOwner) { templateList ->
+            templateList?.let { list ->
+                // Обновляем mTemplateList
+                mTemplateList = list
+
+                // Находим TemplateModel с совпадающим id
+                val templateModel = list.firstOrNull {
+                    it.id == mMarkerModel?.templateId
+                }
+
+                // Рисуем основной список
+                drawMainList(list)
+
+                // Рисуем список полей
+                val fields = templateModel?.fields ?: list.firstOrNull()?.fields
+                fields?.let { drawFieldList(it) }
+            }
+        }
     }
 
     private fun drawMainList(list: List<TemplateModel>) {

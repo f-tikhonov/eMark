@@ -45,6 +45,7 @@ import kz.sapasoft.emark.app.domain.model.ProjectModel
 import kz.sapasoft.emark.app.ui.MainActivity
 import kz.sapasoft.emark.app.ui.OnNewDeviceAttached
 import kz.sapasoft.emark.app.ui.base.DaggerFragmentExtended
+import kz.sapasoft.emark.app.ui.marker.MarkerFragment
 import kz.sapasoft.emark.app.ui.marker.OnMarkerChangeListener
 import kz.sapasoft.emark.app.utils.Constants
 import kz.sapasoft.emark.app.utils.MarkerDrawer
@@ -88,7 +89,17 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     /* access modifiers changed from: private */
     @JvmField
     var mMyLocationOverlay: MyLocationNewOverlay? = null
-    private val onMarkerClickListener: Marker.OnMarkerClickListener? = null
+
+    private val onMarkerClickListener =
+        Marker.OnMarkerClickListener { marker, mapView ->
+            val markerModel = this@MapFragment.mMarkerModelList.firstOrNull {
+                it.id == marker.id
+            }
+            if (markerModel != null) {
+                this@MapFragment.openMarkerFragment(markerModel)
+            }
+            false
+        }
 
     /* access modifiers changed from: private */
     var poiMarkers: RadiusMarkerClusterer? = null
@@ -459,7 +470,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
                         if (location3 == null) {
                             Intrinsics.throwNpe()
                         }
-                        openMarkerFragment(viewModel.getMakerModelFromByteStr(str, location3))
+                        openMarkerFragment(viewModel.getMakerModelFromByteStr(str, location3)!!)
                         return
                     }
                 }
@@ -503,7 +514,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
             val location = getMapLocation() ?: throw NullPointerException("Location is null")
             val markerModel = viewModel.getMakerModelFromByteStr(str, location)
-            openMarkerFragment(markerModel)
+            openMarkerFragment(markerModel!!)
             dialog.dismiss()
         }
         builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
@@ -515,10 +526,10 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     }
 
     /* access modifiers changed from: private */
-    fun openMarkerFragment(markerModel: MarkerModel?) {
+    fun openMarkerFragment(markerModel: MarkerModel) {
         getChildFragmentClickListener().onFragmentAdd(
-            newInstance(
-                projectModel, markerModel, this
+            MarkerFragment.newInstance(
+                projectModel,  markerModel, this
             )
         )
     }

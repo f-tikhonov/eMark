@@ -53,7 +53,7 @@ abstract class LocalDatabase : RoomDatabase() {
             if (instance == null)
                 instance = Room.databaseBuilder(
                     ctx.applicationContext, LocalDatabase::class.java,
-                    "note_database"
+                    "note_database_1"
                 )
                     .fallbackToDestructiveMigration()
                     .build()
