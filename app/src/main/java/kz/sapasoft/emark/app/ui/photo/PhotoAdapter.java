@@ -1,25 +1,28 @@
 package kz.sapasoft.emark.app.ui.photo;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.decompiledapk.R;
 import com.google.android.gms.common.internal.ServiceSpecificExtraArgs;
-import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
-import kz.sapasoft.emark.app.R;
-import kz.sapasoft.emark.app.databinding.ItemPhotoBinding;
-import kz.sapasoft.emark.app.databinding.ItemPhotoFooterBinding;
 import kz.sapasoft.emark.app.domain.model.ImageDataModel;
 import kz.sapasoft.emark.app.ui.DataBindingViewHolder;
 
@@ -90,13 +93,23 @@ public final class PhotoAdapter extends RecyclerView.Adapter<DataBindingViewHold
 
         if (viewType == this.FOOTER_VIEW) {
             // Inflate footer view
-            ItemPhotoFooterBinding footerBinding = ItemPhotoFooterBinding.inflate(inflater, viewGroup, false);
+             ViewDataBinding footerBinding = DataBindingUtil.inflate(
+                    inflater,
+                    R.layout.item_photo_footer,
+                    viewGroup,
+                    false
+            );
             return new FooterHolder(this, footerBinding);
         }
 
         // Inflate normal item view
-        ItemPhotoBinding itemBinding = ItemPhotoBinding.inflate(inflater, viewGroup, false);
-         return new SimpleHolder(this, itemBinding);
+        ViewDataBinding photoBinding = DataBindingUtil.inflate(
+                inflater,
+                R.layout.item_photo,
+                viewGroup,
+                false
+        );
+         return new SimpleHolder(this, photoBinding);
     }
 
     @Metadata(bv = {1, 0, 3}, d1 = {"\u0000\u001e\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u0002\n\u0002\b\u0002\b\u0004\u0018\u00002\b\u0012\u0004\u0012\u00020\u00020\u0001B\r\u0012\u0006\u0010\u0003\u001a\u00020\u0004¢\u0006\u0002\u0010\u0005J\u0010\u0010\u0006\u001a\u00020\u00072\u0006\u0010\b\u001a\u00020\u0002H\u0016¨\u0006\t"}, d2 = {"Lkz/sapasoft/emark/app/ui/photo/PhotoAdapter$SimpleHolder;", "Lkz/sapasoft/emark/app/ui/DataBindingViewHolder;", "Lkz/sapasoft/emark/app/domain/model/ImageDataModel;", "dataBinding", "Landroidx/databinding/ViewDataBinding;", "(Lkz/sapasoft/emark/app/ui/photo/PhotoAdapter;Landroidx/databinding/ViewDataBinding;)V", "onBind", "", "t", "app_release"}, k = 1, mv = {1, 1, 16})
@@ -128,7 +141,7 @@ public final class PhotoAdapter extends RecyclerView.Adapter<DataBindingViewHold
         final /* synthetic */ PhotoAdapter this$0;
 
         /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-        public FooterHolder(PhotoAdapter photoAdapter, ItemPhotoFooterBinding footerBinding) {
+        public FooterHolder(PhotoAdapter photoAdapter, ViewDataBinding footerBinding) {
             super(footerBinding);
             this.this$0 = photoAdapter;
         }

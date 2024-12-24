@@ -2,6 +2,9 @@ package kz.sapasoft.emark.app.ui;
 
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.decompiledapk.databinding.ItemPhotoBinding;
+
 import kotlin.Metadata;
 import kotlin.jvm.internal.Intrinsics;
 
