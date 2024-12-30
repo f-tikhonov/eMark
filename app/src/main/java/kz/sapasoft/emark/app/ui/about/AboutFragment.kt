@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.decompiledapk.R
 import dagger.android.support.DaggerFragment
+import kz.sapasoft.emark.app.BuildConfig
 import kz.sapasoft.emark.app.databinding.FragmentAboutBinding
 import kz.sapasoft.emark.app.ui.MainActivity
 import javax.inject.Inject
@@ -55,7 +56,10 @@ class AboutFragment : DaggerFragment() {
 
     private fun initView(view: View) {
         val textView = view.findViewById(R.id.tv_toolbar) as TextView?
-        Intrinsics.checkExpressionValueIsNotNull(textView, "tv_toolbar")
+        val textViewAppVersion = view.findViewById(R.id.tv_app_verion) as TextView?
+        val version = "${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE})"
+        textViewAppVersion?.text = version
+
         textView!!.text = getString(R.string.nav_item_about)
         val activity: FragmentActivity? = activity
         if (activity != null) {
