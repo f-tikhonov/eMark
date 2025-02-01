@@ -65,6 +65,8 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
         get() = `viewModel$delegate` as MarkerViewModel
 
     private var rootView: View? = null
+    private var easyImage: EasyImage? = null
+
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -88,6 +90,9 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
         initView(view)
         setListeners(view)
         setObservers()
+
+        easyImage = EasyImage.Builder(requireContext()).setCopyImagesToPublicGalleryFolder(false).allowMultiple(false).build();
+
     }
 
     private fun initView(view: View) {
@@ -296,8 +301,7 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
 
     override fun onAddPhotoClick() {
         if (checkCameraPermission()) {
-            val easyImage: EasyImage = EasyImage.Builder(requireContext()).setCopyImagesToPublicGalleryFolder(false).allowMultiple(false).build();
-            easyImage.openCameraForImage(this)
+            easyImage?.openCameraForImage(this)
         } else {
             requestCameraPermission()
         }
@@ -311,21 +315,22 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val easyImage: EasyImage = EasyImage.Builder(requireContext()).setCopyImagesToPublicGalleryFolder(false).allowMultiple(false).build();
-        val requireActivity = requireActivity()
+         val requireActivity = requireActivity()
         Intrinsics.checkExpressionValueIsNotNull(requireActivity, "requireActivity()")
-        easyImage.handleActivityResult(
+        easyImage?.handleActivityResult(
             requestCode, resultCode, data, requireActivity, object :EasyImage.Callbacks{
                 override fun onCanceled(source: MediaSource) {
-                    TODO("Not yet implemented")
+                    Log.d("easyImage", "onCanceled $source")
                 }
 
                 override fun onImagePickerError(error: Throwable, source: MediaSource) {
-                    TODO("Not yet implemented")
+                    Log.d("easyImage", "onImagePickerError $error")
                 }
 
                 override fun onMediaFilesPicked(imageFiles: Array<MediaFile>, source: MediaSource) {
-                    TODO("Not yet implemented")
+                    Log.d("easyImage", "onMediaFilesPicked $imageFiles")
+                    val markerPhotoView = requireView().findViewById<MarkerPhotoView>(R.id.view_marker_photo)
+                    markerPhotoView.addImage(imageFiles.first())
                 }
 
             }

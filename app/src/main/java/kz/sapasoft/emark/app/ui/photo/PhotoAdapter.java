@@ -133,8 +133,14 @@ public final class PhotoAdapter extends RecyclerView.Adapter<DataBindingViewHold
             getDataBinding().getRoot().setOnClickListener(new PhotoAdapter$SimpleHolder$onBind$$inlined$with$lambda$1(this, imageDataModel));
             View root = getDataBinding().getRoot();
             ImageView ivPhoto =  ((ImageView) root.findViewById(R.id.iv_photo));
+            ImageView ivDelete =  ((ImageView) root.findViewById(R.id.iv_delete));
             CustomBindingAdapterKt.loadImage(ivPhoto, imageDataModel);
-            ((ImageView) root.findViewById(R.id.iv_delete)).setOnClickListener(new PhotoAdapter$SimpleHolder$onBind$$inlined$with$lambda$2(this, imageDataModel));
+            if(imageDataModel.getFile() != null){
+                ivDelete.setVisibility(View.VISIBLE);
+            }else {
+                ivDelete.setVisibility(View.GONE);
+            }
+            ivDelete.setOnClickListener(new PhotoAdapter$SimpleHolder$onBind$$inlined$with$lambda$2(this, imageDataModel));
         }
     }
 
