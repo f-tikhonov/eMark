@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
+import kz.sapasoft.emark.app.core.Config
 import kz.sapasoft.emark.app.data.cloud.repository.BaseCloudRepository
 import kz.sapasoft.emark.app.data.cloud.repository.CloudRepository
 import kz.sapasoft.emark.app.data.cloud.rest.ApiService
@@ -26,7 +27,7 @@ class NetworkModule {
     @Provides
     fun providesRetrofit(gsonConverterFactory: GsonConverterFactory, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://emark.ktga.kz/")
+            .baseUrl(Config.INSTANCE.domain)
             .addConverterFactory(gsonConverterFactory)
             .client(okHttpClient)
             .build()
