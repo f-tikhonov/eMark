@@ -1,6 +1,7 @@
 package kz.sapasoft.emark.app.data.cloud.repository
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.room.RoomDatabase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers.IO
@@ -62,7 +63,7 @@ class CloudRepository(
     override suspend fun getMarkerList(
         i: Int,
         list: List<String?>
-    ): ResultWrapper<MutableList<MarkerModel?>?> {
+    ): ResultWrapper<List<MarkerModel>> {
         return safeApiCall(dispatcher) {
             apIs.getMarkerList(
                 GetMarkersRequest(

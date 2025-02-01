@@ -121,7 +121,6 @@ class MarkerViewModel @Inject constructor(
         requireNotNull(markerTemplateIds) { "markerTemplateIds is required" }
 
         loading.postValue(true)
-        Log.d("terra", "getAllData")
 
         launchIO {
             tagList
@@ -136,13 +135,10 @@ class MarkerViewModel @Inject constructor(
 
     suspend fun getMarker(markerModel: MarkerModel): Unit {
         if (prefsImpl.offline) {
-            Log.d("terra", "getMarker ${prefsImpl.offline}")
             markerModelData.postValue(markerModel)
             return
         }
 
-        Log.d("terra", "getMarker ${prefsImpl.offline}")
-        Log.d("terra", "markerModel.status ${markerModel.status}")
         when (markerModel.status) {
             null -> {
                 getImages(markerModel)

@@ -7,8 +7,6 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import androidx.exifinterface.media.ExifInterface;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -86,8 +84,8 @@ public final class MainActivity extends DaggerAppCompatActivity {
 
     private final void setupNavigation() {
         this.fm.beginTransaction().add((int) R.id.fl_content, this.fragment1, "1").commit();
-        this.fm.beginTransaction().add((int) R.id.fl_content, this.fragment2, ExifInterface.GPS_MEASUREMENT_2D).hide(this.fragment2).commit();
-        this.fm.beginTransaction().add((int) R.id.fl_content, this.fragment3, ExifInterface.GPS_MEASUREMENT_3D).hide(this.fragment3).commit();
+        this.fm.beginTransaction().add((int) R.id.fl_content, this.fragment2, "2").hide(this.fragment2).commit();
+        this.fm.beginTransaction().add((int) R.id.fl_content, this.fragment3, "3").hide(this.fragment3).commit();
         updateNavigationBarState(R.id.nav_item_projects);
         ((BottomNavigationView) findViewById(R.id.nav_view)).setOnNavigationItemSelectedListener(
                 new MainActivity$setupNavigation$1(this));

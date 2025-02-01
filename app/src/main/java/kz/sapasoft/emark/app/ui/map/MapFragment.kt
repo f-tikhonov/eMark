@@ -26,7 +26,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.internal.view.SupportMenu
 import androidx.core.os.bundleOf
 import androidx.core.view.InputDeviceCompat
-import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -474,7 +473,6 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
                         return
                     }
                 }
-                Log.e("SCAN_MARKER", ExifInterface.GPS_MEASUREMENT_3D)
                 val string: String = getString(R.string.location_not_found)
                 Intrinsics.checkExpressionValueIsNotNull(
                     string,

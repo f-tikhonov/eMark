@@ -2,6 +2,7 @@ package kz.sapasoft.emark.app.ui.marker
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -41,6 +42,8 @@ import kz.sapasoft.emark.app.ui.custom_views.MarkerPhotoView
 import kz.sapasoft.emark.app.ui.custom_views.MarkerTypeView
 import kz.sapasoft.emark.app.utils.Constants
 import pl.aprilapps.easyphotopicker.EasyImage
+import pl.aprilapps.easyphotopicker.MediaFile
+import pl.aprilapps.easyphotopicker.MediaSource
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.jvm.internal.Intrinsics
@@ -49,7 +52,6 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
 
     private val REQUEST_CAMERA_PERMISSION = 1
     private val TAG: String = this::class.java.simpleName
-    private val easyImage by lazy { EasyImage() }
     private val localImageList = ArrayList<ImageDataModel>()
     private val mFieldViewList = ArrayList<FieldView>()
     private var mMarkerModel: MarkerModel? = null
@@ -98,8 +100,21 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
 
     private fun setListeners(view: View) {
         (view.findViewById(R.id.btn_save) as MaterialButton).setOnClickListener {
-            // Save button logic
+            val newMarkerModel = constructNewMarkerModel()
+            if (newMarkerModel.status == null) {
+                newMarkerModel.status = Constants.MarkerStatus.EDITED
+            }
+            viewModel.saveMarkerAndImage(newMarkerModel, constructImageDataModel())
         }
+    }
+
+    fun constructImageDataModel(): List<ImageDataModel> {
+        val changedModelList = requireView().findViewById<MarkerPhotoView>(R.id.view_marker_photo).changedModelList
+        mMarkerModel?.let { markerModel ->
+            changedModelList.forEach { it.localIdParent = markerModel.idLocal }
+        } ?: throw UninitializedPropertyAccessException("mMarkerModel")
+
+        return changedModelList
     }
 
     fun fillMain(markerModel: MarkerModel) {
@@ -281,7 +296,8 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
 
     override fun onAddPhotoClick() {
         if (checkCameraPermission()) {
-          //  easyImage.openCameraForImage(this)
+            val easyImage: EasyImage = EasyImage.Builder(requireContext()).setCopyImagesToPublicGalleryFolder(false).allowMultiple(false).build();
+            easyImage.openCameraForImage(this)
         } else {
             requestCameraPermission()
         }
@@ -295,9 +311,25 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-//        EasyImage.handleActivityResult(requestCode, resultCode, data, requireActivity()) { images ->
-//            // Handle images
-//        }
+        val easyImage: EasyImage = EasyImage.Builder(requireContext()).setCopyImagesToPublicGalleryFolder(false).allowMultiple(false).build();
+        val requireActivity = requireActivity()
+        Intrinsics.checkExpressionValueIsNotNull(requireActivity, "requireActivity()")
+        easyImage.handleActivityResult(
+            requestCode, resultCode, data, requireActivity, object :EasyImage.Callbacks{
+                override fun onCanceled(source: MediaSource) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onImagePickerError(error: Throwable, source: MediaSource) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onMediaFilesPicked(imageFiles: Array<MediaFile>, source: MediaSource) {
+                    TODO("Not yet implemented")
+                }
+
+            }
+        )
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

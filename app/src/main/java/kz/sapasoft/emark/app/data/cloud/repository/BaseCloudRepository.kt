@@ -24,7 +24,7 @@ interface BaseCloudRepository {
     suspend fun getMarkerList(
         i: Int,
         list: List<String?>,
-    ): ResultWrapper<MutableList<MarkerModel?>?>
+    ): ResultWrapper<List<MarkerModel>>
 
     suspend fun getProjectList(
         i: Int,

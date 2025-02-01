@@ -20,8 +20,8 @@ data class MarkerModel(
     var fields: List<FieldModel>? = emptyList(),
     var generalId: String? = "",
     var markerType: String? = "",
-    var idLocal: String? = "",
-    var status: Constants.MarkerStatus? = Constants.MarkerStatus.NORMAL
+    var idLocal: String?,
+    var status: Constants.MarkerStatus? = null
 ) : Serializable {
 
     fun toNullable(): MarkerModelNullable {

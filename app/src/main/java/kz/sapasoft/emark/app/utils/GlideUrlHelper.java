@@ -1,6 +1,8 @@
 package kz.sapasoft.emark.app.utils;
 
 import android.content.Context;
+import android.util.Log;
+
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.Headers;
 import com.bumptech.glide.load.model.LazyHeaders;

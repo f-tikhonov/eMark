@@ -13,12 +13,10 @@ suspend fun <T> safeApiCall(
 ): ResultWrapper<T> {
     return withContext(dispatcher) {
         try {
-            Log.d("terra", "apiCall()")
             ResultWrapper.Success(apiCall())
         } catch (throwable: Throwable) {
             when (throwable) {
                 is HttpException -> {
-                    Log.d("terra", "HttpException ${throwable.message()}")
                     ResultWrapper.Error(
                         ErrorStatus.BAD_RESPONSE,
                         throwable.code(),
@@ -26,7 +24,6 @@ suspend fun <T> safeApiCall(
                     )
                 }
                 else -> {
-                    Log.d("terra", "other else ${throwable.message}")
                     ResultWrapper.Error(ErrorStatus.NOT_DEFINED, null, throwable.message)
                 }
             }

@@ -173,7 +173,7 @@ class SettingsViewModel @Inject constructor(
                         }
                     }
                     is ResultWrapper.Error -> {
-                        Log.d("terra"," ResultWrapper.Error $result" )
+                        Log.d("emark"," ResultWrapper.Error $result" )
                         //error().postValue(result)
                     }
                 }
@@ -200,7 +200,6 @@ class SettingsViewModel @Inject constructor(
                     }
                     insertTemplateEntityList(result.value)
                 } else if (result is ResultWrapper.Error) {
-                    Log.d("terra"," ResultWrapper.Error $result" )
                     //getError().postValue(result)
                 }
             }
@@ -224,10 +223,8 @@ class SettingsViewModel @Inject constructor(
                         progress.postValue(currentProgress + 100)
                     }
                 } else if (result is ResultWrapper.Error) {
-                    Log.d("terra"," ResultWrapper.Error $result" )
                    // getError().postValue(result)
                 } else {
-                    Log.d("terra"," tags elese " )
                 }
             }
         }
@@ -253,7 +250,6 @@ class SettingsViewModel @Inject constructor(
                     }
                     markerDetails
                 } else if (result is ResultWrapper.Error) {
-                    Log.d("terra"," ResultWrapper.Error $result" )
                     //getError().postValue(result)
                 }
             }
@@ -292,7 +288,6 @@ class SettingsViewModel @Inject constructor(
                             setLoadingDate()
                         }
                     } else if (result is ResultWrapper.Error) {
-                        Log.d("terra"," ResultWrapper.Error $result" )
                        // error.postValue(result)
                     }
                 }

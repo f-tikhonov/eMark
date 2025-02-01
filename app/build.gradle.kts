@@ -72,7 +72,7 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.8.1")
     implementation("com.github.MKergall:osmbonuspack:6.9.0")
 
-    implementation("com.github.jkwiecien:EasyImage:1.2.1")
+    implementation("com.github.jkwiecien:EasyImage:3.2.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0") // Latest stable version as of now
@@ -84,7 +84,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("org.osmdroid:osmdroid-android:6.1.16")
 
-    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.github.bumptech.glide:glide:4.9.0")
     implementation("com.github.bumptech.glide:annotations:4.9.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.9.0")
 

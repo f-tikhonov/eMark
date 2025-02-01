@@ -1,5 +1,7 @@
 package kz.sapasoft.emark.app.data.local.room.image;
 
+import android.util.Log;
+
 import java.util.List;
 import javax.inject.Inject;
 import kotlin.Metadata;

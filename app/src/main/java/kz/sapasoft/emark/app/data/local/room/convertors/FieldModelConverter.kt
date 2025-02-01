@@ -1,5 +1,6 @@
 package kz.sapasoft.emark.app.data.local.room.convertors
 
+import android.util.Log
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

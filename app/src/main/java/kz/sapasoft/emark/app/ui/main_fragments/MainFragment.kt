@@ -4,18 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import com.example.decompiledapk.R
 import kz.sapasoft.emark.app.ui.MainActivity
 import kz.sapasoft.emark.app.ui.about.AboutFragment
 import kz.sapasoft.emark.app.ui.base.DaggerFragmentExtended
 import kz.sapasoft.emark.app.ui.projects.ProjectsFragment
 import kz.sapasoft.emark.app.ui.settings.SettingsFragment
-import kz.sapasoft.emark.app.utils.Utils
+
+/**
+ * test12
+ * test12
+ * https://emark.ktga.kz/
+ */
 
 class MainFragment : DaggerFragmentExtended(), OnChildFragmentClickListener {
 

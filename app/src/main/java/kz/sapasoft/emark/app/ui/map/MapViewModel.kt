@@ -80,19 +80,21 @@ class MapViewModel @Inject constructor(
     fun getMarkerList(projectIds: List<String?>) {
         launchIO {
             if (prefsImpl.offline) {
-                getMarkerEntityList(projectIds?.get(0)!!)
-            } else {
-                val result = baseCloudRepository.getMarkerList(page++, projectIds)
-                when (result) {
-                    is ResultWrapper.Error -> error.postValue(result)
-                    is ResultWrapper.Success -> {
-                         if (result.value?.isNotEmpty() == true) {
-                            markerListAll.addAll(result.value as Collection<MarkerModel>)
-                            markerModelListData.postValue(markerListAll)
-                        } else {
-                            insertMarkerEntityList(projectIds?.get(0)!!, markerListAll)
-                            getMarkerEntityList(projectIds[0]!!)
-                        }
+                getMarkerEntityList(projectIds.first())
+                return@launchIO
+            }
+
+            val pageIndex = page++
+            when (val result = baseCloudRepository.getMarkerList(pageIndex, projectIds)) {
+                is ResultWrapper.Error -> error.postValue(result)
+                is ResultWrapper.Success -> {
+                    val markers = result.value
+                    if (markers?.isNotEmpty() == true) {
+                        markerListAll.addAll(markers)
+                        markerModelListData.postValue(markerListAll)
+                    } else {
+                        insertMarkerEntityList(projectIds.first(), markerListAll)
+                        getMarkerEntityList(projectIds.first())
                     }
                 }
             }
@@ -151,7 +153,10 @@ class MapViewModel @Inject constructor(
             }
 
             when (val result = baseCloudRepository.saveMarker(markerNullable)) {
-                is ResultWrapper.Error -> error.postValue(result)
+
+                is ResultWrapper.Error -> {
+                    error.postValue(result)
+                }
                 is ResultWrapper.Success -> {
                     deleteMarkerSyncById(markerModel.id)
 

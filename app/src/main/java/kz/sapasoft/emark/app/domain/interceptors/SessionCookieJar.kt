@@ -16,7 +16,7 @@ class SessionCookieJar(private val context: Context) : CookieJar {
         val cookieValues = cookies.map { it.value }.toSet()
 
         // Save cookies to shared preferences
-       // prefsImpl.setCookie(cookieValues)
+        prefsImpl.cookie  = cookieValues
 
         // Update the in-memory cookies
         mCookies.clear()

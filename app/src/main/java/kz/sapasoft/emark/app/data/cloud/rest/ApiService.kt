@@ -45,7 +45,7 @@ interface ApiService {
     @POST("marker/getList")
     suspend fun getMarkerList(
         @Body getMarkersRequest: GetMarkersRequest?,
-    ): MutableList<MarkerModel?>?
+    ): List<MarkerModel>
 
     @POST("project/getByNamePart")
     suspend fun getProjectList(
