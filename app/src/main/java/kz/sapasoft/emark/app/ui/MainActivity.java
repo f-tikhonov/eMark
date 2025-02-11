@@ -1,12 +1,20 @@
 package kz.sapasoft.emark.app.ui;
 
+import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -31,6 +39,7 @@ import okhttp3.internal.cache.DiskLruCache;
 public final class MainActivity extends DaggerAppCompatActivity {
     /* access modifiers changed from: private */
     public final String ACTION_USB_PERMISSION;
+    public final int REQUEST_BLUETOOTH_PERMISSIONS = 111;
     private final String TAG = getClass().getSimpleName();
     private HashMap _$_findViewCache;
     /* access modifiers changed from: private */
@@ -139,12 +148,41 @@ public final class MainActivity extends DaggerAppCompatActivity {
 
     /* access modifiers changed from: private */
     public final void requestPermission() {
-        PendingIntent broadcast = PendingIntent.getBroadcast(this, 0, new Intent(this.ACTION_USB_PERMISSION), PendingIntent.FLAG_IMMUTABLE);
-        Collection<UsbDevice> values = getMUsbManager().getDeviceList().values();
-        Intrinsics.checkExpressionValueIsNotNull(values, "mUsbManager.deviceList.values");
-//        for (T requestPermission : CollectionsKt.toMutableList(values)) {
-//            getMUsbManager().requestPermission(requestPermission, broadcast);
-//        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) { // Android 12+
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.BLUETOOTH_CONNECT,
+                        Manifest.permission.BLUETOOTH_SCAN
+                }, REQUEST_BLUETOOTH_PERMISSIONS);
+            } else {
+                Toast.makeText(this, "Bluetooth permissions granted", Toast.LENGTH_SHORT).show();
+            }
+        } else { // Android 11 and below
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.BLUETOOTH,
+                        Manifest.permission.BLUETOOTH_ADMIN
+                }, REQUEST_BLUETOOTH_PERMISSIONS);
+            } else {
+                Toast.makeText(this, "Bluetooth permissions granted", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_BLUETOOTH_PERMISSIONS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Bluetooth permissions granted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Bluetooth permissions denied", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private final void registerReceiver() {
