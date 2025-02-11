@@ -1,7 +1,11 @@
 package kz.sapasoft.emark.app.ui;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -21,10 +25,13 @@ import androidx.fragment.app.FragmentManager;
 import com.example.decompiledapk.R;
 import com.google.android.gms.common.internal.ServiceSpecificExtraArgs;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import dagger.android.support.DaggerAppCompatActivity;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+
 import kotlin.Lazy;
 import kotlin.LazyKt;
 import kotlin.Metadata;
@@ -56,7 +63,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
     /* access modifiers changed from: private */
     public final Fragment fragment3 = MainFragment.Companion.newInstance(3);
     private final Lazy mUsbManager$delegate;
-   // private final MainActivity$usbReceiver$1 usbReceiver;
+    // private final MainActivity$usbReceiver$1 usbReceiver;
 
     private final UsbManager getMUsbManager() {
         return (UsbManager) this.mUsbManager$delegate.getValue();
@@ -76,7 +83,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
         this.active = this.fragment2;
         this.ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
         this.mUsbManager$delegate = LazyKt.lazy(new MainActivity$mUsbManager$2(this));
-     //   this.usbReceiver = new MainActivity$usbReceiver$1(this);
+        //   this.usbReceiver = new MainActivity$usbReceiver$1(this);
     }
 
     /* access modifiers changed from: protected */
@@ -99,7 +106,6 @@ public final class MainActivity extends DaggerAppCompatActivity {
         ((BottomNavigationView) findViewById(R.id.nav_view)).setOnNavigationItemSelectedListener(
                 new MainActivity$setupNavigation$1(this));
     }
-
 
 
     /* access modifiers changed from: private */
@@ -148,27 +154,44 @@ public final class MainActivity extends DaggerAppCompatActivity {
 
     /* access modifiers changed from: private */
     public final void requestPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) { // Android 12+
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
 
                 ActivityCompat.requestPermissions(this, new String[]{
-                        Manifest.permission.BLUETOOTH_CONNECT,
-                        Manifest.permission.BLUETOOTH_SCAN
+                        Manifest.permission.BLUETOOTH_SCAN,
+                        Manifest.permission.BLUETOOTH_CONNECT
                 }, REQUEST_BLUETOOTH_PERMISSIONS);
             } else {
-                Toast.makeText(this, "Bluetooth permissions granted", Toast.LENGTH_SHORT).show();
+                enableBluetooth();
             }
-        } else { // Android 11 and below
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
-
+        } else {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{
-                        Manifest.permission.BLUETOOTH,
-                        Manifest.permission.BLUETOOTH_ADMIN
+                        Manifest.permission.ACCESS_FINE_LOCATION
                 }, REQUEST_BLUETOOTH_PERMISSIONS);
             } else {
-                Toast.makeText(this, "Bluetooth permissions granted", Toast.LENGTH_SHORT).show();
+                enableBluetooth();
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void enableBluetooth() {
+        BluetoothManager bluetoothManager = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+
+            BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
+            if (bluetoothAdapter == null) {
+                Toast.makeText(this, "Bluetooth is not supported on this device", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (!bluetoothAdapter.isEnabled()) {
+                bluetoothAdapter.enable(); // Enable Bluetooth (Requires BLUETOOTH_ADMIN permission)
+                Toast.makeText(this, "Bluetooth Enabled", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Bluetooth Already Enabled", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -178,7 +201,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_BLUETOOTH_PERMISSIONS) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Bluetooth permissions granted", Toast.LENGTH_SHORT).show();
+                enableBluetooth();
             } else {
                 Toast.makeText(this, "Bluetooth permissions denied", Toast.LENGTH_SHORT).show();
             }
@@ -190,11 +213,11 @@ public final class MainActivity extends DaggerAppCompatActivity {
         intentFilter.addAction(this.ACTION_USB_PERMISSION);
         intentFilter.addAction("android.hardware.usb.action.USB_DEVICE_ATTACHED");
         intentFilter.addAction("android.hardware.usb.action.USB_DEVICE_DETACHED");
-       // registerReceiver(this.usbReceiver, intentFilter);
+        // registerReceiver(this.usbReceiver, intentFilter);
     }
 
     private final void unregisterReceiver() {
-      //  unregisterReceiver(this.usbReceiver);
+        //  unregisterReceiver(this.usbReceiver);
     }
 
     /* access modifiers changed from: protected */
