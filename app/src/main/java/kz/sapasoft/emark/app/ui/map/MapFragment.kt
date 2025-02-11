@@ -76,6 +76,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     private var mIsManualNavigation = false
 
     private var rootView: View? = null
+    private var mapView: MapView? = null
 
     /* access modifiers changed from: private */
     @JvmField
@@ -142,6 +143,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         bundle: Bundle?
     ): View? {
         rootView = layoutInflater.inflate(R.layout.fragment_map, viewGroup, false)
+        mapView = rootView?.findViewById(R.id.map_view)
         return rootView
     }
 
@@ -221,10 +223,9 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
             mMarkerModelList.clear()
             mMarkerList.clear()
 
-            val mapView = requireView().findViewById<MapView>(R.id.map_view)
-            mapView.overlays.clear()
-            mapView.overlays.add(mMyLocationOverlay)
-            mapView.invalidate()
+            mapView?.overlays?.clear()
+            mapView?.overlays?.add(mMyLocationOverlay)
+            mapView?.invalidate()
 
             // Add map markers from the updated list
             addMapMarkers(markerModels)
@@ -238,7 +239,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     /* access modifiers changed from: private */
     fun showSnackBar(str: String?) {
         Snackbar.make(
-            rootView?.findViewById(R.id.map_view) as MapView as View,
+            mapView!!,
             "str as CharSequence?",
             BaseTransientBottomBar.LENGTH_INDEFINITE
         ).show()
@@ -263,6 +264,11 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         )
     }
 
+    override fun onResume() {
+        super.onResume()
+        mapView?.onResume()
+    }
+
     @SuppressLint("CutPasteId")
     private fun mapInit(view: View) {
         Configuration.getInstance()
@@ -271,60 +277,29 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         Intrinsics.checkExpressionValueIsNotNull(instance, "Configuration.getInstance()")
         instance.setUserAgentValue(BuildConfig.APPLICATION_ID)
         val myLocationNewOverlay =
-            MyLocationNewOverlay(view.findViewById(R.id.map_view) as MapView)
+            MyLocationNewOverlay(mapView)
         mMyLocationOverlay = myLocationNewOverlay
         if (myLocationNewOverlay != null) {
             myLocationNewOverlay.enableMyLocation()
         }
-        val mapView: MapView =
-            view.findViewById(R.id.map_view) as MapView
-        Intrinsics.checkExpressionValueIsNotNull(mapView, "map_view")
-        mapView.getOverlays().clear()
-        val mapView2: MapView =
-            view.findViewById(R.id.map_view) as MapView
-        Intrinsics.checkExpressionValueIsNotNull(mapView2, "map_view")
-        mapView2.getOverlays().add(mMyLocationOverlay)
-        (view.findViewById<MapView>(R.id.map_view) as MapView).setTileSource(
-            TileSourceFactory.MAPNIK
-        )
-        (view.findViewById<MapView>(R.id.map_view) as MapView).setMultiTouchControls(
-            true
-        )
-        val mapView3: MapView =
-            view.findViewById(R.id.map_view) as MapView
-        Intrinsics.checkExpressionValueIsNotNull(mapView3, "map_view")
-        mapView3.setMaxZoomLevel(java.lang.Double.valueOf(22.0))
-        val mapView4: MapView =
-            view.findViewById(R.id.map_view) as MapView
-        Intrinsics.checkExpressionValueIsNotNull(mapView4, "map_view")
-        mapView4.setMinZoomLevel(java.lang.Double.valueOf(5.0))
-        val mapView5: MapView =
-            view.findViewById(R.id.map_view) as MapView
-        Intrinsics.checkExpressionValueIsNotNull(mapView5, "map_view")
-        mapView5.getController().setZoom(5.0)
-        val mapView6: MapView =
-            view.findViewById(R.id.map_view) as MapView
-        Intrinsics.checkExpressionValueIsNotNull(mapView6, "map_view")
-        mapView6.getController().setCenter(kzGeoPoint)
-        val mapView7: MapView =
-            view.findViewById(R.id.map_view) as MapView
-        Intrinsics.checkExpressionValueIsNotNull(mapView7, "map_view")
-        mapView7.getZoomController()
-            .setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT)
+        mapView?.getOverlays()?.clear()
+        mapView?.getOverlays()?.add(mMyLocationOverlay)
+        mapView?.setTileSource(TileSourceFactory.MAPNIK)
+        mapView?.setMultiTouchControls(true)
+        mapView?.setMaxZoomLevel(java.lang.Double.valueOf(22.0))
+        mapView?.setMinZoomLevel(java.lang.Double.valueOf(5.0))
+        mapView?.getController()?.setZoom(5.0)
+        mapView?.getController()?.setCenter(kzGeoPoint)
+        mapView?.getZoomController()
+            ?.setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT)
     }
 
     private fun moveCamera(geoPoint: GeoPoint?, d: Double?) {
         if (geoPoint != null) {
             if (d != null) {
-                val mapView: MapView =
-                    rootView?.findViewById(R.id.map_view) as MapView
-                Intrinsics.checkExpressionValueIsNotNull(mapView, "map_view")
-                mapView.getController().setZoom(12.0)
+                mapView?.getController()?.setZoom(12.0)
             }
-            val mapView2: MapView =
-                rootView?.findViewById(R.id.map_view) as MapView
-            Intrinsics.checkExpressionValueIsNotNull(mapView2, "map_view")
-            mapView2.getController().setCenter(geoPoint)
+            mapView?.getController()?.setCenter(geoPoint)
         }
     }
 
@@ -341,9 +316,8 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         }
         val radiusMarkerClusterer2: RadiusMarkerClusterer? = poiMarkers
         radiusMarkerClusterer2?.setRadius(ItemTouchHelper.Callback.DEFAULT_DRAG_ANIMATION_DURATION)
-        val mapView: MapView = rootView?.findViewById(R.id.map_view)!!
-        Intrinsics.checkExpressionValueIsNotNull(mapView, "map_view")
-        mapView.overlays.add(poiMarkers)
+
+        mapView?.overlays?.add(poiMarkers)
         for (next in list) {
            // val status: Constants.MarkerStatus = next.status
             val status = Constants.MarkerStatus.NORMAL
@@ -360,7 +334,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     }
 
     private fun addGasMarkerToMapMarkers(markerModel: MarkerModel, i: Int) {
-        val marker = Marker(rootView?.findViewById(R.id.map_view) as MapView)
+        val marker = Marker(mapView)
         val location: List<Double>? = markerModel.location
         if (location == null) {
             Intrinsics.throwNpe()
@@ -487,7 +461,6 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         return if (mIsManualNavigation) {
             val location = Location("map_center").apply {
                 accuracy = 0.0f
-                val mapView = rootView?.findViewById<MapView>(R.id.map_view)
                 val mapCenter = mapView?.mapCenter
                 latitude = mapCenter?.latitude!!
                 longitude = mapCenter?.longitude!!
@@ -563,21 +536,16 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
                 showSnackBar(string)
                 return
             }
-            val mapView: MapView =
-                rootView?.findViewById(R.id.map_view) as MapView
-            Intrinsics.checkExpressionValueIsNotNull(mapView, "map_view")
-            mapView.getOverlays().remove(mMyLocationOverlay)
+            mapView?.getOverlays()?.remove(mMyLocationOverlay)
             val myLocationNewOverlay =
-                MyLocationNewOverlay(rootView?.findViewById(R.id.map_view) as MapView)
+                MyLocationNewOverlay(mapView)
             mMyLocationOverlay = myLocationNewOverlay
             if (myLocationNewOverlay != null) {
                 myLocationNewOverlay.enableMyLocation()
             }
-            val mapView2: MapView =
-                rootView?.findViewById(R.id.map_view) as MapView
-            Intrinsics.checkExpressionValueIsNotNull(mapView2, "map_view")
-            mapView2.getOverlays().add(mMyLocationOverlay)
-            (rootView?.findViewById(R.id.map_view) as MapView).invalidate()
+            Intrinsics.checkExpressionValueIsNotNull(mapView, "map_view")
+            mapView?.getOverlays()?.add(mMyLocationOverlay)
+            mapView?.invalidate()
         }
     }
 
@@ -587,28 +555,12 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
             if (mIsManualNavigation) {
                 val location = Location("map_center")
                 location.accuracy = 0.0f
-                val mapView: MapView =
-                    rootView?.findViewById(R.id.map_view) as MapView
-                Intrinsics.checkExpressionValueIsNotNull(mapView, "map_view")
-                val mapCenter: IGeoPoint = mapView.getMapCenter()
-                Intrinsics.checkExpressionValueIsNotNull(mapCenter, "map_view.mapCenter")
-                location.latitude = mapCenter.getLatitude()
-                val mapView2: MapView =
-                    rootView?.findViewById(R.id.map_view) as MapView
-                Intrinsics.checkExpressionValueIsNotNull(mapView2, "map_view")
-                val mapCenter2: IGeoPoint = mapView2.getMapCenter()
-                Intrinsics.checkExpressionValueIsNotNull(mapCenter2, "map_view.mapCenter")
+                val mapCenter: IGeoPoint? = mapView?.getMapCenter()
+                location.latitude = mapCenter?.getLatitude()!!
+                val mapCenter2: IGeoPoint = mapView?.getMapCenter()!!
                 location.longitude = mapCenter2.getLongitude()
-                val mapView3: MapView =
-                    rootView?.findViewById(R.id.map_view) as MapView
-                Intrinsics.checkExpressionValueIsNotNull(mapView3, "map_view")
-                val mapCenter3: IGeoPoint = mapView3.getMapCenter()
-                Intrinsics.checkExpressionValueIsNotNull(mapCenter3, "map_view.mapCenter")
-                val mapView4: MapView =
-                    rootView?.findViewById(R.id.map_view) as MapView
-                Intrinsics.checkExpressionValueIsNotNull(mapView4, "map_view")
-                val mapCenter4: IGeoPoint = mapView4.getMapCenter()
-                Intrinsics.checkExpressionValueIsNotNull(mapCenter4, "map_view.mapCenter")
+                val mapCenter3: IGeoPoint = mapView!!.getMapCenter()
+                val mapCenter4: IGeoPoint = mapView!!.getMapCenter()
                 arrayListOf<Double>(
                     java.lang.Double.valueOf(mapCenter3.getLatitude()),
                     java.lang.Double.valueOf(mapCenter4.getLongitude())
