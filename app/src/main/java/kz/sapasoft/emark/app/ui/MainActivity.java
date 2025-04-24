@@ -4,6 +4,10 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -11,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.hardware.usb.UsbManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -59,7 +64,11 @@ public final class MainActivity extends DaggerAppCompatActivity {
     private final Lazy mUsbManager$delegate;
     // private final MainActivity$usbReceiver$1 usbReceiver;
 
-    private static final int REQUEST_ENABLE_BT = 1001;
+    // private static final int REQUEST_ENABLE_BT = 1001;
+
+    private static final int REQUEST_ENABLE_BT = 1;
+    private BluetoothAdapter bluetoothAdapter;
+    private BluetoothLeScanner bluetoothLeScanner;
 
     private final UsbManager getMUsbManager() {
         return (UsbManager) this.mUsbManager$delegate.getValue();
@@ -92,7 +101,41 @@ public final class MainActivity extends DaggerAppCompatActivity {
         utils.hideKeyboard(bottomNavigationView);
         registerReceiver();
         requestPermission();
+        startScan();
     }
+
+    private void startScan() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        bluetoothLeScanner.startScan(scanCallback);
+    }
+
+    private void stopScan() {
+        bluetoothLeScanner.stopScan(scanCallback);
+    }
+
+    private final ScanCallback scanCallback = new ScanCallback() {
+        @Override
+        public void onScanResult(int callbackType, ScanResult result) {
+            super.onScanResult(callbackType, result);
+            Log.d("BLE", "Найдено устройство: " + result.getDevice().getName());
+        }
+
+        @Override
+        public void onBatchScanResults(java.util.List<ScanResult> results) {
+            for (ScanResult sr : results) {
+                Log.d("BLE", "Устройство: " + sr.getDevice().getName());
+            }
+        }
+    };
 
     private final void setupNavigation() {
         this.fm.beginTransaction().add((int) R.id.fl_content, this.fragment1, "1").commit();
@@ -193,6 +236,15 @@ public final class MainActivity extends DaggerAppCompatActivity {
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         } else {
             Toast.makeText(this, "Bluetooth Already Enabled", Toast.LENGTH_SHORT).show();
+        }
+
+        this.bluetoothAdapter = bluetoothAdapter;
+        // Проверка поддержки BLE
+        if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        } else {
+            bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
         }
     }
 
