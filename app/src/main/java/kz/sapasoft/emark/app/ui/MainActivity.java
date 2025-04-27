@@ -31,6 +31,7 @@ import dagger.android.support.DaggerAppCompatActivity;
 import kotlin.Lazy;
 import kotlin.LazyKt;
 import kotlin.Metadata;
+import kotlin.Suppress;
 import kotlin.jvm.internal.Intrinsics;
 import kz.sapasoft.emark.app.ui.main_fragments.MainFragment;
 import kz.sapasoft.emark.app.utils.Utils;
@@ -57,7 +58,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
     /* access modifiers changed from: private */
     public final Fragment fragment3 = MainFragment.Companion.newInstance(3);
     private final Lazy mUsbManager$delegate;
-    // private final MainActivity$usbReceiver$1 usbReceiver;
+     private final UsbReceiver usbReceiver;
 
     private static final int REQUEST_ENABLE_BT = 1001;
 
@@ -79,7 +80,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
         this.active = this.fragment2;
         this.ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
         this.mUsbManager$delegate = LazyKt.lazy(new MainActivity$mUsbManager$2(this));
-        //   this.usbReceiver = new MainActivity$usbReceiver$1(this);
+        this.usbReceiver = new UsbReceiver(this);
     }
 
     /* access modifiers changed from: protected */
@@ -225,11 +226,15 @@ public final class MainActivity extends DaggerAppCompatActivity {
         intentFilter.addAction(this.ACTION_USB_PERMISSION);
         intentFilter.addAction("android.hardware.usb.action.USB_DEVICE_ATTACHED");
         intentFilter.addAction("android.hardware.usb.action.USB_DEVICE_DETACHED");
-        // registerReceiver(this.usbReceiver, intentFilter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // API 33
+            registerReceiver(usbReceiver, intentFilter, Context.RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(usbReceiver, intentFilter);
+        }
     }
 
     private final void unregisterReceiver() {
-        //  unregisterReceiver(this.usbReceiver);
+         unregisterReceiver(this.usbReceiver);
     }
 
     /* access modifiers changed from: protected */
