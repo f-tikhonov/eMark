@@ -3,7 +3,12 @@ package kz.sapasoft.emark.app.ui;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
@@ -70,6 +75,37 @@ public final class MainActivity extends DaggerAppCompatActivity {
     private static final int REQUEST_ENABLE_BT = 1;
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothLeScanner bluetoothLeScanner;
+    private BluetoothDevice targetDevice;
+
+    private BluetoothGatt bluetoothGatt;
+
+    private final BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
+
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            if (newState == BluetoothProfile.STATE_CONNECTED) {
+                Log.d("BLE", "Успешное подключение к устройству!");
+                bluetoothGatt.discoverServices(); // Начать поиск сервисов
+            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                Log.d("BLE", "Устройство отключено");
+                bluetoothGatt.close();
+                bluetoothGatt = null;
+            }
+        }
+
+        @Override
+        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                Log.d("BLE", "Сервисы найдены!");
+                for (BluetoothGattService service : gatt.getServices()) {
+                    Log.d("BLE", "Service UUID: " + service.getUuid());
+                    // Здесь можно читать характеристики, если нужно
+                }
+            } else {
+                Log.e("BLE", "Ошибка поиска сервисов: " + status);
+            }
+        }
+    };
 
     private final UsbManager getMUsbManager() {
         return (UsbManager) this.mUsbManager$delegate.getValue();
@@ -128,6 +164,22 @@ public final class MainActivity extends DaggerAppCompatActivity {
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
             Log.d("BLE", "Найдено устройство: " + result.getDevice().getName());
+            BluetoothDevice device = result.getDevice();
+            String deviceName = device.getName();
+
+            if (deviceName != null && deviceName.startsWith("3M-")) {
+                Log.d("BLE", "Найдено целевое устройство: " + deviceName);
+                targetDevice = device;
+                stopScan(); // Остановить сканирование перед подключением
+                connectToDevice();
+            }
+        }
+
+        private void connectToDevice() {
+            if (targetDevice != null) {
+//                bluetoothGatt = targetDevice.connectGatt(this, false, gattCallback);
+//                Toast.makeText(this, targetDevice.getName(), Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
