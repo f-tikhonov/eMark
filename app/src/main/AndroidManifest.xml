@@ -8,8 +8,8 @@
     android:versionName="2.0.7">
 
     <uses-sdk
-        android:minSdkVersion="17"
-        android:targetSdkVersion="30" />
+        android:minSdkVersion="34"
+        android:targetSdkVersion="34" />
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
