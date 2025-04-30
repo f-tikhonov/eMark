@@ -68,6 +68,7 @@ import kotlin.jvm.internal.Intrinsics
 class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     UsbSerialInterface.UsbReadCallback,
     OnNewDeviceAttached {
+
     private val REQUEST_LOCATION_PERMISSIONS = 1
     private val TAG: String
     private var `_$_findViewCache`: HashMap<*, *>? = null
