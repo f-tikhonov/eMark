@@ -34,8 +34,9 @@ public class MarkerData {
             data.longitude = Double.parseDouble(parts[6]);
             data.description = parts.length > 7 ? parts[7].replace("\"", "") : "";
             data.status = parts.length > 8 ? parts[8] : "";
+            Log.e("MarkerData", "Успешный парсинг: " + data);
         } catch (Exception e) {
-            Log.e("MarkerParse", "Ошибка парсинга: " + e.getMessage());
+            Log.e("MarkerData", "Ошибка парсинга: " + e.getMessage());
             return null;
         }
 

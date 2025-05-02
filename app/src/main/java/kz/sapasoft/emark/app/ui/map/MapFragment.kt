@@ -2,6 +2,8 @@ package kz.sapasoft.emark.app.ui.map
 
 //import com.hoho.android.usbserial.driver.UsbSerialDriver
 import android.annotation.SuppressLint
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
@@ -20,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -39,6 +42,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.hoho.android.usbserial.driver.UsbSerialDriver
 import com.hoho.android.usbserial.driver.UsbSerialProber
 import kz.sapasoft.emark.app.BuildConfig
+import kz.sapasoft.emark.app.core.BluetoothService
+import kz.sapasoft.emark.app.core.BluetoothServiceCallback
 import kz.sapasoft.emark.app.domain.model.MarkerModel
 import kz.sapasoft.emark.app.domain.model.ProjectModel
 import kz.sapasoft.emark.app.ui.MainActivity
@@ -49,6 +54,7 @@ import kz.sapasoft.emark.app.ui.marker.OnMarkerChangeListener
 import kz.sapasoft.emark.app.utils.Constants
 import kz.sapasoft.emark.app.utils.MarkerDrawer
 import kz.sapasoft.emark.app.utils.Utils
+import okhttp3.internal.cache.DiskLruCache
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer
 import org.osmdroid.config.Configuration
@@ -60,6 +66,7 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.io.ByteArrayOutputStream
+import java.lang.Exception
 import java.nio.charset.Charset
 import javax.inject.Inject
 import kotlin.jvm.internal.Intrinsics
@@ -152,6 +159,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         Intrinsics.checkParameterIsNotNull(view, "view")
         super.onViewCreated(view, bundle)
         setHasOptionsMenu(true);
+        handleBluetoothConnectionAndRead()
         val textView = view.findViewById(R.id.tv_toolbar) as TextView
         Intrinsics.checkExpressionValueIsNotNull(textView, "tv_toolbar")
         textView.setText(getString(R.string.map))
@@ -177,6 +185,8 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
             throw TypeCastException("null cannot be cast to non-null type kz.sapasoft.emark.app.ui.MainActivity")
         }
         throw TypeCastException("null cannot be cast to non-null type kz.sapasoft.emark.app.ui.MainActivity")
+
+
     }
 
     private val projectModel: ProjectModel
@@ -188,6 +198,33 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
             }
             throw TypeCastException("null cannot be cast to non-null type kz.sapasoft.emark.app.domain.model.ProjectModel")
         }
+
+    @SuppressLint("MissingPermission")
+    private fun handleBluetoothConnectionAndRead(){
+        val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+
+        val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
+        pairedDevices?.forEach { device ->
+            Log.d("BLE", "getBLEAdapter device ${device.name}")
+            if (device.name?.contains("3M") == true) { // или device.name == "3M" для точного совпадения
+                BluetoothService(requireContext(), device, object :BluetoothServiceCallback{
+                    override fun onSuccess(line: String?) {
+                        if(line != null) {
+                            addMarker(line)
+                        }
+                    }
+                    override fun onError(e: Exception?) {
+                        Log.d("BLE", "BluetoothServiceCallback onError ${e?.message}")
+                        Toast.makeText(requireContext(), "BluetoothService error ${e?.message} ", Toast.LENGTH_LONG).show()
+                    }
+
+                }).connectAndRead()
+            }
+        }
+
+       //  Предполагается, что bluetoothSocket уже инициализирован где-то ранее
+       // val outputStream: OutputStream = bluetoothSocket.outputStream
+    }
 
     private fun setListeners() {
         val systemService: Any = requireContext().getSystemService(android.content.Context.USB_SERVICE)
@@ -408,54 +445,75 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     }
 
     override fun onReceivedData(bArr: ByteArray) {
-        if (bArr != null) {
-           // Log.e("SCAN_MARKER", DiskLruCache.VERSION_1)
-            buffer.write(bArr)
-            val byteArray = buffer.toByteArray()
-            Intrinsics.checkExpressionValueIsNotNull(byteArray, "buffer.toByteArray()")
-            val str = String(byteArray, Charset.defaultCharset())
+        Log.e("SCAN_MARKER", DiskLruCache.VERSION_1)
+        buffer.write(bArr)
+        val byteArray = buffer.toByteArray()
+        Intrinsics.checkExpressionValueIsNotNull(byteArray, "buffer.toByteArray()")
+        val str = String(byteArray, Charset.defaultCharset())
+        Log.e("SCAN_MARKER", str)
+        var d: Double? = null
+        if (str.contains("DL,08,", ignoreCase = false)) {
             Log.e("SCAN_MARKER", str)
-            var d: Double? = null
-            if (str.contains("DL,08,", ignoreCase = false)) {
-                Log.e("SCAN_MARKER", str)
-                buffer.reset()
-                if (getMapLocation() != null) {
-                    val location = getMapLocation()
-                    if (location != null) {
-                        d = java.lang.Double.valueOf(location.latitude)
+            buffer.reset()
+            if (getMapLocation() != null) {
+                val location = getMapLocation()
+                if (location != null) {
+                    d = java.lang.Double.valueOf(location.latitude)
+                }
+                if (d != null) {
+                    val location2 = this.getMapLocation()
+                    if (location2 == null) {
+                        Intrinsics.throwNpe()
                     }
-                    if (d != null) {
-                        val location2 = this.getMapLocation()
-                        if (location2 == null) {
-                            Intrinsics.throwNpe()
+                    if (location2!!.accuracy > 5f) {
+                        Log.e("SCAN_MARKER", "4")
+                        val activity: FragmentActivity? = getActivity()
+                        activity?.runOnUiThread {
+                            val location = getMapLocation() ?: throw NullPointerException("Location is null")
+                            alertLowAccuracy(str, location)
                         }
-                        if (location2!!.accuracy > 5f) {
-                            Log.e("SCAN_MARKER", "4")
-                            val activity: FragmentActivity? = getActivity()
-                            activity?.runOnUiThread {
-                                val location = getMapLocation() ?: throw NullPointerException("Location is null")
-                                alertLowAccuracy(str, location)
-                            }
-                            return
-                        }
-                        Log.e("SCAN_MARKER", "5")
-                        val viewModel = viewModel
-                        val location3 = this.getMapLocation()
-                        if (location3 == null) {
-                            Intrinsics.throwNpe()
-                        }
-                        openMarkerFragment(viewModel.getMakerModelFromByteStr(str, location3)!!)
                         return
                     }
+                    Log.e("SCAN_MARKER", "5")
+                    val viewModel = viewModel
+                    val location3 = this.getMapLocation()
+                    if (location3 == null) {
+                        Intrinsics.throwNpe()
+                    }
+                    openMarkerFragment(viewModel.getMarkerModelFromByteStr(str, location3)!!)
+                    return
                 }
-                val string: String = getString(R.string.location_not_found)
-                Intrinsics.checkExpressionValueIsNotNull(
-                    string,
-                    "getString(R.string.location_not_found)"
-                )
-                showSnackBar(string)
             }
+            val string: String = getString(R.string.location_not_found)
+            Intrinsics.checkExpressionValueIsNotNull(
+                string,
+                "getString(R.string.location_not_found)"
+            )
+            showSnackBar(string)
         }
+    }
+
+    private fun addMarker(str: String){
+        val location2 = this.getMapLocation()
+        if (location2 == null) {
+            Intrinsics.throwNpe()
+        }
+        if (location2!!.accuracy > 5f) {
+            Log.e("addMarker", "4")
+            val activity: FragmentActivity? = getActivity()
+            activity?.runOnUiThread {
+                val location = getMapLocation() ?: throw NullPointerException("Location is null")
+                alertLowAccuracy(str, location)
+            }
+            return
+        }
+        Log.e("addMarker", "5")
+        val viewModel = viewModel
+        val location3 = this.getMapLocation()
+        if (location3 == null) {
+            Intrinsics.throwNpe()
+        }
+        openMarkerFragment(viewModel.getMarkerModelFromByteStr(str, location3)!!)
     }
 
     fun getMapLocation(): Location? {
@@ -485,7 +543,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         )
         builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
             val location = getMapLocation() ?: throw NullPointerException("Location is null")
-            val markerModel = viewModel.getMakerModelFromByteStr(str, location)
+            val markerModel = viewModel.getMarkerModelFromByteStr(str, location)
             openMarkerFragment(markerModel!!)
             dialog.dismiss()
         }
@@ -575,6 +633,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         }
 
     override fun onNewDeviceAttached() {
+        Log.d("SCAN_MARKER", "onNewDeviceAttached")
         setListeners()
     }
 

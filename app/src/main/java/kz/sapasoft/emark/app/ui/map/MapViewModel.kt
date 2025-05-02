@@ -237,28 +237,27 @@ class MapViewModel @Inject constructor(
     val markerSize: Float
         get() = prefsImpl.markerSize
 
-    fun getMakerModelFromByteStr(str: String?, location: Location?): MarkerModel? {
-//        String str2;
-//        String str3 = str;
-//        Intrinsics.checkParameterIsNotNull(str3, "string");
-//        Intrinsics.checkParameterIsNotNull(location, FirebaseAnalytics.Param.LOCATION);
-//        Regex regex = new Regex("(?<=ID# : )(.*)");
-//        Regex regex2 = new Regex("(?<=Model : )(.*)");
-//        CharSequence charSequence = str3;
-//        MatchResult find$default = Regex.find$default(regex, charSequence, 0, 2, (Object) null);
-//        String value = find$default != null ? find$default.getValue() : null;
-//        MatchResult find$default2 = Regex.find$default(regex2, charSequence, 0, 2, (Object) null);
-//        if (find$default2 == null || (str2 = find$default2.getValue()) == null) {
-//            str2 = "1405-XR";
-//        }
-//        String str4 = str2;
-//        if (value != null && !Pattern.compile("[a-zA-Z0-9]+").matcher(value).find()) {
-//            value = UUID.randomUUID().toString();
-//        }
-//        String str5 = value;
-//        String uuid = UUID.randomUUID().toString();
-//        Intrinsics.checkExpressionValueIsNotNull(uuid, "UUID.randomUUID().toString()");
-//        return new MarkerModel(uuid, (Long) null, (String) null, str5, str4, (String) null, (String) null, (List<String>) null, (Double) null, CollectionsKt.arrayListOf(Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude())), (List<FieldModel>) null, str5, (String) null, (String) null, Constants.MarkerStatus.NEW);
-        return null
+    fun getMarkerModelFromByteStr(str: String?, location: Location?): MarkerModel? {
+        if (str.isNullOrEmpty() || location == null) return null
+
+        val idRegex = Regex("(?<=ID# : )(.*)")
+        val modelRegex = Regex("(?<=Model : )(.*)")
+
+        val id = idRegex.find(str)?.value?.takeIf {
+            Regex("[a-zA-Z0-9]+").containsMatchIn(it)
+        } ?: UUID.randomUUID().toString()
+
+        val model = modelRegex.find(str)?.value ?: "1405-XR"
+
+        val uuid = UUID.randomUUID().toString()
+
+        return MarkerModel(
+            idLocal = uuid,
+            id = id,
+            markerModel = model,
+            location = listOf(location.latitude, location.longitude),
+            markerId = id,
+            status = Constants.MarkerStatus.NEW
+        )
     }
 }

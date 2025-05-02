@@ -23,41 +23,40 @@ public class BluetoothService {
     private BluetoothSocket bluetoothSocket;
     private BluetoothDevice device;
 
+    private BluetoothServiceCallback callback;
+
     private Context context;
 
-    public BluetoothService(Context context, BluetoothDevice device) {
+    public BluetoothService(Context context, BluetoothDevice device, BluetoothServiceCallback callback) {
         this.context = context.getApplicationContext(); // во избежание утечек памяти
         this.device = device;
+        this.callback = callback;
     }
     public void connectAndRead() {
         new Thread(() -> {
             try {
-                if (ActivityCompat.checkSelfPermission(this.context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
                 bluetoothSocket = device.createRfcommSocketToServiceRecord(SPP_UUID);
                 bluetoothSocket.connect();
 
                 InputStream inputStream = bluetoothSocket.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
+                StringBuilder fullData = new StringBuilder();
                 String line;
+
                 while ((line = reader.readLine()) != null) {
-                    Log.d("BLE_SPP", "Принято: " + line);
+                    fullData.append(line).append("\n"); // собираем все строки в одну
                 }
 
                 reader.close();
                 bluetoothSocket.close();
 
+                // Вызываем callback один раз с полной строкой
+                callback.onSuccess(fullData.toString().trim());
+
             } catch (IOException e) {
-                Log.e("BLE_SPP", "Ошибка подключения/чтения: " + e.getMessage(), e);
+                Log.e("BLE", "Ошибка подключения/чтения: " + e.getMessage(), e);
+                callback.onError(e);
             }
         }).start();
     }
