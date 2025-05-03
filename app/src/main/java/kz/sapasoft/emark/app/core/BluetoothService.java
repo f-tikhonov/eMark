@@ -1,6 +1,7 @@
 package kz.sapasoft.emark.app.core;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.pm.PackageManager;
@@ -18,7 +19,9 @@ import android.content.Context;
 
 public class BluetoothService {
 
-    private static final UUID SPP_UUID =
+    private static BluetoothService instance;
+
+    public static final UUID SPP_UUID =
             UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // стандартный UUID SPP
     private BluetoothSocket bluetoothSocket;
     private BluetoothDevice device;
@@ -27,15 +30,16 @@ public class BluetoothService {
 
     private Context context;
 
-    public BluetoothService(Context context, BluetoothDevice device, BluetoothServiceCallback callback) {
+    private BluetoothService(Context context, BluetoothDevice device, BluetoothServiceCallback callback) {
         this.context = context.getApplicationContext(); // во избежание утечек памяти
         this.device = device;
         this.callback = callback;
     }
-    public void connectAndRead() {
+    @SuppressLint("MissingPermission")
+    public void connectAndRead(UUID uuid) {
         new Thread(() -> {
             try {
-                bluetoothSocket = device.createRfcommSocketToServiceRecord(SPP_UUID);
+                bluetoothSocket = device.createRfcommSocketToServiceRecord(uuid);
                 bluetoothSocket.connect();
 
                 InputStream inputStream = bluetoothSocket.getInputStream();
@@ -59,5 +63,16 @@ public class BluetoothService {
                 callback.onError(e);
             }
         }).start();
+    }
+
+    public static synchronized BluetoothService getInstance(Context context, BluetoothDevice device, BluetoothServiceCallback callback) {
+        if (instance == null) {
+            instance = new BluetoothService(context, device, callback);
+        } else {
+            instance.context = context.getApplicationContext();
+            instance.device = device;
+            instance.callback = callback;
+        }
+        return instance;
     }
 }

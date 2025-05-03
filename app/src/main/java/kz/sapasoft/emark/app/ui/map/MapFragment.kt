@@ -43,6 +43,7 @@ import com.hoho.android.usbserial.driver.UsbSerialDriver
 import com.hoho.android.usbserial.driver.UsbSerialProber
 import kz.sapasoft.emark.app.BuildConfig
 import kz.sapasoft.emark.app.core.BluetoothService
+import kz.sapasoft.emark.app.core.BluetoothService.SPP_UUID
 import kz.sapasoft.emark.app.core.BluetoothServiceCallback
 import kz.sapasoft.emark.app.domain.model.MarkerModel
 import kz.sapasoft.emark.app.domain.model.ProjectModel
@@ -68,6 +69,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
 import java.nio.charset.Charset
+import java.util.UUID
 import javax.inject.Inject
 import kotlin.jvm.internal.Intrinsics
 
@@ -205,24 +207,32 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
 
         val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
         pairedDevices?.forEach { device ->
-            Log.d("BLE", "getBLEAdapter device ${device.name}")
-            if (device.name?.contains("3M") == true) { // или device.name == "3M" для точного совпадения
-                BluetoothService(requireContext(), device, object :BluetoothServiceCallback{
+            Log.d("BLE", "Found device: ${device.name}")
+
+            device.uuids?.forEach {
+                Log.d("BLE", "UUID for ${device.name}: ${it.uuid}")
+            }
+
+            if (device.name?.contains("Galaxy") == true) {
+                val availableUuids = device.uuids
+                val uuidToUse = availableUuids?.firstOrNull()?.uuid ?: SPP_UUID
+
+                BluetoothService.getInstance(requireContext(), device, object : BluetoothServiceCallback {
                     override fun onSuccess(line: String?) {
-                        if(line != null) {
+                         if (line != null) {
                             addMarker(line)
                         }
                     }
-                    override fun onError(e: Exception?) {
-                        Log.d("BLE", "BluetoothServiceCallback onError ${e?.message}")
-                        Toast.makeText(requireContext(), "BluetoothService error ${e?.message} ", Toast.LENGTH_LONG).show()
-                    }
 
-                }).connectAndRead()
+                    override fun onError(e: Exception?) {
+                        Toast.makeText(requireContext(), "BluetoothService error ${e?.message}", Toast.LENGTH_LONG).show()
+                    }
+                }).connectAndRead(uuidToUse)
             }
         }
 
-       //  Предполагается, что bluetoothSocket уже инициализирован где-то ранее
+
+        //  Предполагается, что bluetoothSocket уже инициализирован где-то ранее
        // val outputStream: OutputStream = bluetoothSocket.outputStream
     }
 
