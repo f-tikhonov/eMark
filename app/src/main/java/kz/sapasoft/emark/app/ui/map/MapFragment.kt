@@ -213,7 +213,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
                 Log.d("BLE", "UUID for ${device.name}: ${it.uuid}")
             }
 
-            if (device.name?.contains("Galaxy") == true) {
+            if (device.name?.contains("3M") == true) {
                 val availableUuids = device.uuids
                 val uuidToUse = availableUuids?.firstOrNull()?.uuid ?: SPP_UUID
 
