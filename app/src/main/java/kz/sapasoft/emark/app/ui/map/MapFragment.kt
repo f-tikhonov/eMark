@@ -88,6 +88,8 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     private var rootView: View? = null
     private var mapView: MapView? = null
 
+    private var bluetoothService: BluetoothService? = null
+
     /* access modifiers changed from: private */
     @JvmField
     val mMarkerList = ArrayList<Marker>()
@@ -217,17 +219,29 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
                 val availableUuids = device.uuids
                 val uuidToUse = availableUuids?.firstOrNull()?.uuid ?: SPP_UUID
 
-                BluetoothService.getInstance(requireContext(), device, object : BluetoothServiceCallback {
-                    override fun onSuccess(line: String?) {
-                         if (line != null) {
-                            addMarker(line)
-                        }
-                    }
+                if (bluetoothService == null) {
+                    bluetoothService = BluetoothService.getInstance(
+                        requireContext(),
+                        device,
+                        object : BluetoothServiceCallback {
+                            override fun onSuccess(line: String?) {
+                                if (line != null) {
+                                    addMarker(line)
+                                }
+                            }
 
-                    override fun onError(e: Exception?) {
-                        Toast.makeText(requireContext(), "BluetoothService error ${e?.message}", Toast.LENGTH_LONG).show()
-                    }
-                }).connectAndRead(uuidToUse)
+                            override fun onError(e: Exception?) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "BluetoothService error ${e?.message}",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    )
+                }
+
+                bluetoothService?.connectAndRead(uuidToUse)
             }
         }
 
