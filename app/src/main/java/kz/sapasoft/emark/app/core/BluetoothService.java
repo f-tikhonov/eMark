@@ -129,11 +129,11 @@ public class BluetoothService {
                 UUID servId = null;
                 UUID charsId = null;
                 for (BluetoothGattService service : gatt.getServices()) {
-                    if(service.getUuid().toString().startsWith("0xAABB")) {
+                    if(service.getUuid().toString().contains("AABB")) {
                         servId = service.getUuid();
                         Log.d("BLEq", "Сервис: " + service.getUuid());
                         for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
-                            if(characteristic.getUuid().toString().startsWith("0x1BB1")) {
+                            if(characteristic.getUuid().toString().contains("1BB1")) {
                                 charsId = characteristic.getUuid();
                                 Log.d("BLEq", "  └── Характеристика: " + characteristic.getUuid());
                             }
