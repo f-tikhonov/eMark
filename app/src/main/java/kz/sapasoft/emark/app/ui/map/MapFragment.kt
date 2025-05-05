@@ -210,7 +210,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         pairedDevices?.forEach { device ->
             Log.d("BLE", "Found device: ${device.name}")
 
-            if (device.name?.contains("ЗМ") == true) {
+            if (device.name?.contains("3M") == true) {
 
                 BluetoothService.getUuids(requireContext(),device, object : UuidBluetoothServiceCallback {
                     override fun onSuccess(serviceId: UUID?, characteristicsId: UUID?) {
