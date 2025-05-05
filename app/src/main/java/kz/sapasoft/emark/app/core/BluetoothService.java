@@ -1,78 +1,146 @@
 package kz.sapasoft.emark.app.core;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
-import android.content.pm.PackageManager;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
+import android.content.Context;
 import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.UUID;
-
-import android.content.Context;
 
 public class BluetoothService {
 
-    private static BluetoothService instance;
+    private final Context context;
+    private final BluetoothDevice device;
+    private final UUID serviceUUID;
+    private final UUID characteristicUUID;
+    private final BluetoothServiceCallback callback;
 
-    public static final UUID SPP_UUID =
-            UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // стандартный UUID SPP
-    private BluetoothSocket bluetoothSocket;
-    private BluetoothDevice device;
+    private BluetoothGatt bluetoothGatt;
 
-    private BluetoothServiceCallback callback;
-
-    private Context context;
-
-    private BluetoothService(Context context, BluetoothDevice device, BluetoothServiceCallback callback) {
-        this.context = context.getApplicationContext(); // во избежание утечек памяти
+    public BluetoothService(Context context,
+                            BluetoothDevice device,
+                            UUID serviceUUID,
+                            UUID characteristicUUID,
+                            BluetoothServiceCallback callback) {
+        this.context = context.getApplicationContext();
         this.device = device;
+        this.serviceUUID = serviceUUID;
+        this.characteristicUUID = characteristicUUID;
         this.callback = callback;
     }
+
     @SuppressLint("MissingPermission")
-    public void connectAndRead(UUID uuid) {
-        new Thread(() -> {
-            try {
-                bluetoothSocket = device.createRfcommSocketToServiceRecord(uuid);
-                bluetoothSocket.connect();
-
-                InputStream inputStream = bluetoothSocket.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-                StringBuilder fullData = new StringBuilder();
-                String line;
-
-                while ((line = reader.readLine()) != null) {
-                    fullData.append(line).append("\n"); // собираем все строки в одну
-                }
-
-                reader.close();
-                bluetoothSocket.close();
-
-                // Вызываем callback один раз с полной строкой
-                callback.onSuccess(fullData.toString().trim());
-
-            } catch (IOException e) {
-                Log.e("BLE", "Ошибка подключения/чтения: " + e.getMessage(), e);
-                callback.onError(e);
-            }
-        }).start();
+    public void connect() {
+        bluetoothGatt = device.connectGatt(context, false, gattCallback);
     }
 
-    public static synchronized BluetoothService getInstance(Context context, BluetoothDevice device, BluetoothServiceCallback callback) {
-        if (instance == null) {
-            instance = new BluetoothService(context, device, callback);
-        } else {
-            instance.context = context.getApplicationContext();
-            instance.device = device;
-            instance.callback = callback;
+    private final BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
+        @SuppressLint("MissingPermission")
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            if (status == BluetoothGatt.GATT_SUCCESS && newState == BluetoothGatt.STATE_CONNECTED) {
+                Log.d("BLE", "Успешное подключение, начинаем service discovery");
+                gatt.discoverServices();
+            } else {
+                Log.e("BLE", "Ошибка соединения: статус = " + status);
+                callback.onError(new Exception("Connection failed with status " + status));
+                gatt.close();
+            }
         }
-        return instance;
+
+        @SuppressLint("MissingPermission")
+        @Override
+        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            if (status != BluetoothGatt.GATT_SUCCESS) {
+                Log.e("BLE", "Ошибка service discovery: статус = " + status);
+                callback.onError(new Exception("Service discovery failed"));
+                gatt.close();
+                return;
+            }
+
+            BluetoothGattService service = gatt.getService(serviceUUID);
+            if (service == null) {
+                Log.e("BLE", "Сервис не найден: " + serviceUUID);
+                callback.onError(new Exception("Service not found: " + serviceUUID));
+                gatt.close();
+                return;
+            }
+
+            BluetoothGattCharacteristic characteristic = service.getCharacteristic(characteristicUUID);
+            if (characteristic == null) {
+                Log.e("BLE", "Характеристика не найдена: " + characteristicUUID);
+                callback.onError(new Exception("Characteristic not found: " + characteristicUUID));
+                gatt.close();
+                return;
+            }
+
+            boolean readInitiated = gatt.readCharacteristic(characteristic);
+            if (!readInitiated) {
+                Log.e("BLE", "Не удалось инициировать чтение характеристики");
+                callback.onError(new Exception("Failed to initiate characteristic read"));
+                gatt.close();
+            }
+        }
+
+        @SuppressLint("MissingPermission")
+        @Override
+        public void onCharacteristicRead(BluetoothGatt gatt,
+                                         BluetoothGattCharacteristic characteristic,
+                                         int status) {
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                byte[] value = characteristic.getValue();
+                String stringValue = new String(value);
+                callback.onSuccess(stringValue);
+            } else {
+                Log.e("BLE", "Ошибка чтения характеристики: " + status);
+                callback.onError(new Exception("Characteristic read failed"));
+            }
+            gatt.close();
+        }
+    };
+
+    @SuppressLint("MissingPermission")
+    public static void getUuids(Context context, BluetoothDevice device, UuidBluetoothServiceCallback uuidBluetoothServiceCallback){
+        device.connectGatt(context, false, new BluetoothGattCallback() {
+            @Override
+            public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+                if (newState == BluetoothGatt.STATE_CONNECTED) {
+                    Log.d("BLE", "Подключено к устройству. Ищем сервисы...");
+                    gatt.discoverServices();
+                } else if (newState == BluetoothGatt.STATE_DISCONNECTED) {
+                    Log.d("BLE", "Отключено от устройства.");
+                    uuidBluetoothServiceCallback.onError("Отключено от устройства.");
+                    gatt.close();
+                }
+            }
+
+            @Override
+            public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+                if (status != BluetoothGatt.GATT_SUCCESS) {
+                    Log.e("BLE", "Ошибка при обнаружении сервисов: " + status);
+                    uuidBluetoothServiceCallback.onError("Ошибка при обнаружении сервисов: " + status);
+                    return;
+                }
+
+                UUID servId = null;
+                UUID charsId = null;
+                for (BluetoothGattService service : gatt.getServices()) {
+                    Log.d("BLE", "Сервис: " + service.getUuid());
+                    servId = service.getUuid();
+                    for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
+                        charsId = characteristic.getUuid();
+                        Log.d("BLE", "  └── Характеристика: " + characteristic.getUuid());
+                    }
+
+                }
+                uuidBluetoothServiceCallback.onSuccess(servId, charsId);
+
+                gatt.close();
+            }
+        });
     }
 }

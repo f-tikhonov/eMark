@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
@@ -36,6 +37,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import dagger.android.support.DaggerAppCompatActivity;
 import kotlin.Lazy;
@@ -79,6 +81,11 @@ public final class MainActivity extends DaggerAppCompatActivity {
 
     private BluetoothGatt bluetoothGatt;
 
+
+    public UUID serviceUuid;
+
+    public UUID characteristicUuid;
+
     private final BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
 
         @Override
@@ -93,17 +100,24 @@ public final class MainActivity extends DaggerAppCompatActivity {
             }
         }
 
+        @SuppressLint("MissingPermission")
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-            if (status == BluetoothGatt.GATT_SUCCESS) {
-                Log.d("BLE", "Сервисы найдены!");
-                for (BluetoothGattService service : gatt.getServices()) {
-                    Log.d("BLE", "Service UUID: " + service.getUuid());
-                    // Здесь можно читать характеристики, если нужно
-                }
-            } else {
-                Log.e("BLE", "Ошибка поиска сервисов: " + status);
+            if (status != BluetoothGatt.GATT_SUCCESS) {
+                Log.e("BLE", "Ошибка при обнаружении сервисов: " + status);
+                return;
             }
+
+            for (BluetoothGattService service : gatt.getServices()) {
+                Log.d("BLE", "Сервис: " + service.getUuid());
+                serviceUuid = service.getUuid();
+                for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
+                    characteristicUuid = characteristic.getUuid();
+                    Log.d("BLE", "  └── Характеристика: " + characteristic.getUuid());
+                }
+            }
+
+            gatt.close();
         }
     };
 
@@ -167,7 +181,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
             BluetoothDevice device = result.getDevice();
             String deviceName = device.getName();
 
-            if (deviceName != null && deviceName.startsWith("3M-")) {
+            if (deviceName != null) {
                 Log.d("BLE", "Найдено целевое устройство: " + deviceName);
                 targetDevice = device;
                 stopScan(); // Остановить сканирование перед подключением
@@ -187,9 +201,8 @@ public final class MainActivity extends DaggerAppCompatActivity {
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    bluetoothGatt = targetDevice.connectGatt(getApplicationContext(), false, gattCallback);
-                }
+                Log.d("BLE", "bluetoothGatt starting ---->>>>> " + targetDevice.getName());
+                bluetoothGatt = targetDevice.connectGatt(getApplicationContext(), false, gattCallback);
                 Toast.makeText(getApplicationContext(), targetDevice.getName(), Toast.LENGTH_SHORT).show();
             }
         }

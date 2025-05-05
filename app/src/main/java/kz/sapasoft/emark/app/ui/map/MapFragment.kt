@@ -35,15 +35,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.decompiledapk.R
-import com.felhr.usbserial.UsbSerialInterface
 import com.felhr.usbserial.UsbSerialDevice
+import com.felhr.usbserial.UsbSerialInterface
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.hoho.android.usbserial.driver.UsbSerialDriver
 import com.hoho.android.usbserial.driver.UsbSerialProber
 import kz.sapasoft.emark.app.BuildConfig
 import kz.sapasoft.emark.app.core.BluetoothService
-import kz.sapasoft.emark.app.core.BluetoothService.SPP_UUID
+import kz.sapasoft.emark.app.core.UuidBluetoothServiceCallback
 import kz.sapasoft.emark.app.core.BluetoothServiceCallback
 import kz.sapasoft.emark.app.domain.model.MarkerModel
 import kz.sapasoft.emark.app.domain.model.ProjectModel
@@ -67,7 +67,6 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.io.ByteArrayOutputStream
-import java.lang.Exception
 import java.nio.charset.Charset
 import java.util.UUID
 import javax.inject.Inject
@@ -211,37 +210,48 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         pairedDevices?.forEach { device ->
             Log.d("BLE", "Found device: ${device.name}")
 
-            device.uuids?.forEach {
-                Log.d("BLE", "UUID for ${device.name}: ${it.uuid}")
-            }
+            if (device.name?.contains("ЗМ") == true) {
 
-            if (device.name?.contains("3M") == true) {
-                val availableUuids = device.uuids
-                val uuidToUse = availableUuids?.firstOrNull()?.uuid ?: SPP_UUID
-
-                if (bluetoothService == null) {
-                    bluetoothService = BluetoothService.getInstance(
-                        requireContext(),
-                        device,
-                        object : BluetoothServiceCallback {
-                            override fun onSuccess(line: String?) {
-                                if (line != null) {
-                                    addMarker(line)
-                                }
-                            }
-
-                            override fun onError(e: Exception?) {
-                                Toast.makeText(
+                BluetoothService.getUuids(requireContext(),device, object : UuidBluetoothServiceCallback {
+                    override fun onSuccess(serviceId: UUID?, characteristicsId: UUID?) {
+                        Log.d("BLE", "Ble UUID onSuccess: $serviceId charUuid $characteristicsId")
+                        if (bluetoothService == null) {
+                            bluetoothService =
+                                BluetoothService(
                                     requireContext(),
-                                    "BluetoothService error ${e?.message}",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        }
-                    )
-                }
+                                    device,
+                                    serviceId,
+                                    characteristicsId,
+                                    object : BluetoothServiceCallback {
+                                        override fun onSuccess(line: String?) {
+                                            if (line != null) {
+                                                Log.d("BLEq", "BluetoothService connecting $line")
+                                                addMarker(line)
+                                            }
+                                        }
 
-                bluetoothService?.connectAndRead(uuidToUse)
+                                        override fun onError(e: Exception?) {
+                                            Log.e("BLEq", "BluetoothService onError $e")
+                                            Toast.makeText(
+                                                requireContext(),
+                                                "BluetoothService error ${e?.message}",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        }
+                                    }
+                                )
+                        }
+
+                        bluetoothService?.connect()
+                    }
+
+                    override fun onError(message: String?) {
+                        Log.e("BLE", "Ble UUID onError messsage: $message ")
+                        Toast.makeText(requireContext(), "Ble UUID onError messsage: $message ", Toast.LENGTH_LONG).show()
+                    }
+
+                })
+
             }
         }
 
@@ -518,25 +528,20 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     }
 
     private fun addMarker(str: String){
-        val location2 = this.getMapLocation()
-        if (location2 == null) {
-            Intrinsics.throwNpe()
-        }
-        if (location2!!.accuracy > 5f) {
-            Log.e("addMarker", "4")
-            val activity: FragmentActivity? = getActivity()
-            activity?.runOnUiThread {
-                val location = getMapLocation() ?: throw NullPointerException("Location is null")
-                alertLowAccuracy(str, location)
-            }
-            return
-        }
+//        val location2 = this.getMapLocation()
+//        Log.e("addMarker", " location2 $location2")
+//        if (location2!!.accuracy > 5f) {
+//            Log.e("addMarker", "4")
+//            val activity: FragmentActivity? = getActivity()
+//            activity?.runOnUiThread {
+//                val location = getMapLocation() ?: throw NullPointerException("Location is null")
+//                alertLowAccuracy(str, location)
+//            }
+//            return
+//        }
         Log.e("addMarker", "5")
         val viewModel = viewModel
         val location3 = this.getMapLocation()
-        if (location3 == null) {
-            Intrinsics.throwNpe()
-        }
         openMarkerFragment(viewModel.getMarkerModelFromByteStr(str, location3)!!)
     }
 
