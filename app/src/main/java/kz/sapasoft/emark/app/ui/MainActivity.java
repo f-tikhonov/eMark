@@ -181,7 +181,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
             BluetoothDevice device = result.getDevice();
             String deviceName = device.getName();
 
-            if (deviceName != null) {
+            if (deviceName != null && deviceName.startsWith("3M-")) {
                 Log.d("BLEq", "Найдено целевое устройство: " + deviceName);
                 targetDevice = device;
                 stopScan(); // Остановить сканирование перед подключением
