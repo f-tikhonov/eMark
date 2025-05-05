@@ -129,17 +129,24 @@ public class BluetoothService {
                 UUID servId = null;
                 UUID charsId = null;
                 for (BluetoothGattService service : gatt.getServices()) {
-                    Log.d("BLEq", "Сервис: " + service.getUuid());
-                    servId = service.getUuid();
-                    for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
-                        charsId = characteristic.getUuid();
-                        Log.d("BLEq", "  └── Характеристика: " + characteristic.getUuid());
+                    if(service.getUuid().toString().startsWith("0xAABB")) {
+                        servId = service.getUuid();
+                        Log.d("BLEq", "Сервис: " + service.getUuid());
+                        for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
+                            if(characteristic.getUuid().toString().startsWith("0x1BB1")) {
+                                charsId = characteristic.getUuid();
+                                Log.d("BLEq", "  └── Характеристика: " + characteristic.getUuid());
+                            }
+                        }
                     }
-
                 }
-                uuidBluetoothServiceCallback.onSuccess(servId, charsId);
+                if (servId != null && charsId != null) {
+                    uuidBluetoothServiceCallback.onSuccess(servId, charsId);
+                } else {
+                    uuidBluetoothServiceCallback.onError("Ошибка servId " + servId + " charsId " + charsId);
+                }
 
-                gatt.close();
+               // gatt.close();
             }
         });
     }
