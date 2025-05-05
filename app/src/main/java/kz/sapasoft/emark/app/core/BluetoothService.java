@@ -43,10 +43,10 @@ public class BluetoothService {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             if (status == BluetoothGatt.GATT_SUCCESS && newState == BluetoothGatt.STATE_CONNECTED) {
-                Log.d("BLE", "Успешное подключение, начинаем service discovery");
+                Log.d("BLEq", "Успешное подключение, начинаем service discovery");
                 gatt.discoverServices();
             } else {
-                Log.e("BLE", "Ошибка соединения: статус = " + status);
+                Log.e("BLEq", "Ошибка соединения: статус = " + status);
                 callback.onError(new Exception("Connection failed with status " + status));
                 gatt.close();
             }
@@ -56,7 +56,7 @@ public class BluetoothService {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status != BluetoothGatt.GATT_SUCCESS) {
-                Log.e("BLE", "Ошибка service discovery: статус = " + status);
+                Log.e("BLEq", "Ошибка service discovery: статус = " + status);
                 callback.onError(new Exception("Service discovery failed"));
                 gatt.close();
                 return;
@@ -64,7 +64,7 @@ public class BluetoothService {
 
             BluetoothGattService service = gatt.getService(serviceUUID);
             if (service == null) {
-                Log.e("BLE", "Сервис не найден: " + serviceUUID);
+                Log.e("BLEq", "Сервис не найден: " + serviceUUID);
                 callback.onError(new Exception("Service not found: " + serviceUUID));
                 gatt.close();
                 return;
@@ -72,7 +72,7 @@ public class BluetoothService {
 
             BluetoothGattCharacteristic characteristic = service.getCharacteristic(characteristicUUID);
             if (characteristic == null) {
-                Log.e("BLE", "Характеристика не найдена: " + characteristicUUID);
+                Log.e("BLEq", "Характеристика не найдена: " + characteristicUUID);
                 callback.onError(new Exception("Characteristic not found: " + characteristicUUID));
                 gatt.close();
                 return;
@@ -80,7 +80,7 @@ public class BluetoothService {
 
             boolean readInitiated = gatt.readCharacteristic(characteristic);
             if (!readInitiated) {
-                Log.e("BLE", "Не удалось инициировать чтение характеристики");
+                Log.e("BLEq", "Не удалось инициировать чтение характеристики");
                 callback.onError(new Exception("Failed to initiate characteristic read"));
                 gatt.close();
             }
@@ -96,7 +96,7 @@ public class BluetoothService {
                 String stringValue = new String(value);
                 callback.onSuccess(stringValue);
             } else {
-                Log.e("BLE", "Ошибка чтения характеристики: " + status);
+                Log.e("BLEq", "Ошибка чтения характеристики: " + status);
                 callback.onError(new Exception("Characteristic read failed"));
             }
             gatt.close();
@@ -109,10 +109,10 @@ public class BluetoothService {
             @Override
             public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
                 if (newState == BluetoothGatt.STATE_CONNECTED) {
-                    Log.d("BLE", "Подключено к устройству. Ищем сервисы...");
+                    Log.d("BLEq", "Подключено к устройству. Ищем сервисы...");
                     gatt.discoverServices();
                 } else if (newState == BluetoothGatt.STATE_DISCONNECTED) {
-                    Log.d("BLE", "Отключено от устройства.");
+                    Log.d("BLEq", "Отключено от устройства.");
                     uuidBluetoothServiceCallback.onError("Отключено от устройства.");
                     gatt.close();
                 }
@@ -121,7 +121,7 @@ public class BluetoothService {
             @Override
             public void onServicesDiscovered(BluetoothGatt gatt, int status) {
                 if (status != BluetoothGatt.GATT_SUCCESS) {
-                    Log.e("BLE", "Ошибка при обнаружении сервисов: " + status);
+                    Log.e("BLEq", "Ошибка при обнаружении сервисов: " + status);
                     uuidBluetoothServiceCallback.onError("Ошибка при обнаружении сервисов: " + status);
                     return;
                 }
@@ -129,11 +129,11 @@ public class BluetoothService {
                 UUID servId = null;
                 UUID charsId = null;
                 for (BluetoothGattService service : gatt.getServices()) {
-                    Log.d("BLE", "Сервис: " + service.getUuid());
+                    Log.d("BLEq", "Сервис: " + service.getUuid());
                     servId = service.getUuid();
                     for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
                         charsId = characteristic.getUuid();
-                        Log.d("BLE", "  └── Характеристика: " + characteristic.getUuid());
+                        Log.d("BLEq", "  └── Характеристика: " + characteristic.getUuid());
                     }
 
                 }

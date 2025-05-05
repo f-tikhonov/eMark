@@ -208,13 +208,13 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
 
         val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
         pairedDevices?.forEach { device ->
-            Log.d("BLE", "Found device: ${device.name}")
+            Log.d("BLEq", "Found device: ${device.name}")
 
             if (device.name?.contains("3M") == true) {
 
                 BluetoothService.getUuids(requireContext(),device, object : UuidBluetoothServiceCallback {
                     override fun onSuccess(serviceId: UUID?, characteristicsId: UUID?) {
-                        Log.d("BLE", "Ble UUID onSuccess: $serviceId charUuid $characteristicsId")
+                        Log.d("BLEq", "Ble UUID onSuccess: $serviceId charUuid $characteristicsId")
                         if (bluetoothService == null) {
                             bluetoothService =
                                 BluetoothService(
@@ -246,7 +246,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
                     }
 
                     override fun onError(message: String?) {
-                        Log.e("BLE", "Ble UUID onError messsage: $message ")
+                        Log.e("BLEq", "Ble UUID onError messsage: $message ")
                         Toast.makeText(requireContext(), "Ble UUID onError messsage: $message ", Toast.LENGTH_LONG).show()
                     }
 

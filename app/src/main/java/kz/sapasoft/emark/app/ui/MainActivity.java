@@ -91,10 +91,10 @@ public final class MainActivity extends DaggerAppCompatActivity {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
-                Log.d("BLE", "Успешное подключение к устройству!");
+                Log.d("BLEq", "Успешное подключение к устройству!");
                 bluetoothGatt.discoverServices(); // Начать поиск сервисов
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                Log.d("BLE", "Устройство отключено");
+                Log.d("BLEq", "Устройство отключено");
                 bluetoothGatt.close();
                 bluetoothGatt = null;
             }
@@ -104,16 +104,16 @@ public final class MainActivity extends DaggerAppCompatActivity {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status != BluetoothGatt.GATT_SUCCESS) {
-                Log.e("BLE", "Ошибка при обнаружении сервисов: " + status);
+                Log.e("BLEq", "Ошибка при обнаружении сервисов: " + status);
                 return;
             }
 
             for (BluetoothGattService service : gatt.getServices()) {
-                Log.d("BLE", "Сервис: " + service.getUuid());
+                Log.d("BLEq", "Сервис: " + service.getUuid());
                 serviceUuid = service.getUuid();
                 for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
                     characteristicUuid = characteristic.getUuid();
-                    Log.d("BLE", "  └── Характеристика: " + characteristic.getUuid());
+                    Log.d("BLEq", "  └── Характеристика: " + characteristic.getUuid());
                 }
             }
 
@@ -177,12 +177,12 @@ public final class MainActivity extends DaggerAppCompatActivity {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
-            Log.d("BLE", "Найдено устройство: " + result.getDevice().getName());
+            Log.d("BLEq", "Найдено устройство: " + result.getDevice().getName());
             BluetoothDevice device = result.getDevice();
             String deviceName = device.getName();
 
             if (deviceName != null) {
-                Log.d("BLE", "Найдено целевое устройство: " + deviceName);
+                Log.d("BLEq", "Найдено целевое устройство: " + deviceName);
                 targetDevice = device;
                 stopScan(); // Остановить сканирование перед подключением
                 connectToDevice();
@@ -201,7 +201,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
-                Log.d("BLE", "bluetoothGatt starting ---->>>>> " + targetDevice.getName());
+                Log.d("BLEq", "bluetoothGatt starting ---->>>>> " + targetDevice.getName());
                 bluetoothGatt = targetDevice.connectGatt(getApplicationContext(), false, gattCallback);
                 Toast.makeText(getApplicationContext(), targetDevice.getName(), Toast.LENGTH_SHORT).show();
             }
@@ -210,7 +210,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
         @Override
         public void onBatchScanResults(java.util.List<ScanResult> results) {
             for (ScanResult sr : results) {
-                Log.d("BLE", "Устройство: " + sr.getDevice().getName());
+                Log.d("BLEq", "Устройство: " + sr.getDevice().getName());
             }
         }
     };
