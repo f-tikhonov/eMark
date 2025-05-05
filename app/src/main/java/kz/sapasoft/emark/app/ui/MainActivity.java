@@ -152,68 +152,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
         utils.hideKeyboard(bottomNavigationView);
         registerReceiver();
         requestPermission();
-        startScan();
     }
-
-    private void startScan() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        bluetoothLeScanner.startScan(scanCallback);
-    }
-
-    private void stopScan() {
-        bluetoothLeScanner.stopScan(scanCallback);
-    }
-
-    private final ScanCallback scanCallback = new ScanCallback() {
-        @Override
-        public void onScanResult(int callbackType, ScanResult result) {
-            super.onScanResult(callbackType, result);
-            Log.d("BLEq", "Найдено устройство: " + result.getDevice().getName());
-            BluetoothDevice device = result.getDevice();
-            String deviceName = device.getName();
-
-            if (deviceName != null && deviceName.startsWith("3M-")) {
-                Log.d("BLEq", "Найдено целевое устройство: " + deviceName);
-                targetDevice = device;
-                stopScan(); // Остановить сканирование перед подключением
-                connectToDevice();
-            }
-        }
-
-        private void connectToDevice() {
-            if (targetDevice != null) {
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                Log.d("BLEq", "bluetoothGatt starting ---->>>>> " + targetDevice.getName());
-                bluetoothGatt = targetDevice.connectGatt(getApplicationContext(), false, gattCallback);
-                Toast.makeText(getApplicationContext(), targetDevice.getName(), Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void onBatchScanResults(java.util.List<ScanResult> results) {
-            for (ScanResult sr : results) {
-                Log.d("BLEq", "Устройство: " + sr.getDevice().getName());
-            }
-        }
-    };
 
     private final void setupNavigation() {
         this.fm.beginTransaction().add((int) R.id.fl_content, this.fragment1, "1").commit();
