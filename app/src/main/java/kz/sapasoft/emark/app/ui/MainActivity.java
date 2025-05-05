@@ -154,6 +154,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
         requestPermission();
     }
 
+
     private final void setupNavigation() {
         this.fm.beginTransaction().add((int) R.id.fl_content, this.fragment1, "1").commit();
         this.fm.beginTransaction().add((int) R.id.fl_content, this.fragment2, "2").hide(this.fragment2).commit();
