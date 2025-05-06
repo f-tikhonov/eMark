@@ -173,9 +173,9 @@ public class BluetoothService {
                             if(characteristic.getUuid().toString().contains("1bb1")) {
                                 charsId = characteristic.getUuid();
                                 Log.d("BLEq", "  └── Характеристика: " + characteristic.getUuid());
-                         //   }
+                            }
                         }
-             //       }
+                    }
                 }
                 if (servId != null && charsId != null) {
                     uuidBluetoothServiceCallback.onSuccess(servId, charsId);
