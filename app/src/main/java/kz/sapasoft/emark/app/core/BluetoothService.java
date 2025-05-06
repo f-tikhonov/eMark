@@ -177,6 +177,30 @@ public class BluetoothService {
             }
 
             @Override
+            public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+                byte[] value = characteristic.getValue();
+                String stringValue = new String(value);
+                Log.d("BLEq", "Получено уведомление: " + stringValue);
+
+                // Здесь — только при реальном приходе новых данных
+                if(characteristic.getService().getUuid().toString().contains("aabb")) {
+                    Log.d("BLEq", "Уведомление: Сервис: " + characteristic.getService().getUuid());
+                    for (BluetoothGattCharacteristic item : characteristic.getService().getCharacteristics()) {
+                        Log.d("BLEq", "Уведомление: Обнаружена характеристика: " + item.getUuid());
+                        if(item.getUuid().toString().contains("1bb1")) {
+                            Log.d("BLEq", "Уведомление: вызов фунции onSuccess на добавление маркера ");
+                            uuidBluetoothServiceCallback.onSuccess(
+                                    characteristic.getService().getUuid(),
+                                    characteristic.getUuid()
+                            );
+                        }
+                    }
+                }
+
+                // Если хочешь — можно передавать stringValue тоже через отдельный коллбэк
+            }
+
+            @Override
             public void onServicesDiscovered(BluetoothGatt gatt, int status) {
                 if (status != BluetoothGatt.GATT_SUCCESS) {
                     Log.e("BLEq", "Ошибка при обнаружении сервисов: " + status);
@@ -184,27 +208,28 @@ public class BluetoothService {
                     return;
                 }
 
-                UUID servId = null;
-                UUID charsId = null;
-                for (BluetoothGattService service : gatt.getServices()) {
-                    Log.e("BLEq", "Обнаружен сервис: " + service.getUuid());
-                    if(service.getUuid().toString().contains("aabb")) {
-                        servId = service.getUuid();
-                        Log.d("BLEq", "Сервис: " + service.getUuid());
-                        for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
-                            Log.e("BLEq", "-- Обнаружена характеристика: " + characteristic.getUuid());
-                            if(characteristic.getUuid().toString().contains("1bb1")) {
-                                charsId = characteristic.getUuid();
-                                Log.d("BLEq", "  └── Характеристика: " + characteristic.getUuid());
-                            }
-                        }
-                    }
-                }
-                if (servId != null && charsId != null) {
-                    uuidBluetoothServiceCallback.onSuccess(servId, charsId);
-                } else {
-                    uuidBluetoothServiceCallback.onError("Ошибка servId " + servId + " charsId " + charsId);
-                }
+//                UUID servId = null;
+//                UUID charsId = null;
+//                for (BluetoothGattService service : gatt.getServices()) {
+//                    Log.d("BLEq", "Обнаружен сервис: " + service.getUuid());
+//                    if(service.getUuid().toString().contains("aabb")) {
+//                        servId = service.getUuid();
+//                        Log.d("BLEq", "Сервис: " + service.getUuid());
+//                        for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
+//                            Log.d("BLEq", "-- Обнаружена характеристика: " + characteristic.getUuid());
+//                            if(characteristic.getUuid().toString().contains("1bb1")) {
+//                                charsId = characteristic.getUuid();
+//                                Log.d("BLEq", "  └── Характеристика: " + characteristic.getUuid());
+//                            }
+//                        }
+//                    }
+//                }
+
+//                if (servId != null && charsId != null) {
+//                    uuidBluetoothServiceCallback.onSuccess(servId, charsId);
+//                } else {
+//                    uuidBluetoothServiceCallback.onError("Ошибка servId " + servId + " charsId " + charsId);
+//                }
 
                // gatt.close();
             }
