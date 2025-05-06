@@ -37,7 +37,7 @@ public class BluetoothService {
             for (BluetoothDevice device : pairedDevices) {
                 Log.d(TAG, "Found device: " + device.getName());
 
-                if (device.getName() != null && device.getName().contains("Galaxy")) {
+                if (device.getName() != null && device.getName().contains("3M")) {
                     connect(device);
                     break;
                 }
