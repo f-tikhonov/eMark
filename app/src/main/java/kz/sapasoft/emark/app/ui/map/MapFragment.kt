@@ -226,7 +226,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
                                         override fun onSuccess(line: String?) {
                                             if (line != null) {
                                                 Log.d("BLEq", "BluetoothService connecting $line")
-                                                addMarker(line)
+//                                                addMarker(line)
                                             }
                                         }
 
@@ -260,34 +260,34 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
        // val outputStream: OutputStream = bluetoothSocket.outputStream
     }
 
-    private fun setListeners() {
-        val systemService: Any = requireContext().getSystemService(android.content.Context.USB_SERVICE)
-        if (systemService != null) {
-            val usbManager: UsbManager = systemService as UsbManager
-            val findAllDrivers: List<UsbSerialDriver> =
-                UsbSerialProber.getDefaultProber().findAllDrivers(usbManager)
-            if (!findAllDrivers.isEmpty()) {
-                val usbSerialDriver: UsbSerialDriver = findAllDrivers[0]
-                Intrinsics.checkExpressionValueIsNotNull(usbSerialDriver, "availableDrivers[0]")
-                val openDevice: UsbDeviceConnection =
-                    usbManager.openDevice(usbSerialDriver.getDevice())
-                val usbSerialDriver2: UsbSerialDriver = findAllDrivers[0]
-                Intrinsics.checkExpressionValueIsNotNull(usbSerialDriver2, "availableDrivers[0]")
-                val createUsbSerialDevice: UsbSerialDevice =
-                    UsbSerialDevice.createUsbSerialDevice(usbSerialDriver2.getDevice(), openDevice)
-                createUsbSerialDevice.open()
-                createUsbSerialDevice.setBaudRate(4800)
-                createUsbSerialDevice.setDataBits(8)
-                createUsbSerialDevice.setParity(0)
-                createUsbSerialDevice.setFlowControl(0)
-                createUsbSerialDevice.setStopBits(1)
-                createUsbSerialDevice.read(this)
-                return
-            }
-            return
-        }
-        throw TypeCastException("null cannot be cast to non-null type android.hardware.usb.UsbManager")
-    }
+//    private fun setListeners() {
+//        val systemService: Any = requireContext().getSystemService(android.content.Context.USB_SERVICE)
+//        if (systemService != null) {
+//            val usbManager: UsbManager = systemService as UsbManager
+//            val findAllDrivers: List<UsbSerialDriver> =
+//                UsbSerialProber.getDefaultProber().findAllDrivers(usbManager)
+//            if (!findAllDrivers.isEmpty()) {
+//                val usbSerialDriver: UsbSerialDriver = findAllDrivers[0]
+//                Intrinsics.checkExpressionValueIsNotNull(usbSerialDriver, "availableDrivers[0]")
+//                val openDevice: UsbDeviceConnection =
+//                    usbManager.openDevice(usbSerialDriver.getDevice())
+//                val usbSerialDriver2: UsbSerialDriver = findAllDrivers[0]
+//                Intrinsics.checkExpressionValueIsNotNull(usbSerialDriver2, "availableDrivers[0]")
+//                val createUsbSerialDevice: UsbSerialDevice =
+//                    UsbSerialDevice.createUsbSerialDevice(usbSerialDriver2.getDevice(), openDevice)
+//                createUsbSerialDevice.open()
+//                createUsbSerialDevice.setBaudRate(4800)
+//                createUsbSerialDevice.setDataBits(8)
+//                createUsbSerialDevice.setParity(0)
+//                createUsbSerialDevice.setFlowControl(0)
+//                createUsbSerialDevice.setStopBits(1)
+//                createUsbSerialDevice.read(this)
+//                return
+//            }
+//            return
+//        }
+//        throw TypeCastException("null cannot be cast to non-null type android.hardware.usb.UsbManager")
+//    }
 
     private fun setObservers() {
         val viewModel = viewModel
@@ -663,7 +663,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
 
     override fun onNewDeviceAttached() {
         Log.d("SCAN_MARKER", "onNewDeviceAttached")
-        setListeners()
+//        setListeners()
     }
 
     companion object {
