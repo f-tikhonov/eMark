@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.content.Context;
 import android.util.Log;
@@ -84,6 +85,39 @@ public class BluetoothService {
                 callback.onError(new Exception("Failed to initiate characteristic read"));
                 gatt.close();
             }
+
+            if (characteristic == null) {
+                Log.e("BLEq", "Характеристика не найдена: " + characteristicUUID);
+                callback.onError(new Exception("Characteristic not found: " + characteristicUUID));
+                gatt.close();
+                return;
+            }
+
+            // Для уведомлений об измении характеристики
+            boolean notificationSet = gatt.setCharacteristicNotification(characteristic, true);
+            if (!notificationSet) {
+                Log.e("BLEq", "Не удалось включить уведомления для характеристики");
+                callback.onError(new Exception("Failed to set notification"));
+                gatt.close();
+                return;
+            }
+
+
+            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
+                    UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")); // стандартный UUID
+
+            if (descriptor != null) {
+                descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                boolean descriptorWriteStarted = gatt.writeDescriptor(descriptor);
+                if (!descriptorWriteStarted) {
+                    Log.e("BLEq", "Не удалось записать дескриптор уведомлений");
+                    callback.onError(new Exception("Failed to write descriptor"));
+                    gatt.close();
+                }
+            } else {
+                callback.onError(new Exception("Notification descriptor not found"));
+                gatt.close();
+            }
         }
 
         @SuppressLint("MissingPermission")
@@ -129,16 +163,16 @@ public class BluetoothService {
                 UUID servId = null;
                 UUID charsId = null;
                 for (BluetoothGattService service : gatt.getServices()) {
-                    if(service.getUuid().toString().startsWith("0xAABB")) {
+                 //   if(service.getUuid().toString().startsWith("0xAABB")) {
                         servId = service.getUuid();
                         Log.d("BLEq", "Сервис: " + service.getUuid());
                         for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
-                            if(characteristic.getUuid().toString().startsWith("0x1BB1")) {
+                         //   if(characteristic.getUuid().toString().startsWith("0x1BB1")) {
                                 charsId = characteristic.getUuid();
                                 Log.d("BLEq", "  └── Характеристика: " + characteristic.getUuid());
-                            }
+                         //   }
                         }
-                    }
+             //       }
                 }
                 if (servId != null && charsId != null) {
                     uuidBluetoothServiceCallback.onSuccess(servId, charsId);

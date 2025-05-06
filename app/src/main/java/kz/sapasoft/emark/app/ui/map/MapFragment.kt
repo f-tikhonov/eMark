@@ -207,17 +207,22 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
 
         val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
-        pairedDevices?.forEach { device ->
+        loop@ for (device in pairedDevices.orEmpty()) {
             Log.d("BLEq", "Found device: ${device.name}")
 
-            if (device.name?.startsWith("3M") == true) {
+            if (device.name?.startsWith("Galaxy") == true) {
+                BluetoothService.getUuids(
+                    requireContext(),
+                    device,
+                    object : UuidBluetoothServiceCallback {
+                        override fun onSuccess(serviceId: UUID?, characteristicsId: UUID?) {
+                            Log.d(
+                                "BLEq",
+                                "Ble UUID onSuccess: $serviceId charUuid $characteristicsId"
+                            )
 
-                BluetoothService.getUuids(requireContext(),device, object : UuidBluetoothServiceCallback {
-                    override fun onSuccess(serviceId: UUID?, characteristicsId: UUID?) {
-                        Log.d("BLEq", "Ble UUID onSuccess: $serviceId charUuid $characteristicsId")
-                        if (bluetoothService == null) {
-                            bluetoothService =
-                                BluetoothService(
+                            if (bluetoothService == null) {
+                                bluetoothService = BluetoothService(
                                     requireContext(),
                                     device,
                                     serviceId,
@@ -240,24 +245,31 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
                                         }
                                     }
                                 )
+                            }
+
+                            bluetoothService?.connect()
+                            // ✅ Stop further processing by clearing or ignoring further devices
+                            // or tracking a flag like isConnected
                         }
 
-                        bluetoothService?.connect()
-                    }
+                        override fun onError(message: String?) {
+                            Log.e("BLEq", "Ble UUID onError messsage: $message ")
+                            Toast.makeText(
+                                requireContext(),
+                                "Ble UUID onError messsage: $message ",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    })
 
-                    override fun onError(message: String?) {
-                        Log.e("BLEq", "Ble UUID onError messsage: $message ")
-                        Toast.makeText(requireContext(), "Ble UUID onError messsage: $message ", Toast.LENGTH_LONG).show()
-                    }
-
-                })
+                // ✅ Exit the loop to prevent multiple initializations
+                break@loop
 
             }
+
+            //  Предполагается, что bluetoothSocket уже инициализирован где-то ранее
+            // val outputStream: OutputStream = bluetoothSocket.outputStream
         }
-
-
-        //  Предполагается, что bluetoothSocket уже инициализирован где-то ранее
-       // val outputStream: OutputStream = bluetoothSocket.outputStream
     }
 
     private fun setListeners() {
