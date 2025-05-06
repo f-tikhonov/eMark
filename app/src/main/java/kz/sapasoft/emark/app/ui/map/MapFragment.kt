@@ -2,8 +2,6 @@ package kz.sapasoft.emark.app.ui.map
 
 //import com.hoho.android.usbserial.driver.UsbSerialDriver
 import android.annotation.SuppressLint
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
@@ -20,7 +18,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -39,7 +36,6 @@ import com.google.android.material.snackbar.Snackbar
 import kz.sapasoft.emark.app.BuildConfig
 import kz.sapasoft.emark.app.core.BluetoothService
 import kz.sapasoft.emark.app.core.BluetoothServiceCallback
-import kz.sapasoft.emark.app.core.UuidBluetoothServiceCallback
 import kz.sapasoft.emark.app.domain.model.MarkerModel
 import kz.sapasoft.emark.app.domain.model.ProjectModel
 import kz.sapasoft.emark.app.ui.MainActivity
@@ -50,6 +46,7 @@ import kz.sapasoft.emark.app.ui.marker.OnMarkerChangeListener
 import kz.sapasoft.emark.app.utils.Constants
 import kz.sapasoft.emark.app.utils.MarkerDrawer
 import kz.sapasoft.emark.app.utils.Utils
+import kz.sapasoft.emark.app.utils.showToast
 import okhttp3.internal.cache.DiskLruCache
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer
@@ -73,7 +70,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     OnNewDeviceAttached {
 
     private val REQUEST_LOCATION_PERMISSIONS = 1
-    private val TAG: String
+    private val TAG: String = "BLEq"
     private var `_$_findViewCache`: HashMap<*, *>? = null
     private val buffer = ByteArrayOutputStream()
     private val kzGeoPoint: GeoPoint = GeoPoint(48.005284, 66.9045435)
@@ -116,7 +113,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-   // @Metadata(bv = [1, 0, 3], k = 3, mv = [1, 1, 16])
+    // @Metadata(bv = [1, 0, 3], k = 3, mv = [1, 1, 16])
     object WhenMappings {
         /* synthetic */ val `$EnumSwitchMapping$0`: IntArray
 
@@ -140,7 +137,6 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     init {
         val simpleName = javaClass.simpleName
         Intrinsics.checkExpressionValueIsNotNull(simpleName, "this::class.java.simpleName")
-        TAG = simpleName
     }
 
     override fun onCreateView(
@@ -198,73 +194,40 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         }
 
     @SuppressLint("MissingPermission")
-    private fun handleBluetoothConnectionAndRead(){
-        val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+    private fun handleBluetoothConnectionAndRead() {
+        bluetoothService = BluetoothService(
+            requireContext(),
+            object : BluetoothServiceCallback {
+                override fun onDiscovered(value: String?) {
+                    Log.d(TAG, "BS onDiscovered value $value ")
+                    requireContext().showToast("BS onDiscovered value $value")
+                }
 
-        val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
-        loop@ for (device in pairedDevices.orEmpty()) {
-            Log.d("BLEq", "Found device: ${device.name}")
+                override fun onChanged(
+                    serviceId: UUID?,
+                    characteristicId: UUID?,
+                    characteristicValue: String?
+                ) {
+                    Log.d(
+                        TAG, "BS onChanged " +
+                                "serviceId: $serviceId " +
+                                "characteristicId $characteristicId " +
+                                "characteristicValue $characteristicValue"
+                    )
 
-            if (device.name?.contains("3M") == true) {
-                BluetoothService.getUuids(
-                    requireContext(),
-                    device,
-                    object : UuidBluetoothServiceCallback {
-                        override fun onSuccess(serviceId: UUID?, characteristicsId: UUID?) {
-                            Log.d(
-                                "BLEq",
-                                "Ble UUID onSuccess: $serviceId charUuid $characteristicsId"
-                            )
+                    if (characteristicValue != null) {
+                        Log.d(TAG, "BS connecting $characteristicValue")
+                        addMarker(characteristicValue)
+                    }
+                }
 
-                            if (bluetoothService == null) {
-                                bluetoothService = BluetoothService(
-                                    requireContext(),
-                                    device,
-                                    serviceId,
-                                    characteristicsId,
-                                    object : BluetoothServiceCallback {
-                                        override fun onSuccess(line: String?) {
-                                            if (line != null) {
-                                                Log.d("BLEq", "BluetoothService connecting $line")
-//                                                addMarker(line)
-                                            }
-                                        }
-
-                                        override fun onError(e: Exception?) {
-                                            Log.e("BLEq", "BluetoothService onError $e")
-                                            Toast.makeText(
-                                                requireContext(),
-                                                "BluetoothService error ${e?.message}",
-                                                Toast.LENGTH_LONG
-                                            ).show()
-                                        }
-                                    }
-                                )
-                            }
-
-                            bluetoothService?.connect()
-                            // ✅ Stop further processing by clearing or ignoring further devices
-                            // or tracking a flag like isConnected
-                        }
-
-                        override fun onError(message: String?) {
-                            Log.e("BLEq", "Ble UUID onError messsage: $message ")
-                            Toast.makeText(
-                                requireContext(),
-                                "Ble UUID onError messsage: $message ",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    })
-
-                // ✅ Exit the loop to prevent multiple initializations
-                break@loop
-
+                override fun onError(e: Exception?) {
+                    Log.d(TAG, "BS onError e: ${e?.message}")
+                    requireContext().showToast("BS onError e: ${e?.message}")
+                }
             }
-
-            //  Предполагается, что bluetoothSocket уже инициализирован где-то ранее
-            // val outputStream: OutputStream = bluetoothSocket.outputStream
-        }
+        )
+        bluetoothService?.searchAndConnectDevice()
     }
 
 //    private fun setListeners() {
@@ -398,7 +361,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
 
         mapView?.overlays?.add(poiMarkers)
         for (next in list) {
-           // val status: Constants.MarkerStatus = next.status
+            // val status: Constants.MarkerStatus = next.status
             val status = Constants.MarkerStatus.NORMAL
             val i = WhenMappings.`$EnumSwitchMapping$0`[status.ordinal]
             if (i == 1) {
@@ -435,7 +398,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     private fun enableManualNavigation(z: Boolean) {
         mIsManualNavigation = z
         if (z) {
-            val imageView =rootView?.findViewById(R.id.iv_pin) as ImageView
+            val imageView = rootView?.findViewById(R.id.iv_pin) as ImageView
             Intrinsics.checkExpressionValueIsNotNull(imageView, "iv_pin")
             imageView.visibility = View.VISIBLE
             return
@@ -510,7 +473,8 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
                         Log.e("SCAN_MARKER", "4")
                         val activity: FragmentActivity? = getActivity()
                         activity?.runOnUiThread {
-                            val location = getMapLocation() ?: throw NullPointerException("Location is null")
+                            val location =
+                                getMapLocation() ?: throw NullPointerException("Location is null")
                             alertLowAccuracy(str, location)
                         }
                         return
@@ -534,7 +498,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         }
     }
 
-    private fun addMarker(str: String){
+    private fun addMarker(str: String) {
 //        val location2 = this.getMapLocation()
 //        Log.e("addMarker", " location2 $location2")
 //        if (location2!!.accuracy > 5f) {
@@ -595,7 +559,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     fun openMarkerFragment(markerModel: MarkerModel) {
         getChildFragmentClickListener().onFragmentAdd(
             MarkerFragment.newInstance(
-                projectModel,  markerModel, this
+                projectModel, markerModel, this
             )
         )
     }
