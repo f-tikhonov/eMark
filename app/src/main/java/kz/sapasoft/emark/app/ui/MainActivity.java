@@ -77,49 +77,49 @@ public final class MainActivity extends DaggerAppCompatActivity {
     private static final int REQUEST_ENABLE_BT = 1;
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothLeScanner bluetoothLeScanner;
-    private BluetoothDevice targetDevice;
+//    private BluetoothDevice targetDevice;
 
-    private BluetoothGatt bluetoothGatt;
+//    private BluetoothGatt bluetoothGatt;
 
 
-    public UUID serviceUuid;
-
-    public UUID characteristicUuid;
-
-    private final BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
-
-        @Override
-        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-            if (newState == BluetoothProfile.STATE_CONNECTED) {
-                Log.d("BLEq", "Успешное подключение к устройству!");
-                bluetoothGatt.discoverServices(); // Начать поиск сервисов
-            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                Log.d("BLEq", "Устройство отключено");
-                bluetoothGatt.close();
-                bluetoothGatt = null;
-            }
-        }
-
-        @SuppressLint("MissingPermission")
-        @Override
-        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-            if (status != BluetoothGatt.GATT_SUCCESS) {
-                Log.e("BLEq", "Ошибка при обнаружении сервисов: " + status);
-                return;
-            }
-
-            for (BluetoothGattService service : gatt.getServices()) {
-                Log.d("BLEq", "Сервис: " + service.getUuid());
-                serviceUuid = service.getUuid();
-                for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
-                    characteristicUuid = characteristic.getUuid();
-                    Log.d("BLEq", "  └── Характеристика: " + characteristic.getUuid());
-                }
-            }
-
-            gatt.close();
-        }
-    };
+//    public UUID serviceUuid;
+//
+//    public UUID characteristicUuid;
+//
+//    private final BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
+//
+//        @Override
+//        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+//            if (newState == BluetoothProfile.STATE_CONNECTED) {
+//                Log.d("BLEq", "Успешное подключение к устройству!");
+//                bluetoothGatt.discoverServices(); // Начать поиск сервисов
+//            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+//                Log.d("BLEq", "Устройство отключено");
+//                bluetoothGatt.close();
+//                bluetoothGatt = null;
+//            }
+//        }
+//
+//        @SuppressLint("MissingPermission")
+//        @Override
+//        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+//            if (status != BluetoothGatt.GATT_SUCCESS) {
+//                Log.e("BLEq", "Ошибка при обнаружении сервисов: " + status);
+//                return;
+//            }
+//
+//            for (BluetoothGattService service : gatt.getServices()) {
+//                Log.d("BLEq", "Сервис: " + service.getUuid());
+//                serviceUuid = service.getUuid();
+//                for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
+//                    characteristicUuid = characteristic.getUuid();
+//                    Log.d("BLEq", "  └── Характеристика: " + characteristic.getUuid());
+//                }
+//            }
+//
+//            gatt.close();
+//        }
+//    };
 
     private final UsbManager getMUsbManager() {
         return (UsbManager) this.mUsbManager$delegate.getValue();
@@ -153,6 +153,7 @@ public final class MainActivity extends DaggerAppCompatActivity {
         registerReceiver();
         requestPermission();
     }
+
 
     private final void setupNavigation() {
         this.fm.beginTransaction().add((int) R.id.fl_content, this.fragment1, "1").commit();

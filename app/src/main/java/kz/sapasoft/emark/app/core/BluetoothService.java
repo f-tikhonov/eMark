@@ -36,6 +36,7 @@ public class BluetoothService {
 
     @SuppressLint("MissingPermission")
     public void connect() {
+        Log.d("BLEq", "Пытаемся подключить устройство " + device.getName().toString());
         bluetoothGatt = device.connectGatt(context, false, gattCallback);
     }
 
@@ -163,11 +164,13 @@ public class BluetoothService {
                 UUID servId = null;
                 UUID charsId = null;
                 for (BluetoothGattService service : gatt.getServices()) {
-                 //   if(service.getUuid().toString().startsWith("0xAABB")) {
+                    Log.e("BLEq", "Обнаружен сервис: " + service.getUuid());
+                    if(service.getUuid().toString().contains("aabb")) {
                         servId = service.getUuid();
                         Log.d("BLEq", "Сервис: " + service.getUuid());
                         for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
-                         //   if(characteristic.getUuid().toString().startsWith("0x1BB1")) {
+                            Log.e("BLEq", "-- Обнаружена характеристика: " + characteristic.getUuid());
+                            if(characteristic.getUuid().toString().contains("1bb1")) {
                                 charsId = characteristic.getUuid();
                                 Log.d("BLEq", "  └── Характеристика: " + characteristic.getUuid());
                          //   }
