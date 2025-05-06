@@ -8,8 +8,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.hardware.usb.UsbDeviceConnection
-import android.hardware.usb.UsbManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
@@ -35,16 +33,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.decompiledapk.R
-import com.felhr.usbserial.UsbSerialDevice
 import com.felhr.usbserial.UsbSerialInterface
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import com.hoho.android.usbserial.driver.UsbSerialDriver
-import com.hoho.android.usbserial.driver.UsbSerialProber
 import kz.sapasoft.emark.app.BuildConfig
 import kz.sapasoft.emark.app.core.BluetoothService
-import kz.sapasoft.emark.app.core.UuidBluetoothServiceCallback
 import kz.sapasoft.emark.app.core.BluetoothServiceCallback
+import kz.sapasoft.emark.app.core.UuidBluetoothServiceCallback
 import kz.sapasoft.emark.app.domain.model.MarkerModel
 import kz.sapasoft.emark.app.domain.model.ProjectModel
 import kz.sapasoft.emark.app.ui.MainActivity
