@@ -73,6 +73,12 @@ public final class MarkerIdentifierView extends LinearLayout {
         editText.addTextChangedListener(new MarkerIdentifierView$setData$$inlined$addTextChangedListener$1(onFieldValueChangeListener));
     }
 
+    public final boolean isIdentifierEmpty() {
+        EditText editText = (EditText) _$_findCachedViewById(R.id.et_text);
+        String text = editText.getText().toString().trim();
+        return !text.isEmpty();
+    }
+
     public final String getValue() {
         EditText editText = (EditText) _$_findCachedViewById(R.id.et_text);
         Intrinsics.checkExpressionValueIsNotNull(editText, "et_text");

@@ -41,6 +41,7 @@ import kz.sapasoft.emark.app.ui.custom_views.MarkerModelView
 import kz.sapasoft.emark.app.ui.custom_views.MarkerPhotoView
 import kz.sapasoft.emark.app.ui.custom_views.MarkerTypeView
 import kz.sapasoft.emark.app.utils.Constants
+import kz.sapasoft.emark.app.utils.showToast
 import pl.aprilapps.easyphotopicker.EasyImage
 import pl.aprilapps.easyphotopicker.MediaFile
 import pl.aprilapps.easyphotopicker.MediaSource
@@ -86,7 +87,9 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getAllData(mMarkerModel!!, mProjectModel!!.markerTemplateIds)
+        if(mMarkerModel != null) {
+            viewModel.getAllData(mMarkerModel!!, mProjectModel!!.markerTemplateIds)
+        }
         initView(view)
         setListeners(view)
         setObservers()
@@ -109,7 +112,12 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
             if (newMarkerModel.status == null) {
                 newMarkerModel.status = Constants.MarkerStatus.EDITED
             }
-            viewModel.saveMarkerAndImage(newMarkerModel, constructImageDataModel())
+            val identifierView = rootView?.findViewById<MarkerIdentifierView>(R.id.view_marker_identifier)
+            if(identifierView?.isIdentifierEmpty() == true) {
+                viewModel.saveMarkerAndImage(newMarkerModel, constructImageDataModel())
+            }else {
+                requireContext().showToast("Идентификатор не должен быть пустым")
+            }
         }
     }
 

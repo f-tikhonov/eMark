@@ -31,6 +31,7 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.decompiledapk.R
 import com.felhr.usbserial.UsbSerialInterface
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import kz.sapasoft.emark.app.BuildConfig
@@ -153,6 +154,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         Intrinsics.checkParameterIsNotNull(view, "view")
         super.onViewCreated(view, bundle)
         setHasOptionsMenu(true);
+        setFloatingActionButton()
         handleBluetoothConnectionAndRead()
         val textView = view.findViewById(R.id.tv_toolbar) as TextView
         Intrinsics.checkExpressionValueIsNotNull(textView, "tv_toolbar")
@@ -179,8 +181,23 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
             throw TypeCastException("null cannot be cast to non-null type kz.sapasoft.emark.app.ui.MainActivity")
         }
         throw TypeCastException("null cannot be cast to non-null type kz.sapasoft.emark.app.ui.MainActivity")
+    }
 
-
+    private fun setFloatingActionButton(){
+        val fab = rootView?.findViewById<FloatingActionButton>(R.id.fab)
+        fab?.setOnClickListener {
+            val markerLocation = this.getMapLocation()
+            if(markerLocation != null) {
+                openMarkerFragment(
+                    MarkerModel(
+                        idLocal = UUID.randomUUID().toString(),
+                        id = projectModel.id,
+                        location = listOf(markerLocation.latitude, markerLocation.longitude),
+                        status = Constants.MarkerStatus.NEW
+                    )
+                )
+            }
+        }
     }
 
     private val projectModel: ProjectModel
@@ -436,7 +453,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
 
             R.id.action_synchronize -> viewModel.synchronizeMarkers(projectModel.id)
             R.id.action_to_last_marker -> {
-                MapFragment.Companion.`moveCamera$default`(
+                `moveCamera$default`(
                     this,
                     mMarkerList.lastOrNull()?.position,
                     null as Double?,
