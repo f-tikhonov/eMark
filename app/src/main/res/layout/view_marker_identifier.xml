@@ -28,6 +28,7 @@
         android:layout_marginBottom="8dp"
         android:background="@null"
         android:enabled="true"
+        android:inputType="number"
         android:hint="@string/enter_value"
         android:textColor="@color/black"
         android:textSize="16sp" />

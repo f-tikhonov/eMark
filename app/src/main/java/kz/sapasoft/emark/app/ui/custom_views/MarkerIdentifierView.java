@@ -1,6 +1,8 @@
 package kz.sapasoft.emark.app.ui.custom_views;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +56,7 @@ public final class MarkerIdentifierView extends LinearLayout {
         this(context, (i2 & 2) != 0 ? null : attributeSet, (i2 & 4) != 0 ? 0 : i);
     }
 
+
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public MarkerIdentifierView(Context context, AttributeSet attributeSet, int i) {
         super(context, attributeSet, i);
@@ -62,8 +65,50 @@ public final class MarkerIdentifierView extends LinearLayout {
         if (layoutInflater != null) {
             layoutInflater.inflate(R.layout.view_marker_identifier, this);
         }
+
+        addMask();
     }
 
+    public void addMask(){
+        EditText etText = (EditText) _$_findCachedViewById(R.id.et_text);
+        etText.addTextChangedListener(new TextWatcher() {
+            boolean isUpdating = false;
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (isUpdating) return;
+                isUpdating = true;
+
+                // Удалим всё, кроме цифр
+                String digits = s.toString().replaceAll("[^\\d]", "");
+
+                // Ограничим длину (максимум 10 цифр)
+                if (digits.length() > 10) {
+                    digits = digits.substring(0, 10);
+                }
+
+                // Строим маску #:000-000-0000
+                StringBuilder formatted = new StringBuilder("#:");
+                for (int i = 0; i < digits.length(); i++) {
+                    if (i == 3 || i == 6) {
+                        formatted.append('-');
+                    }
+                    formatted.append(digits.charAt(i));
+                }
+
+                etText.setText(formatted.toString());
+                etText.setSelection(formatted.length());
+
+                isUpdating = false;
+            }
+        });
+    }
     public final void setData(String str, OnFieldValueChangeListener onFieldValueChangeListener) {
         Intrinsics.checkParameterIsNotNull(onFieldValueChangeListener, ServiceSpecificExtraArgs.CastExtraArgs.LISTENER);
         this.mValue = str;
