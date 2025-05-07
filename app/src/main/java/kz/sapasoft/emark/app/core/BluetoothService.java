@@ -84,6 +84,8 @@ public class BluetoothService {
             // присвоение значений сервис и характеристи UUID
             UUID serviceUUID = null;
             UUID characteristicUUID = null;
+            UUID descriptorUUID = null;
+
             for (BluetoothGattService serviceItem : gatt.getServices()) {
                 Log.d(TAG, "Обнаружен сервис: " + serviceItem.getUuid());
                 if (serviceItem.getUuid().toString().contains("aabb")) {
@@ -109,7 +111,9 @@ public class BluetoothService {
             BluetoothGattCharacteristic characteristic = service.getCharacteristic(characteristicUUID);
             for (BluetoothGattDescriptor desc : characteristic.getDescriptors()) {
                 Log.d(TAG, "Найден дескриптор: " + desc.getUuid());
+                descriptorUUID = desc.getUuid();
             }
+
             if (characteristic == null) {
                 Log.e(TAG, "Характеристика не найдена: " + characteristicUUID);
                 callback.onError(new Exception("Characteristic not found: " + characteristicUUID));
@@ -135,6 +139,13 @@ public class BluetoothService {
                 return;
             }
 
+            if (descriptorUUID == null) {
+                Log.e("BLEq", "Notification descriptor not found");
+                callback.onError(new Exception("Notification descriptor not found"));
+                gatt.close();
+                return;
+            }
+
             // Включаем уведомления
             boolean notificationSet = gatt.setCharacteristicNotification(characteristic, true);
             if (!notificationSet) {
@@ -144,31 +155,14 @@ public class BluetoothService {
                 return;
             }
 
-            // Находим дескриптор уведомлений
-            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
-                    UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")); // стандартный UUID
-
-            if (descriptor == null) {
-                Log.e("BLEq", "Notification descriptor not found");
-                callback.onError(new Exception("Notification descriptor not found"));
-                gatt.close();
-                return;
-            }
-
-            // Устанавливаем значение (уведомления или индикации)
-            if ((props & BluetoothGattCharacteristic.PROPERTY_NOTIFY) != 0) {
+           // Находим дескриптор уведомлений
+            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(descriptorUUID); // стандартный UUID
+            if (descriptor != null) {
                 descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                gatt.writeDescriptor(descriptor);
             } else {
-                descriptor.setValue(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE);
+                Log.e("BLEq", "Дескриптор не найден");
             }
-
-            boolean descriptorWriteStarted = gatt.writeDescriptor(descriptor);
-            if (!descriptorWriteStarted) {
-                Log.e("BLEq", "Не удалось записать дескриптор уведомлений");
-                callback.onError(new Exception("Failed to write descriptor"));
-                gatt.close();
-            }
-        }
 
         @SuppressLint("MissingPermission")
         @Override
