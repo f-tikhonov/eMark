@@ -164,6 +164,8 @@ public class BluetoothService {
                 Log.e("BLEq", "Дескриптор не найден");
             }
 
+        }
+
         @SuppressLint("MissingPermission")
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt,
