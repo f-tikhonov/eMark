@@ -234,7 +234,9 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
 
                     if (characteristicValue != null) {
                         Log.d(TAG, "BS connecting $characteristicValue")
-                        addMarker(characteristicValue)
+                        if (viewModel.checkId(characteristicValue)) {
+                            addMarker(characteristicValue)
+                        }
                     }
                 }
 
@@ -527,10 +529,13 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
 //            }
 //            return
 //        }
-        Log.e("addMarker", "5")
+        Log.e("addMarker", "New marker from scanner")
         val viewModel = viewModel
         val location3 = this.getMapLocation()
-        openMarkerFragment(viewModel.getMarkerModelFromByteStr(str, location3)!!)
+        val marker = viewModel.getMarkerModelFromByteStr(str, location3)
+        if (marker != null) {
+            openMarkerFragment(marker)
+        }
     }
 
     fun getMapLocation(): Location? {

@@ -234,20 +234,34 @@ class MapViewModel @Inject constructor(
         markerRepository.addWithReplace(markerModel)
     }
 
+    fun checkId(str: String?):Boolean {
+        val idRegex = Regex("(?<=#:)(.*)")
+        if (str != null) {
+            val id = idRegex.find(str)?.value?.takeIf {
+                Regex("[a-zA-Z0-9]+").containsMatchIn(it)
+            }
+            if (id != null) {
+                return true
+            }
+        }
+
+        return false
+    }
+
     val markerSize: Float
         get() = prefsImpl.markerSize
 
     fun getMarkerModelFromByteStr(str: String?, location: Location?): MarkerModel? {
         if (str.isNullOrEmpty() || location == null) return null
 
-        val idRegex = Regex("(?<=ID# : )(.*)")
-        val modelRegex = Regex("(?<=Model : )(.*)")
+        val idRegex = Regex("(?<=#:)(.*)")
+        val modelRegex = Regex("(?<=T:)(.*)")
 
         val id = idRegex.find(str)?.value?.takeIf {
             Regex("[a-zA-Z0-9]+").containsMatchIn(it)
         } ?: UUID.randomUUID().toString()
 
-        val model = modelRegex.find(str)?.value ?: "1405-XR"
+        val model = modelRegex.find(str)?.value ?: "1425"
 
         val uuid = UUID.randomUUID().toString()
 
