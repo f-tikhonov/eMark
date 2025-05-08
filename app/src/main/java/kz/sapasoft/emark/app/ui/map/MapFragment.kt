@@ -534,6 +534,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         val location3 = this.getMapLocation()
         val marker = viewModel.getMarkerModelFromByteStr(str, location3)
         if (marker != null) {
+//            addGasMarkerToMapMarkers(marker,1)
             openMarkerFragment(marker)
         }
     }

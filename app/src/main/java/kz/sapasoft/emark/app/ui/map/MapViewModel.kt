@@ -271,6 +271,7 @@ class MapViewModel @Inject constructor(
             markerModel = model,
             location = listOf(location.latitude, location.longitude),
             markerId = id,
+            generalId = id,
             status = Constants.MarkerStatus.NEW
         )
     }
