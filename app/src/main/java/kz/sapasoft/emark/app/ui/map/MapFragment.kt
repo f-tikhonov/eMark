@@ -294,7 +294,8 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
         }
         viewModel.error.observe(viewLifecycleOwner) { error ->
             val errorMessage = error?.toString() ?: "Error ______"
-            showSnackBar(errorMessage)
+            Log.e("MapFragment","errorMessage while syncing with server $errorMessage")
+            // showSnackBar(errorMessage)
         }
     }
 

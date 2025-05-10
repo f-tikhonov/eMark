@@ -104,6 +104,11 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
         if (mMarkerModel?.status == null) {
             (view.findViewById(R.id.btn_save) as MaterialButton).visibility = View.GONE
         }
+        // эти поля должны быть не редатируемыми
+//        else if( mMarkerModel?.status == Constants.MarkerStatus.NEW){
+//            view.findViewById<MarkerIdentifierView>(R.id.view_marker_identifier).enableEdit(true)
+//            view.findViewById<MarkerModelView>(R.id.view_marker_model).enableEdit(true)
+//        }
     }
 
     private fun setListeners(view: View) {
@@ -114,9 +119,9 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
             }
             val identifierView = rootView?.findViewById<MarkerIdentifierView>(R.id.view_marker_identifier)
             if(identifierView?.isIdentifierEmpty() == true) {
-                viewModel.saveMarkerAndImage(newMarkerModel, constructImageDataModel())
-            }else {
                 requireContext().showToast("Идентификатор не должен быть пустым")
+            }else {
+                viewModel.saveMarkerAndImage(newMarkerModel, constructImageDataModel())
             }
         }
     }
@@ -175,6 +180,7 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
             markerModel?.let {
                 // Сохраняем модель в переменной фрагмента
                 mMarkerModel = it
+                Log.d("terrar", "marker ${mMarkerModel?.fields.toString()}")
 
                 // Показываем ScrollView
                 val scrollView = requireView().findViewById<ScrollView>(R.id.sv_main)

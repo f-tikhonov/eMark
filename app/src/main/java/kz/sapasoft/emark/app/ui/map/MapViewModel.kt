@@ -89,15 +89,12 @@ class MapViewModel @Inject constructor(
                 is ResultWrapper.Error -> error.postValue(result)
                 is ResultWrapper.Success -> {
                     val markers = result.value
-                    if (markers?.isNotEmpty() == true) {
-
+                    if (markers.isNotEmpty()) {
                         markerListAll.addAll(markers)
+                        val syncedList = markerListAll.map { it.toSync() }
+                        markerSyncRepository.addWithReplace(syncedList)
                         markerModelListData.postValue(markerListAll)
-
-                        Log.d("MMarker", "markers isNotEmpty ${markerListAll.size}")
-                       // insertMarkerEntityList(projectIds.first(), markerListAll)
                     } else {
-                        Log.d("MMarker", "markers ${markers.size}")
                         insertMarkerEntityList(projectIds.first(), markerListAll)
                         getMarkerEntityList(projectIds.first())
                     }
@@ -136,6 +133,7 @@ class MapViewModel @Inject constructor(
 
     suspend fun saveMarkerList(projectId: String) {
         val markerSyncList = markerSyncRepository.findByProjectId(projectId)
+        Log.d(TAG, "BS markerSyncList size--- ${markerSyncList.size} ")
 
         for (markerSync in markerSyncList) {
             val markerModel = markerSync.toModel()
@@ -162,6 +160,7 @@ class MapViewModel @Inject constructor(
                 is ResultWrapper.Error -> {
                     error.postValue(result)
                 }
+
                 is ResultWrapper.Success -> {
                     deleteMarkerSyncById(markerModel.id)
 
@@ -193,15 +192,11 @@ class MapViewModel @Inject constructor(
                 markerSyncList.none { syncMarker -> syncMarker.id == marker.id }
             }
 
-            Log.d("MMarker", "getMarkerEntityList markerSyncList ${markerSyncList.size}")
-
             // Add unique unsynced markers
             markerModels.addAll(unsyncedMarkers)
 
             // Convert synced markers to MarkerModel and add them
             markerModels.addAll(markerSyncList.map { it.toModel() })
-
-            Log.d("MMarker", "getMarkerEntityList --->markerModels ${markerModels.size}")
 
             // Post the result to LiveData
             markerModelListData.postValue(markerModels)
@@ -235,22 +230,16 @@ class MapViewModel @Inject constructor(
 
     /* access modifiers changed from: private */
     private suspend fun insertMarkerEntityList(str: String?, list: List<MarkerModel?>?) {
-        //markerRepository.deleteByProjectId(str)
-        Log.d("terra", "markers insertMarkerEntityList ${list?.size}")
-
-        val markers = markerRepository.findByProjectId(str)
-
+        markerRepository.deleteByProjectId(str)
+        Log.d("MMarker", "markers insertMarkerEntityList ${list?.size}")
         markerRepository.addWithReplace(list)
-
-        val  ggg= markerRepository.findByProjectId(str)
-        Log.d("terra", "markers after add------ ${ggg.size}")
     }
 
     private fun insertMarkerEntity(markerModel: MarkerModel) {
         markerRepository.addWithReplace(markerModel)
     }
 
-    fun checkId(str: String?):Boolean {
+    fun checkId(str: String?): Boolean {
         val idRegex = Regex("(?<=#:)(.*)")
         if (str != null) {
             val id = idRegex.find(str)?.value?.takeIf {
