@@ -147,9 +147,15 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
             markerModel.generalId,
             onFieldValueChangeListener
         )
-        (rootView?.findViewById(R.id.view_marker_model) as MarkerModelView).setData(
-            markerModel.markerModel
-        )
+
+        if (mMarkerModel?.status == Constants.MarkerStatus.NEW) {
+            (rootView?.findViewById(R.id.view_marker_model) as MarkerModelView).setData("1405${markerModel.markerModel}")
+        } else {
+            (rootView?.findViewById(R.id.view_marker_model) as MarkerModelView).setData(
+                markerModel.markerModel
+            )
+        }
+
         (rootView?.findViewById(R.id.view_marker_depth) as MarkerDepthView).setData(
             markerModel.depth,
             onFieldValueChangeListener
