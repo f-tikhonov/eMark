@@ -90,9 +90,14 @@ class MapViewModel @Inject constructor(
                 is ResultWrapper.Success -> {
                     val markers = result.value
                     if (markers?.isNotEmpty() == true) {
+
                         markerListAll.addAll(markers)
                         markerModelListData.postValue(markerListAll)
+
+                        Log.d("MMarker", "markers isNotEmpty ${markerListAll.size}")
+                       // insertMarkerEntityList(projectIds.first(), markerListAll)
                     } else {
+                        Log.d("MMarker", "markers ${markers.size}")
                         insertMarkerEntityList(projectIds.first(), markerListAll)
                         getMarkerEntityList(projectIds.first())
                     }
@@ -178,7 +183,7 @@ class MapViewModel @Inject constructor(
     }
 
     fun getMarkerEntityList(str: String?) {
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main.immediate).launch {
             val markerModels = mutableListOf<MarkerModel>()
 
             // Get synchronized markers
@@ -188,11 +193,15 @@ class MapViewModel @Inject constructor(
                 markerSyncList.none { syncMarker -> syncMarker.id == marker.id }
             }
 
+            Log.d("MMarker", "getMarkerEntityList markerSyncList ${markerSyncList.size}")
+
             // Add unique unsynced markers
             markerModels.addAll(unsyncedMarkers)
 
             // Convert synced markers to MarkerModel and add them
             markerModels.addAll(markerSyncList.map { it.toModel() })
+
+            Log.d("MMarker", "getMarkerEntityList --->markerModels ${markerModels.size}")
 
             // Post the result to LiveData
             markerModelListData.postValue(markerModels)
@@ -225,9 +234,16 @@ class MapViewModel @Inject constructor(
     }
 
     /* access modifiers changed from: private */
-    fun insertMarkerEntityList(str: String?, list: List<MarkerModel?>?) {
-        markerRepository.deleteByProjectId(str)
+    private suspend fun insertMarkerEntityList(str: String?, list: List<MarkerModel?>?) {
+        //markerRepository.deleteByProjectId(str)
+        Log.d("terra", "markers insertMarkerEntityList ${list?.size}")
+
+        val markers = markerRepository.findByProjectId(str)
+
         markerRepository.addWithReplace(list)
+
+        val  ggg= markerRepository.findByProjectId(str)
+        Log.d("terra", "markers after add------ ${ggg.size}")
     }
 
     private fun insertMarkerEntity(markerModel: MarkerModel) {

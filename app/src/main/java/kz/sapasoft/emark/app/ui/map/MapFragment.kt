@@ -190,6 +190,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
             if(markerLocation != null) {
                 openMarkerFragment(
                     MarkerModel(
+                        projectIds = arrayListOf(projectModel.id),
                         idLocal = UUID.randomUUID().toString(),
                         id = projectModel.id,
                         location = listOf(markerLocation.latitude, markerLocation.longitude),
@@ -297,11 +298,13 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
 
     /* access modifiers changed from: private */
     fun showSnackBar(str: String?) {
-        Snackbar.make(
-            mapView!!,
-            "str as CharSequence?",
-            BaseTransientBottomBar.LENGTH_INDEFINITE
-        ).show()
+        (str as CharSequence?)?.let {
+            Snackbar.make(
+                mapView!!,
+                it,
+                BaseTransientBottomBar.LENGTH_INDEFINITE
+            ).show()
+        }
     }
 
     private fun drawPin(view: View) {
@@ -426,6 +429,7 @@ class MapFragment : DaggerFragmentExtended(), OnMarkerChangeListener,
     }
 
     override fun onMarkerChange() {
+        Log.d("MMarker", "onMarkerChange")
         viewModel.getMarkerEntityList(projectModel.id)
     }
 

@@ -375,7 +375,7 @@ class MarkerFragment : DaggerFragmentExtended(), OnFieldValueChangeListener, OnM
     override fun onMarkerTypeChange(templateModel: TemplateModel) {
         drawFieldList(templateModel.fields)
         mMarkerModel?.fields?.let {
-            //fillFields(it)
+            fillFields(it)
         }
     }
 
