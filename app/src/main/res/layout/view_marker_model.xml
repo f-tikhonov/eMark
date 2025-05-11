@@ -29,7 +29,6 @@
         android:background="@null"
         android:enabled="false"
         android:hint="@string/enter_value"
-        android:text="@string/_1405_xr"
         android:textColor="@color/black"
         android:textSize="16sp" />
 </LinearLayout>
